@@ -1053,7 +1053,7 @@
     <!-- main JS
 		============================================ -->
     <script src="js/main.js"></script>
-
+        <a href="category-update.html" role="button"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
     <script>
         $(document).ready(function () {
             $.ajax({
@@ -1064,19 +1064,33 @@
                 for (f of data) {
                     var tr = `
                     <tr>
-                        <td>${f.id}</td>
+                        <td id="categoryId">${f.id}</td>
                         <td>${f.name}</td>
                         <td>
                             <button class="pd-setting">Active</button>
                         </td>
                         <td>
-                            <button data-toggle="tooltip" title="Edit" class="pd-setting-ed"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
-                            <button data-toggle="tooltip" title="Trash" class="pd-setting-ed"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                            <button id="categoryEdit" title="Edit" class="pd-setting-ed"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                            <button id="categoryRemove" title="Trash" class="pd-setting-ed"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
                         </td>
                     </tr>
                     `
                     $('#categoryContent').append(tr);
                 }
+            })
+        })
+    </script>
+
+    <script>
+        $('#categoryRemove').on('click',function(){
+            console.log('Hello')
+            const id = $('categoryId').val();
+            console.log(id)
+            $.ajax({
+                url:'http://localhost:3000/api/category/delete/'+ id,
+                type:'PATCH'
+            }).done(function(data){
+                console.log(data)
             })
         })
     </script>

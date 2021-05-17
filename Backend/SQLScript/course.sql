@@ -1,0 +1,23 @@
+CREATE TABLE `course` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `category_id` int DEFAULT NULL,
+  `teacher_id` int DEFAULT NULL,
+  `rate` float DEFAULT NULL,
+  `image` longblob,
+  `price` float DEFAULT NULL,
+  `sale` float DEFAULT NULL,
+  `sale_info` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `short_description` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `full_description` varchar(5000) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `max_students` int DEFAULT NULL,
+  `current_student` int DEFAULT NULL,
+  `preview` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `view` int NOT NULL DEFAULT '0',
+  `IsDeleted` bit(1) NOT NULL DEFAULT b'0',
+  `Log_CreatedDate` datetime DEFAULT NULL,
+  `Log_CreatedBy` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `Log_UpdatedDate` datetime DEFAULT NULL,
+  `Log_UpdatedBy` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
