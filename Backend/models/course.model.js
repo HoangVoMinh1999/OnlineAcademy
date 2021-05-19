@@ -43,5 +43,16 @@ module.exports = {
         }
         obj.Log_UpdatedDate = new Date();
         return db('course').where('id',id).update(obj);
+    },
+
+    async updateView(id){
+        const course = await this.singleById(id);
+        if (course === null){
+            return null;
+        }
+        return db('course').where('id',id).update({
+                                                    'view':course.view + 1,
+                                                    'Log_UpdatedDate': new Date(),
+                                                    });
     }
 }
