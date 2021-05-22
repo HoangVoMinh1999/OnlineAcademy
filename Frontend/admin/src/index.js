@@ -3,15 +3,16 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import Category from './Layouts/Category'
+import CategoryAdd from './Layouts/Category/CategoryAdd'
 
 import {rootReducer} from './Redux/Reducers/rootReducer'
 import {Provider} from 'react-redux'
 import {createStore} from 'redux'
 
+const store = createStore(rootReducer);
 ReactDOM.render(
   <Provider store = {store}>
-    <Category></Category>
+    <CategoryAdd></CategoryAdd>
   </Provider>
   ,
   document.getElementById('root')

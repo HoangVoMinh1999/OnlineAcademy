@@ -2,7 +2,6 @@ import React,{Component} from 'react'
 import LeftMenu from '../Components/leftMenu'
 import Header from '../Components/Header'
 import Footer from '../Components/Footer'
-import CategoryList from '../Components/Category/CategoryList'
 
 export default class Category extends Component {
     render() {
@@ -12,7 +11,6 @@ export default class Category extends Component {
                 <div class="all-content-wrapper">
                     <Header></Header>
                     <Footer></Footer>
-                    <CategoryList></CategoryList>
                 </div>
             </div>
         )
