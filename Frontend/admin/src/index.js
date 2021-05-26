@@ -3,8 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import CourseList from './Layouts/Course/CourseList'
-import CategoryList from './Layouts/Category/CategoryList'
+
 
 import {rootReducer} from './Redux/Reducers/rootReducer'
 import {Provider} from 'react-redux'
@@ -13,7 +12,7 @@ import {createStore} from 'redux'
 const store = createStore(rootReducer);
 ReactDOM.render(
   <Provider store = {store}>
-    <CategoryList></CategoryList>
+    <App></App>
   </Provider>
   ,
   document.getElementById('root')

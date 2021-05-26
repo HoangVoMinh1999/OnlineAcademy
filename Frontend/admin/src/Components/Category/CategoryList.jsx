@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import Axios from 'axios'
 import { connect } from 'react-redux'
 import Action from "../../Redux/Action/action"
+import { Link } from 'react-router-dom';
 
 class CategoryList extends Component {
     constructor(props) {
@@ -38,7 +39,7 @@ render() {
                             <div className="product-status-wrap">
                                 <h4>Products List</h4>
                                 <div className="add-product">
-                                    <a href="category-add.html">Thêm loại khóa học</a>
+                                    <Link to="/category-add">Thêm loại khóa học</Link>
                                 </div>
                                 <table>
                                     <thead>

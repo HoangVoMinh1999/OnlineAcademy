@@ -10,15 +10,20 @@ router.get('/',async function(req,res,next){
 
 router.post('/',async function(req,res,next){
     const course = req.body;
-    const validcourse = await courseModel.singleByName(course.name);
-    if (validcourse == null){
-        course.Log_CreatedDate = new Date();
-        const ids =await  courseModel.addcourse(course);
-        course.id = ids[0];
-        res.status(200).json(course);
+    if (course.name !== undefined){
+        const validcourse = await courseModel.singleByName(course.name);
+        if (validcourse == null){
+            course.Log_CreatedDate = new Date();
+            const ids =await  courseModel.addcourse(course);
+            course.id = ids[0];
+            res.status(200).json(course);
+        }
+        res.status(500).json({
+            'err_message':'This course is existed'
+        });
     }
-    res.status(500).json({
-        'err_message':'This course is existed'
+    res.json({
+        'err_message':'No content for course'
     });
 })
 

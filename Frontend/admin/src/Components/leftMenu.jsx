@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 
 export default class LeftMenu extends Component {
     render() {
@@ -32,7 +33,7 @@ export default class LeftMenu extends Component {
                                             <span className="mini-click-non">Course List</span>
                                         </a>
                                         <ul className="submenu-angle" aria-expanded="true">
-                                            <li><a title="Category" href="category.html"><span className="mini-sub-pro">Category</span></a></li>
+                                            <li><Link title="Category" to="/category-list"><span className="mini-sub-pro">Category</span></Link></li>
                                             <li><a title="Product List" href="product-list.html"><span className="mini-sub-pro">Courses</span></a></li>
                                         </ul>
                                     </li>

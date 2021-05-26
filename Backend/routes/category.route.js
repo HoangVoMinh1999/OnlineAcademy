@@ -8,18 +8,26 @@ router.get('/',async function(req,res,next){
     res.json(listCategory);
 })
 
-router.post('/',async function(req,res,next){
+router.post('/',async function(req,res){
     const category = req.body;
-    console.log(category)
-    const validCategory = await CategoryModel.singleByName(category.name);
-    if (validCategory == null){
-        category.Log_CreatedDate = new Date();
-        const ids =await  CategoryModel.addCategory(category);
-        category.id = ids[0];
-        res.status(200).json(category);
+    // console.log(category);
+    if (category.name !== undefined){
+        const validCategory = await CategoryModel.singleByName(category.name);
+        console.log(validCategory);
+        if (validCategory === null){
+            category.Log_CreatedDate = new Date();
+            const ids =await  CategoryModel.addCategory(category);
+            category.id = ids[0];
+            res.status(200).json(category);
+        }
+        else{
+            res.json({
+                'err_message':'This category is existed'
+            });
+        }
     }
-    res.status(500).json({
-        'err_message':'This category is existed'
+    res.json({
+        'err_message':'No content for category'
     });
 })
 

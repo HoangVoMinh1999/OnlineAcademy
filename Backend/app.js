@@ -5,7 +5,7 @@ const cors = require('cors');
 const app = express();
 app.use(morgan('dev'));
 app.use(express.json());
-app.use(cors());
+app.use(cors('*'));
 
 app.use('/api/category',require('./routes/category.route'))
 app.use('/api/teacher',require('./routes/teacher.route'))

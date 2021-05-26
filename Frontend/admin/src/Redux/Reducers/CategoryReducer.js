@@ -1,4 +1,4 @@
-import Action from '../Action/action'
+import Action, { UPDATE_LIST } from '../Action/action'
 
 const stateCategory = {
     CategoryList : [],
@@ -7,7 +7,7 @@ const stateCategory = {
 
 export const  CategoryReducer = (state = stateCategory,action) => {
     switch (action.type) {
-        case 'UPDATE_LIST': {
+        case  UPDATE_LIST: {
             //--- CategoryList
             let categoryList = [...state.CategoryList];
             categoryList = action.categoryList ;

@@ -10,15 +10,20 @@ router.get('/',async function(req,res,next){
 
 router.post('/',async function(req,res,next){
     const teacher = req.body;
-    const validteacher = await teacherModel.singleByName(teacher.name);
-    if (validteacher == null){
-        teacher.Log_CreatedDate = new Date();
-        const ids =await  teacherModel.addteacher(teacher);
-        teacher.id = ids[0];
-        res.status(200).json(teacher);
+    if (teacher.name !== undefined){
+        const validteacher = await teacherModel.singleByName(teacher.name);
+        if (validteacher == null){
+            teacher.Log_CreatedDate = new Date();
+            const ids =await  teacherModel.addteacher(teacher);
+            teacher.id = ids[0];
+            res.status(200).json(teacher);
+        }
+        res.status(500).json({
+            'err_message':'This teacher is existed'
+        });
     }
-    res.status(500).json({
-        'err_message':'This teacher is existed'
+    res.json({
+        'err_message':'No content for teacher'
     });
 })
 
