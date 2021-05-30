@@ -35,6 +35,7 @@ module.exports = {
                                                     'Log_UpdatedDate': new Date(),
                                                     });
     },
+    
 
     async update(id,obj){
         const course = await this.singleById(id);

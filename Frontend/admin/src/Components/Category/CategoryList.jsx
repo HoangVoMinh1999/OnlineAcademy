@@ -1,106 +1,130 @@
 import React, { Component } from 'react'
 import Axios from 'axios'
 import { connect } from 'react-redux'
-import Action from "../../Redux/Action/action"
+import { GET_LIST } from "../../Redux/Action/type"
 import { Link } from 'react-router-dom';
-
+import createAction from '../../Redux/Action'
+import { categoryService } from '../../Services/';
+import { Pagination } from 'antd';
 class CategoryList extends Component {
-    constructor(props) {
-        super(props);
+
+    handleClickButtonDelete = async (id) => {
+        const res = await categoryService.deleteCategory(id);
+        console.log(res);
+    }
+
+    handleClickButtonEdit = async (id) => {
+        const res = await categoryService.getCategoryDetail(id);
     }
 
     renderContent = () => {
-        console.log(this.props.mainCategoryList)
         return (
             this.props.categoryList.map((category, index) => {
+                const mainCategory = category.category_id !== null ? this.props.mainCategoryList.find(t => t.id === category.category_id).name : '';
                 return <tr key={index}>
                     <td>{category.id}</td>
                     <td>{category.name}</td>
-                    <td>{category.category_id}</td>
+                    <td>{mainCategory}</td>
                     <td>
                         <button class="pd-setting">Active</button>
                     </td>
                     <td>
-                        <button id="categoryEdit" title="Edit" class="pd-setting-ed"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
-                        <button id="categoryRemove" title="Trash" class="pd-setting-ed"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                        <Link to={`/category-edit/${category.id}`}><button id="categoryEdit" title="Edit" class="pd-setting-ed"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></Link>
+                        {/* Button trigger modal */}
+                        <button type="button" id="categoryRemove" title="Trash" className="pd-setting-ed" data-toggle="modal" data-target="#deleteCategory">
+                            <i class="fa fa-trash-o" aria-hidden="true"></i>
+                        </button>
+                        {/* Modal */}
+                        <div className="modal fade" id="deleteCategory" tabIndex={-1} role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                            <div className="modal-dialog modal-dialog-centered" role="document">
+                                <div className="modal-content">
+                                    <div className="modal-header">
+                                        <h5 className="modal-title text-danger" id="exampleModalLongTitle">Thông báo</h5>
+                                        <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">×</span>
+                                        </button>
+                                    </div>
+                                    <div className="modal-body">
+                                        <p className="text-danger">Bạn có chắn chắn muốn xóa loại khóa học này không ???</p>
+                                    </div>
+                                    <div className="modal-footer">
+                                        <button type="button" className="btn btn-primary" onClick={() => this.handleClickButtonDelete(category.id)}>Đồng ý</button>
+                                        <button type="button" className="btn btn-secondary" data-dismiss="modal" >Quay lại</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </td>
                 </tr>
             })
         )
     }
 
-render() {
-    return (
-        <div>
-            <div className="product-status mg-b-30">
-                <div className="container-fluid">
-                    <div className="row">
-                        <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            <div className="product-status-wrap">
-                                <h4>Products List</h4>
-                                <div className="add-product">
-                                    <Link to="/category-add">Thêm loại khóa học</Link>
-                                </div>
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Tên</th>
-                                            <th>Category Cha</th>
-                                            <th>Status</th>
-                                            <th>Tùy chỉnh</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="categoryContent">
-                                        {this.renderContent()}
+    render() {
+        return (
+            <div>
+                <div className="product-status mg-b-30">
+                    <div className="container-fluid">
+                        <div className="row">
+                            <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div className="product-status-wrap">
+                                    <h4>Products List</h4>
+                                    <div className="add-product">
+                                        <Link to="/category-add">Thêm loại khóa học</Link>
+                                    </div>
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Tên</th>
+                                                <th>Category Cha</th>
+                                                <th>Status</th>
+                                                <th>Tùy chỉnh</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="categoryContent">
+                                            {this.renderContent()}
                                         </tbody>
-                                </table>
-                                <div className="custom-pagination">
-                                    <ul className="pagination">
-                                        <li className="page-item"><a className="page-link" href="#">Previous</a></li>
-                                        <li className="page-item"><a className="page-link" href="#">1</a></li>
-                                        <li className="page-item"><a className="page-link" href="#">2</a></li>
-                                        <li className="page-item"><a className="page-link" href="#">3</a></li>
-                                        <li className="page-item"><a className="page-link" href="#">Next</a></li>
-                                    </ul>
+                                    </table>
+                                    {/* <div className="custom-pagination">
+                                        <ul className="pagination">
+                                            <li className="page-item"><a className="page-link" href="#">Previous</a></li>
+                                            <li className="page-item"><a className="page-link" href="/">1</a></li>
+                                            <li className="page-item"><a className="page-link" href="#">2</a></li>
+                                            <li className="page-item"><a className="page-link" href="#">3</a></li>
+                                            <li className="page-item"><a className="page-link" href="#">Next</a></li>
+                                        </ul>
+                                    </div> */}
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
             </div>
+        )
+    }
 
-        </div>
-    )
-}
-
-componentDidMount() {
-    Axios({
-        method: 'GET',
-        url: 'http://localhost:4000/api/category'
-    }).then(res => {
-        this.props.updateCategoryList(res.data);
-    }).catch(err => {
-        console.log(err);
-    })
-}
+    async componentDidMount() {
+        const res = await categoryService.getAllCategories();
+        console.log(res.data)
+        this.props.dispatch(
+            createAction(
+                GET_LIST,
+                res.data
+            )
+        )
+    }
 }
 
 const mapStateToProps = (state) => {
-    return { categoryList: state.CategoryReducer.CategoryList,
-            mainCategoryList : state.CategoryReducer.MainCategoryList }
-}
-
-const mapDispatchToProps = (dispatch) => {
     return {
-        updateCategoryList: (categoryList) => {
-            dispatch({
-                type: 'UPDATE_LIST',
-                categoryList,
-            });
-        },
+        categoryList: state.CategoryReducer.CategoryList,
+        mainCategoryList: state.CategoryReducer.MainCategoryList
     }
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(CategoryList);
+
+export default connect(mapStateToProps)(CategoryList);

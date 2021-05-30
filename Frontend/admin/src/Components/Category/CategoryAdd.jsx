@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
-import Axios from 'axios'
 import { connect } from 'react-redux'
 import { appendScript } from '../../utils/appendScript'
+import { categoryService } from '../../Services'
+import swal from 'sweetalert';
 
 class CategoryAdd extends Component {
 
@@ -46,16 +47,43 @@ class CategoryAdd extends Component {
         return '';
     }
 
-    handleSubmit = (event) => {
+    handleSubmit = async (event) => {
         event.preventDefault();
         const body = this.state.values;
-
-        Axios.post('http://localhost:4000/api/category', body).then(res => {
-            console.log(res.data);
-        }).catch(err => {
-            console.log(err);
+        const res = await categoryService.addNewCategory(body);
+        console.log(res.data);
+        this.setState({
+            values: {
+                name: '',
+                category_id: null
+            },
+            errors: {
+                name: ''
+            }
         })
-
+        if (!res.data.err_message){
+            swal({
+                title: "Chúc mừng",
+                text: "Thêm loại khóa học thành công !!!",
+                icon: "success",
+            });
+        }
+        else{
+            if (res.data.err_message === 'This category is existed'){
+                swal({
+                    title: "Cảnh báo",
+                    text: "Loại khóa học đã tồn tại",
+                    icon: "error",
+                  });
+            }
+            else{
+                swal({
+                    title: "Cảnh báo",
+                    text: "Chưa có nội dung cho loại khóa học",
+                    icon: "error",
+                  });
+            }
+        }
 
     }
 
@@ -100,8 +128,8 @@ class CategoryAdd extends Component {
                                                     <div className="row">
                                                         <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                                             <div className="text-center custom-pro-edt-ds">
-                                                                <button type="submit" className="btn btn-ctl-bt waves-effect waves-light m-r-10">Save</button>
-                                                                <button type="button" className="btn btn-ctl-bt waves-effect waves-light">Discard</button>
+                                                                <button type="submit" className="btn btn-ctl-bt waves-effect waves-light m-r-10">Đồng ý</button>
+                                                                <button type="button" className="btn btn-ctl-bt waves-effect waves-light" onClick={() => this.props.history.goBack()}>Quay lại</button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -118,67 +146,10 @@ class CategoryAdd extends Component {
             </div>
         )
     }
-    componentDidMount() {
-
-
-
-        appendScript("js/vendor/jquery-1.12.4.min.js");
-
-        appendScript("js/bootstrap.min.js");
-
-        appendScript("js/wow.min.js");
-
-        appendScript("js/jquery-price-slider.js");
-
-        appendScript("js/jquery.meanmenu.js");
-
-        appendScript("js/owl.carousel.min.js");
-
-        appendScript("js/jquery.sticky.js");
-
-        appendScript("js/jquery.scrollUp.min.js");
-
-        appendScript("js/scrollbar/jquery.mCustomScrollbar.concat.min.js");
-        appendScript("js/scrollbar/mCustomScrollbar-active.js");
-
-        appendScript("js/metisMenu/metisMenu.min.js");
-        appendScript("js/metisMenu/metisMenu-active.js");
-
-        appendScript("js/sparkline/jquery.sparkline.min.js");
-        appendScript("js/sparkline/jquery.charts-sparkline.js");
-        appendScript("js/calendar/moment.min.js");
-        appendScript("js/calendar/fullcalendar.min.js");
-        appendScript("js/calendar/fullcalendar-active.js");
-        appendScript("js/flot/jquery.flot.js");
-        appendScript("js/flot/jquery.flot.resize.js");
-        appendScript("js/flot/curvedLines.js");
-        appendScript("js/flot/flot-active.js");
-        appendScript("js/plugins.js");
-
-        appendScript("js/main.js");
-    }
 }
 
 const mapStateToProps = (state) => {
     return { mainCategoryList: state.CategoryReducer.MainCategoryList }
 }
-
-// const mapDispacthtoProps = (dispatch) => {
-//     return {
-//         addCategory: (newCategory) => {
-//             dispatch({
-//                 type: Action.ADD_NEW_ITEM,
-//                 payload: newCategory,
-//             });
-//         },
-//         updateCategory: (category) => {
-//             dispatch({
-//                 type: Action.UPDATE_ITEM,
-//                 payload: category,
-//             })
-//         },
-//     }
-// }
-
 
 export default connect(mapStateToProps)(CategoryAdd)

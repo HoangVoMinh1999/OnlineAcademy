@@ -5,6 +5,10 @@ module.exports = {
         return db('category').where('isdeleted',0);
     },
 
+    pagination(offset,limit){
+        return db('category').limit(limit).offset(offset);
+    },
+
     addCategory(obj){
         return db('category').insert(obj);
     },
@@ -42,6 +46,18 @@ module.exports = {
             return null;
         }
         obj.Log_UpdatedDate = new Date();
+        obj.id = category.id;
         return db('category').where('id',id).update(obj);
+    },
+
+    async deleteChildren(category_id){
+        const children = await db('category').where('category_id',category_id).andWhere('isdeleted',false);
+        if (children !== null && children.length > 0){
+             children.map(async (category) => {
+                await this.delete(category.id);
+                return null;
+            })
+        }
+        return null;
     }
 }

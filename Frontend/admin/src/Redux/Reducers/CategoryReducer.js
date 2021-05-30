@@ -1,24 +1,39 @@
-import Action, { UPDATE_LIST } from '../Action/action'
+import {
+    UPDATE_ITEM,
+    GET_LIST
+} from '../Action/type'
 
 const stateCategory = {
-    CategoryList : [],
+    CategoryList: [],
     MainCategoryList: [],
+    ChildCategory: [],
+    CategoryDetail: null,
 }
 
-export const  CategoryReducer = (state = stateCategory,action) => {
+export const CategoryReducer = (state = stateCategory, action) => {
     switch (action.type) {
-        case  UPDATE_LIST: {
+        case GET_LIST: {
             //--- CategoryList
             let categoryList = [...state.CategoryList];
-            categoryList = action.categoryList ;
+            categoryList = action.payload;
             state.CategoryList = categoryList;
 
             //--- MainCategoryList
             let mainCategoryList = [...state.MainCategoryList];
-            mainCategoryList = action.categoryList.filter(t => t.category_id === null);
+            mainCategoryList = action.payload.filter(t => t.category_id === null);
             state.MainCategoryList = mainCategoryList;
-            return {...state}
+
+            //--- ChildCategoryList
+            let childCategoryList = [...state.ChildCategory];
+            childCategoryList = action.payload.filter(t => t.category_id !== null);
+            state.ChildCategory = childCategoryList;
+
+            return {
+                ...state
+            }
         }
     }
-    return {...state}
+    return {
+        ...state
+    }
 }

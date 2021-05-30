@@ -8,6 +8,17 @@ router.get('/',async function(req,res,next){
     res.json(listCategory);
 })
 
+router.get('/:id',async function(req,res,next){
+    const id = req.params.id;
+    const category = await CategoryModel.singleById(id);
+    if (category === null){
+        res.status(204).json({
+            'err_message':'No content for category'
+        })
+    }
+    res.status(200).json(category);
+})
+
 router.post('/',async function(req,res){
     const category = req.body;
     // console.log(category);
@@ -44,6 +55,7 @@ router.patch('/delete/:id',async function(req,res,next){
             'message': 'Delete failed !!!'
         })
     }
+    await CategoryModel.deleteChildren(id);
     res.json({
         'message':'Delete successfully !!!'
     })
@@ -52,6 +64,7 @@ router.patch('/delete/:id',async function(req,res,next){
 router.patch('/:id', async function(req,res,next){
     const id = req.params.id;
     const category = req.body; 
+    category.Log_UpdatedDate = new Date();
     const isUpdated = await CategoryModel.update(id,category);
     if (isUpdated === null){
         res.json({

@@ -8,7 +8,7 @@ app.use(express.json());
 app.use(cors('*'));
 
 app.use('/api/category',require('./routes/category.route'))
-app.use('/api/teacher',require('./routes/teacher.route'))
+app.use('/api/user',require('./routes/user.route'))
 app.use('/api/course',require('./routes/course.route'))
 
 //handle error

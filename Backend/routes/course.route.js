@@ -7,6 +7,11 @@ router.get('/',async function(req,res,next){
     const listcourse = await courseModel.all();
     res.json(listcourse);
 })
+router.get('/:id',async function(req,res,next){
+    const id = req.params.id;
+    const course = await courseModel.singleById(id);
+    res.status(201).json(course);
+})
 
 router.post('/',async function(req,res,next){
     const course = req.body;
@@ -32,12 +37,12 @@ router.patch('/delete/:id',async function(req,res,next){
     const isDeleted = await courseModel.delete(id);
     if (isDeleted === null){
         res.json({
-            'message':'Cateogory is not exist !!!'
+            'err_message':'Cateogory is not exist !!!'
         })
     }
     else if (isDeleted !== 1){
         res.json({
-            'message': 'Delete failed !!!'
+            'err_message': 'Delete failed !!!'
         })
     }
     res.json({
@@ -51,12 +56,12 @@ router.patch('/:id', async function(req,res,next){
     const isUpdated = await courseModel.update(id,course);
     if (isUpdated === null){
         res.json({
-            'message':'Cateogory is not exist !!!'
+            'err_message':'Cateogory is not exist !!!'
         })
     }
     else if (isUpdated !== 1){
         res.json({
-            'message': 'Update failed !!!'
+            'err_message': 'Update failed !!!'
         })
     }
     res.json({

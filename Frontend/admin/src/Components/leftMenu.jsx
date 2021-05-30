@@ -8,7 +8,7 @@ export default class LeftMenu extends Component {
                 <div className="left-sidebar-pro">
                     <nav id="sidebar" className>
                         <div className="sidebar-header">
-                            <a href="index.html"><img className="main-logo" src="img/logo/logo.png" alt /></a>
+                            <Link to="/"><img className="main-logo" src="img/logo/logo.png" alt /></Link>
                             <strong><img src="img/logo/logosn.png" alt /></strong>
                         </div>
                         <div className="nalika-profile">
@@ -34,7 +34,7 @@ export default class LeftMenu extends Component {
                                         </a>
                                         <ul className="submenu-angle" aria-expanded="true">
                                             <li><Link title="Category" to="/category-list"><span className="mini-sub-pro">Category</span></Link></li>
-                                            <li><a title="Product List" href="product-list.html"><span className="mini-sub-pro">Courses</span></a></li>
+                                            <li><Link title="Product List" to="/course-list"><span className="mini-sub-pro">Courses</span></Link></li>
                                         </ul>
                                     </li>
                                     <li>

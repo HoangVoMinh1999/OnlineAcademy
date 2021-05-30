@@ -1,6 +1,62 @@
 import React, { Component } from 'react'
+import { categoryService, courseService } from '../../Services'
+import createAction from '../../Redux/Action'
+import { connect } from 'react-redux'
+import { GET_COURSE_LIST, GET_LIST } from '../../Redux/Action/type'
+import { Link } from 'react-router-dom'
 
-export default class CourseList extends Component {
+class CourseList extends Component {
+
+    renderContent = () => {
+        return this.props.courseList.map((course, index) => {
+            const isFinish = course.IsFinish === true ? "Đã hoàn thành" : "Chưa hoàn thành"
+            const category = this.props.categoryList.find(t => t.id === course.category_id);
+            return <tr key={index}>
+                <td>{course.id}</td>
+                <td>{course.name}</td>
+                <td>{category.name}</td>
+                <td>{course.rate}</td>
+                <td>{course.price}</td>
+                <td>{course.sale}%</td>
+                <td>{course.current_student} / {course.max_students}</td>
+                <td>{isFinish}</td>
+                <td>
+                    <Link to={`/course-edit/${course.id}`}><button id="categoryEdit" title="Edit" class="pd-setting-ed"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></Link>
+                    {/* Button trigger modal */}
+                    <button type="button" id="categoryRemove" title="Trash" className="pd-setting-ed" data-toggle="modal" data-target="#deleteCategory">
+                        <i class="fa fa-trash-o" aria-hidden="true"></i>
+                    </button>
+                    {/* Modal */}
+                    <div className="modal fade" id="deleteCategory" tabIndex={-1} role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                        <div className="modal-dialog modal-dialog-centered" role="document">
+                            <div className="modal-content">
+                                <div className="modal-header">
+                                    <h5 className="modal-title text-danger" id="exampleModalLongTitle">Thông báo</h5>
+                                    <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                </div>
+                                <div className="modal-body">
+                                    <p className="text-danger">Bạn có chắn chắn muốn xóa loại khóa học này không ???</p>
+                                </div>
+                                <div className="modal-footer">
+                                    <button type="button" className="btn btn-primary" onClick={() => this.handleClickButtonDelete(course.id)}>Đồng ý</button>
+                                    <button type="button" className="btn btn-secondary" data-dismiss="modal" >Quay lại</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </td>
+            </tr>
+        })
+    }
+
+    handleClickButtonDelete = async (id) => {
+        const res = await courseService.deleteCourse(id);
+        console.log(res);
+    }
+
     render() {
         return (
             <div>
@@ -11,7 +67,7 @@ export default class CourseList extends Component {
                                 <div className="product-status-wrap">
                                     <h4>Products List</h4>
                                     <div className="add-product">
-                                        <a href="category-add.html">Thêm khóa học</a>
+                                        <Link to="/course-add">Thêm khóa học</Link>
                                     </div>
                                     <table>
                                         <thead>
@@ -28,7 +84,7 @@ export default class CourseList extends Component {
                                             </tr>
                                         </thead>
                                         <tbody id="categoryContent">
-                                            
+                                            {this.renderContent()}
                                         </tbody>
                                     </table>
                                     <div className="custom-pagination">
@@ -49,5 +105,33 @@ export default class CourseList extends Component {
             </div>
         )
     }
+
+    async componentDidMount() {
+        if (this.props.categoryList.length === 0) {
+            const res = await categoryService.getAllCategories();
+            console.log(res.data)
+            this.props.dispatch(
+                createAction(
+                    GET_LIST,
+                    res.data
+                )
+            )
+        }
+        const res = await courseService.getAllCourses();
+        this.props.dispatch(
+            createAction(
+                GET_COURSE_LIST,
+                res.data
+            )
+        )
+    }
 }
 
+const mapStateToProps = (state) => {
+    return {
+        courseList: state.CourseReducer.CourseList,
+        categoryList: state.CategoryReducer.ChildCategory,
+    }
+}
+
+export default connect(mapStateToProps)(CourseList)

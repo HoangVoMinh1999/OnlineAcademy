@@ -7,8 +7,10 @@ import Header from './Components/Header';
 import Footer from './Components/Footer';
 import CategoryList from './Components/Category/CategoryList';
 import { appendScript } from './utils/appendScript';
-import CourseInfo from './Components/Course/CourseInfo';
-
+import CategoryEdit from './Components/Category/CategoryEdit';
+import CourseList from './Components/Course/CourseList';
+import CourseAdd from './Components/Course/CourseAdd';
+import CourseEdit from './Components/Course/CourseEdit';
 class App extends Component {
 
   render() {
@@ -21,7 +23,12 @@ class App extends Component {
             <Switch>
               <Route path="/" exact component={Homepage} />
               <Route path="/category-list" component={CategoryList} />
-              <Route path="/category-add" component={CourseInfo} />
+              <Route path="/category-add" component={CategoryAdd} />
+              <Route path="/category-edit/:id" component={CategoryEdit}></Route>
+
+              <Route path="/course-list" component={CourseList}></Route>
+              <Route path="/course-add" component={CourseAdd}></Route>
+              <Route path="/course-edit/:id" component={CourseEdit}></Route>
             </Switch>
             <Footer></Footer>
           </div>
