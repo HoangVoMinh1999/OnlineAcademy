@@ -10,17 +10,17 @@ module.exports = {
     },
 
     async singleById(id){
-        const categories = await db('user').where('isdeleted',false).andWhere('id',id);
-        if (categories != null && categories.length > 0){
-            return categories[0];
+        const users = await db('user').where('isdeleted',false).andWhere('id',id);
+        if (users != null && users.length > 0){
+            return users[0];
         }
         return null;
     },
 
-    async singleByName(name){
-        const categories = await db('user').where('isdeleted',false).andWhere('name',name);
-        if (categories != null && categories.length > 0){
-            return categories[0];
+    async singleByUserName(username){
+        const users = await db('user').where('isdeleted',false).andWhere('username',username);
+        if (users != null && users.length > 0){
+            return users[0];
         }
         return null;
     },
@@ -43,5 +43,14 @@ module.exports = {
         }
         obj.Log_UpdatedDate = new Date();
         return db('user').where('id',id).update(obj);
+    },
+
+    async login(username){
+        const username = await this.singleByUserName(username);
+        if (username === null){
+            return null;
+        }
+        
+        
     }
 }

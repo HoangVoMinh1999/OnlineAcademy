@@ -1,10 +1,10 @@
 const express = require('express')
-constuserModel = require('../models/user.model');
+const userModel = require('../models/user.model');
 
 const router = express.Router();
 
 router.get('/', async function (req, res, next) {
-    const listteacher = awaituserModel.all();
+    const listteacher = await userModel.all();
     res.json(listteacher);
 })
 
@@ -17,16 +17,16 @@ router.post('/', async function (req, res, next) {
         res.status(200).json(teacher);
     }
     res.json({
-        'err_message': 'No content foruser'
+        'err_message': 'No content for user'
     });
 })
 
 router.patch('/delete/:id', async function (req, res, next) {
     const id = req.params.id;
-    const isDeleted = awaituserModel.delete(id);
+    const isDeleted = await userModel.delete(id);
     if (isDeleted === null) {
         res.json({
-            'message': 'Cateogory is not exist !!!'
+            'message': 'User is not exist !!!'
         })
     } else if (isDeleted !== 1) {
         res.json({
@@ -41,10 +41,10 @@ router.patch('/delete/:id', async function (req, res, next) {
 router.patch('/:id', async function (req, res, next) {
     const id = req.params.id;
     constuser = req.body;
-    const isUpdated = awaituserModel.update(id, teacher);
+    const isUpdated = await userModel.update(id, teacher);
     if (isUpdated === null) {
         res.json({
-            'message': 'Cateogory is not exist !!!'
+            'message': 'User is not exist !!!'
         })
     } else if (isUpdated !== 1) {
         res.json({
