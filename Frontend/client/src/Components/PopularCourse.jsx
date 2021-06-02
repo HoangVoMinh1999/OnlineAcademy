@@ -1,8 +1,22 @@
 import React, { Component } from 'react'
-import { CourseItem } from './CourseItem'
-import { SubTabCourse } from './SubTabCourse'
+import SubTabCourse from './SubTabCourse'
 
 export class PopularCourse extends Component {
+
+    constructor(props){
+        super(props);
+        this.state ={
+            isActive : "suggested-course",
+        }
+    }
+
+    handleClick = (event) => {
+        let {id} = event.target;
+        this.setState({
+            isActive : id
+        })
+    }
+
     render() {
         return (
             <div>
@@ -23,16 +37,16 @@ export class PopularCourse extends Component {
                                     <nav>
                                         <ul className="nav" id="myTab" role="tablist">
                                             <li className="nav-item">
-                                                <a className="nav-link active" id="suggested-course" data-toggle="tab" href="#suggested-course" role="tab" aria-controls="suggested-course" aria-selected="true">Suggested Course</a>
+                                                <a className="nav-link active" id="suggested-course" data-toggle="tab" href="#suggested-course" role="tab" aria-controls="suggested-course" aria-selected="true" onClick={this.handleClick}>Suggested Course</a>
                                             </li>
                                             <li className="nav-item">
-                                                <a className="nav-link" id="most-view" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Most View</a>
+                                                <a className="nav-link" id="most-view" data-toggle="tab" href="#most-view" role="tab" aria-controls="most-view" aria-selected="false" onClick={this.handleClick}>Most View</a>
                                             </li>
                                             <li className="nav-item">
-                                                <a className="nav-link" id="most-popular" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Most Popular</a>
+                                                <a className="nav-link" id="most-popular" data-toggle="tab" href="#most-popular" role="tab" aria-controls="most-popular" aria-selected="false" onClick={this.handleClick}>Most Popular</a>
                                             </li>
                                             <li className="nav-item">
-                                                <a className="nav-link" id="new-course" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">New Courses</a>
+                                                <a className="nav-link" id="new-course" data-toggle="tab" href="#new-course" role="tab" aria-controls="new-course" aria-selected="false" onClick={this.handleClick}>New Courses</a>
                                             </li>
                                         </ul>
                                     </nav>
@@ -43,12 +57,10 @@ export class PopularCourse extends Component {
                     <div className="all_courses">
                         <div className="container">
                             <div className="tab-content" id="myTabContent" >
-                                <div className="tab-pane fade show active" id="suggested-course" role="tabpanel" aria-labelledby="suggested-course">
-                                    <SubTabCourse id="suggested-course" ariaLabelledby="suggested-course"></SubTabCourse>
-                                </div>
-                                <div className="tab-pane fade show active" id="most-view" role="tabpanel" aria-labelledby="most-view">
-                                    <SubTabCourse id="most-view" ariaLabelledby="most-view"></SubTabCourse>
-                                </div>
+                                <SubTabCourse isActive={this.state.isActive} id="suggested-course" ></SubTabCourse>
+                                <SubTabCourse isActive={this.state.isActive} id="most-view" ></SubTabCourse>
+                                <SubTabCourse isActive={this.state.isActive} id="most-popular" ></SubTabCourse>
+                                <SubTabCourse isActive={this.state.isActive} id="new-course"></SubTabCourse>
                             </div>
                         </div>
                     </div>

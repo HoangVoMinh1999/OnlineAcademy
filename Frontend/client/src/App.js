@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { appendScript } from './utils/appendScript';
@@ -6,16 +5,18 @@ import { Component } from 'react';
 import { Header } from './Components/Header';
 import { PopularCourse } from './Components/PopularCourse';
 import { Footer } from './Components/Footer';
+import HomePage from './Screens/HomePage';
 import { Slider } from './Components/Slider';
-import { CourseDetail } from './Components/CourseDetail';
 
 class App extends Component {
   render(){
     return(
       <div>
-        <Header></Header>
-        <CourseDetail></CourseDetail>
-        <Footer></Footer>
+        <Router>
+          <Header></Header>
+          <HomePage></HomePage>
+          <Footer></Footer>
+        </Router>
       </div>
     )
   }

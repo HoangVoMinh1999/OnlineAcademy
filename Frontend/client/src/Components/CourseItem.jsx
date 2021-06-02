@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 
-export class CourseItem extends Component {
+class CourseItem extends Component {
     render() {
+        const category = this.props.categoryList.find(t => t.id === this.props.info.category_id)
         return (
             <div>
                 <div className="single_courses">
@@ -11,19 +13,20 @@ export class CourseItem extends Component {
                         </a>
                     </div>
                     <div className="courses_info">
-                        <span>Photoshop</span>
-                        <h3><a href="#">Mobile App design step by step <br />
-                        from beginner</a></h3>
+                        <span>{category.name}</span>
+                        <h3><a href="#">{this.props.info.name}</a></h3>
                         <div className="star_prise d-flex justify-content-between">
                             <div className="star">
                                 <i className="flaticon-mark-as-favorite-star" />
-                                <span>(4.5)</span>
+                                <span>({this.props.info.rate})</span>
                             </div>
                             <div className="prise">
-                                <span className="offer">$89.00</span>
-                                <span className="active_prise">
-                                    $49
-                                </span>
+                                {this.props.sale === 0 ? <span className="offer">{this.props.info.price} VND</span> : <p></p>}
+                                <p>
+                                    <span className="active_prise">
+                                        {this.props.info.price - this.props.info.price * this.props.info.sale} VND
+                                    </span>
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -32,3 +35,11 @@ export class CourseItem extends Component {
         )
     }
 }
+
+const mapStateToProps = (state) => {
+    return {
+        categoryList : state.CategoryReducer.ChildCategoryList
+    }
+}
+
+export default connect(mapStateToProps)(CourseItem);
