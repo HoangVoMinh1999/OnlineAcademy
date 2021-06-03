@@ -46,8 +46,8 @@ module.exports = {
     },
 
     async login(username){
-        const username = await this.singleByUserName(username);
-        if (username === null){
+        const user = await this.singleByUserName(username);
+        if (user === null){
             return null;
         }
         

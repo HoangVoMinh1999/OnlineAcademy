@@ -10,6 +10,7 @@ app.use(cors('*'));
 app.use('/api/category',require('./routes/category.route'))
 app.use('/api/user',require('./routes/user.route'))
 app.use('/api/course',require('./routes/course.route'))
+app.use('/api/lesson',require('./routes/lesson4course.route'))
 
 //handle error
 app.use(function(req,res,next){
