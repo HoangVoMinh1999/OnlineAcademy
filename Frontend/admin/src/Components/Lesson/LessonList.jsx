@@ -1,27 +1,20 @@
 import React, { Component } from 'react'
-import { categoryService, courseService } from '../../Services'
-import createAction from '../../Redux/Action'
+import createAction from '../../Redux/Action';
+import { GET_LESSON_LIST } from '../../Redux/Action/type';
+import { lessonService } from '../../Services'
 import { connect } from 'react-redux'
-import { GET_COURSE_LIST, GET_LIST } from '../../Redux/Action/type'
 import { Link } from 'react-router-dom'
 
-class CourseList extends Component {
+class LessonList extends Component {
 
     renderContent = () => {
-        return this.props.courseList.map((course, index) => {
-            const isFinish = course.IsFinish === true ? "Đã hoàn thành" : "Chưa hoàn thành"
-            const category = this.props.categoryList.find(t => t.id === course.category_id);
+        return this.props.lessonList.map((lesson, index) => {
             return <tr key={index}>
-                <td>{course.id}</td>
-                <td>{course.name}</td>
-                <td>{category.name}</td>
-                <td>{course.rate}</td>
-                <td>{course.price}</td>
-                <td>{course.sale}%</td>
-                <td>{course.current_student} / {course.max_students}</td>
-                <td>{isFinish}</td>
+                <td>{index}</td>
+                <td>{lesson.title}</td>
+                <td>{lesson.is_preview === true ? "Cho phép" : "Không cho phép"}</td>
                 <td>
-                    <Link to={`/course-edit/${course.id}`}><button id="categoryEdit" title="Edit" class="pd-setting-ed"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></Link>
+                    <Link to={`/course-edit/}`}><button id="categoryEdit" title="Edit" class="pd-setting-ed"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></Link>
                     {/* Button trigger modal */}
                     <button type="button" id="categoryRemove" title="Trash" className="pd-setting-ed" data-toggle="modal" data-target="#deleteCategory">
                         <i class="fa fa-trash-o" aria-hidden="true"></i>
@@ -40,7 +33,7 @@ class CourseList extends Component {
                                     <p className="text-danger">Bạn có chắn chắn muốn xóa loại khóa học này không ???</p>
                                 </div>
                                 <div className="modal-footer">
-                                    <button type="button" className="btn btn-primary" onClick={() => this.handleClickButtonDelete(course.id)}>Đồng ý</button>
+                                    <button type="button" className="btn btn-primary" onClick={() => this.handleClickButtonDelete(index)}>Đồng ý</button>
                                     <button type="button" className="btn btn-secondary" data-dismiss="modal" >Quay lại</button>
                                 </div>
                             </div>
@@ -52,10 +45,6 @@ class CourseList extends Component {
         })
     }
 
-    handleClickButtonDelete = async (id) => {
-        const res = await courseService.deleteCourse(id);
-    }
-
     render() {
         return (
             <div>
@@ -64,21 +53,16 @@ class CourseList extends Component {
                         <div className="row">
                             <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <div className="product-status-wrap">
-                                    <h4>Products List</h4>
+                                    <h4>Danh sách bài học</h4>
                                     <div className="add-product">
-                                        <Link to="/course-add">Thêm khóa học</Link>
+                                        <Link to={`/lesson-add/${this.props.course_id}`}>Thêm bài học</Link>
                                     </div>
                                     <table>
                                         <thead>
                                             <tr>
-                                                <th>ID</th>
-                                                <th>Tên khóa học</th>
-                                                <th>Loại khóa học</th>
-                                                <th>Đánh giá</th>
-                                                <th>Giá</th>
-                                                <th>Giảm giá</th>
-                                                <th>Học sinh</th>
-                                                <th>Hoàn thành</th>
+                                                <th>STT</th>
+                                                <th>Tiêu đề bài học</th>
+                                                <th>Cho phép preview</th>
                                                 <th>More</th>
                                             </tr>
                                         </thead>
@@ -100,36 +84,25 @@ class CourseList extends Component {
                         </div>
                     </div>
                 </div>
-
             </div>
         )
     }
-
     async componentDidMount() {
-        if (this.props.categoryList.length === 0) {
-            const res = await categoryService.getAllCategories();
-            this.props.dispatch(
-                createAction(
-                    GET_LIST,
-                    res.data
-                )
-            )
-        }
-        const res = await courseService.getAllCourses();
+        const course_id = this.props.course_id;
+        const res = await lessonService.getLessons4Course(course_id);
         this.props.dispatch(
             createAction(
-                GET_COURSE_LIST,
+                GET_LESSON_LIST,
                 res.data
             )
-        )
+        );
     }
 }
 
 const mapStateToProps = (state) => {
     return {
-        courseList: state.CourseReducer.CourseList,
-        categoryList: state.CategoryReducer.ChildCategory,
+        lessonList: state.LessonReducer.LessonList,
     }
 }
 
-export default connect(mapStateToProps)(CourseList)
+export default connect(mapStateToProps)(LessonList);

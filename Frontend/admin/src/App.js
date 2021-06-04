@@ -11,6 +11,7 @@ import CategoryEdit from './Components/Category/CategoryEdit';
 import CourseList from './Components/Course/CourseList';
 import CourseAdd from './Components/Course/CourseAdd';
 import CourseEdit from './Components/Course/CourseEdit';
+import LessonAdd from './Components/Lesson/LessonAdd';
 class App extends Component {
 
   render() {
@@ -29,6 +30,8 @@ class App extends Component {
               <Route path="/course-list" component={CourseList}></Route>
               <Route path="/course-add" component={CourseAdd}></Route>
               <Route path="/course-edit/:id" component={CourseEdit}></Route>
+              
+              <Route path="/lesson-add/:course_id" component={LessonAdd}></Route>
             </Switch>
             <Footer></Footer>
           </div>

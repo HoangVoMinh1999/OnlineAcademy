@@ -17,4 +17,21 @@ router.post('/',async (req,res) => {
     res.json(lesson)
 })
 
+router.get('/:id',async (req,res) => {
+    let id = req.params.id;
+    let lesson = await lesson4courseModel.singleById(id);
+    if (lesson !== null){
+        res.status(200).json(lesson)
+    }
+    res.status(204).json({
+        'err_message': 'Không có bài giảng'
+    })
+})
+
+router.patch('/:id',async (req,res) => {
+    let id = req.params.id;
+    let lesson = req.body;
+    let res = await lesson4courseModel.updateLesson(id,lesson);
+    res.json(res);
+})
 module.exports = router

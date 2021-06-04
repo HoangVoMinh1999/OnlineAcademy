@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
-import { categoryService, courseService } from '../../Services';
+import { categoryService, courseService, lessonService } from '../../Services';
 import swal from 'sweetalert'
 import { connect } from 'react-redux';
 import { GET_LIST } from '../../Redux/Action/type';
 import createAction from '../../Redux/Action';
+import LessonList from '../Lesson/LessonList';
 
 class CourseEdit extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
+            activeTab: 'description',
             values: {
                 name: '',
                 category_id: null,
@@ -33,19 +35,20 @@ class CourseEdit extends Component {
                 short_description: '',
                 full_description: '',
             },
-            activeTab : 'description'
+
+
         }
     };
 
     handleChange = (e) => {
         const { name, value } = e.target;
-        console.log(name+ " " +e.target.checked)
-        if (name === "IsFinish"){
+        console.log(name + " " + e.target.checked)
+        if (name === "IsFinish") {
             this.setState({
-                IsFinish : e.target.checked
+                IsFinish: e.target.checked
             })
         }
-        else{
+        else {
             this.setState({ values: { ...this.state.values, [name]: value } })
         }
 
@@ -77,7 +80,6 @@ class CourseEdit extends Component {
     };
 
     handleBlur = (e) => {
-        console.log('Blur')
         const { name, value } = e.target;
         const errMessage = this.validateData(name, value);
         this.setState({ errors: { ...this.state.errors, [name]: errMessage } })
@@ -108,7 +110,7 @@ class CourseEdit extends Component {
                 short_description: '',
                 full_description: '',
                 IsFinish: false,
-                sale_info : '',
+                sale_info: '',
             },
             errors: {
                 name: '',
@@ -159,8 +161,8 @@ class CourseEdit extends Component {
         })
     }
 
+    
     render() {
-        const {name, IsFinish}=this.state.values;
         return (
             <div>
                 <div className="single-product-tab-area mg-b-30">
@@ -207,7 +209,7 @@ class CourseEdit extends Component {
                                                                 {this.renderError(this.state.errors.rate)}
                                                                 <div className="input-group mg-b-pro-edt">
                                                                     <span className="input-group-addon">Kết thúc khóa học</span>
-                                                                    <input type="checkbox" name="IsFinish" checked={this.state.values.IsFinish} className="form-control" onClick={this.handleChange} onBlur={this.handleBlur}/>
+                                                                    <input type="checkbox" name="IsFinish" checked={this.state.values.IsFinish} className="form-control" onClick={this.handleChange} onBlur={this.handleBlur} />
                                                                 </div>
                                                                 {this.renderError(this.state.errors.rate)}
                                                             </div>
@@ -303,32 +305,7 @@ class CourseEdit extends Component {
                                             <div className={`product-tab-list tab-pane fade ${this.state.activeTab === "INFORMATION" ? "active in" : ""}`} id="INFORMATION" >
                                                 <div className="row">
                                                     <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                        <div className="review-content-section">
-                                                            <form>
-                                                                <div className="card-block">
-                                                                    <div className="input-group mg-b-15 mg-t-15">
-                                                                        <span className="input-group-addon"><i className="icon nalika-user" aria-hidden="true" /></span>
-                                                                        <input type="text" className="form-control" placeholder="Tên bài học" />
-                                                                    </div>
-                                                                    <div className="input-group mg-b-15">
-                                                                        <span className="input-group-addon"><i className="icon nalika-user" aria-hidden="true" /></span>
-                                                                        <textarea className="form-control" name="" id="" cols="30" rows="10" placeholder="Nội dung tóm tắt"></textarea>
-                                                                    </div>
-                                                                    <div className="input-group mg-b-15">
-                                                                        <span className="input-group-addon"><i className="icon nalika-mail" aria-hidden="true" /></span>
-                                                                        <input type="text" className="form-control" placeholder="Link video bài giảng" />
-                                                                    </div>
-                                                                    <div className="input-group mg-b-15">
-                                                                        <span className="input-group-addon">Cho phép xem review</span>
-                                                                        <input type="checkbox" />
-                                                                    </div>
-                                                                    <div className="form-group review-pro-edt mg-b-0-pt">
-                                                                        <button type="submit" className="btn btn-ctl-bt waves-effect waves-light">Submit
-                                                                    </button>
-                                                                    </div>
-                                                                </div>
-                                                            </form>
-                                                        </div>
+                                                        <LessonList course_id={this.props.match.params.id}></LessonList>
                                                     </div>
                                                 </div>
                                             </div>
@@ -346,7 +323,6 @@ class CourseEdit extends Component {
     async componentDidMount() {
         const id = this.props.match.params.id;
         const detail = await courseService.getCourseDetail(id);
-        console.log(detail)
         const newCourse = {
             name: detail.data.name,
             category_id: detail.data.category_id,
@@ -357,12 +333,15 @@ class CourseEdit extends Component {
             current_student: detail.data.current_student,
             short_description: detail.data.short_description,
             full_description: detail.data.full_description,
-            sale_info : detail.data.sale_info,
-            IsFinish : detail.data.IsFinish,
+            sale_info: detail.data.sale_info,
+            IsFinish: detail.data.IsFinish,
         }
         this.setState({
             ...this.state,
-            values: newCourse
+            values: newCourse,
+            lessonValues: {
+                course_id: id
+            }
         })
     }
 }

@@ -8,7 +8,6 @@ export const CourseReducer = (state = stateCourse, action) => {
     switch (action.type) {
         case GET_COURSE_LIST : {
             let courseList = [...state.CourseList];
-            console.log(action.payload)
             courseList = action.payload;
             state.CourseList = courseList
 
