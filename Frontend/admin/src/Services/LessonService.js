@@ -8,8 +8,23 @@ class LessonService {
         return Axios.get(currentURL)
     }
 
-    addLesson4Course = (course) => {
-        return Axios.post(this.baseURL,course)
+    addLesson4Course = (lesson) => {
+        return Axios.post(this.baseURL,lesson)
+    }
+
+    getLessonById = (id) => {
+        const currentURL = this.baseURL + "/single/"+id;
+        return Axios.get(currentURL);
+    }
+
+    updateLesson4Course = (id,obj) => {
+        const currentURL = this.baseURL + "/"+id;
+        return Axios.patch(currentURL,obj)
+    }
+
+    delete = (id) => {
+        const currentURL = this.baseURL + "/delete/"+ id;
+        return Axios.patch(currentURL);
     }
 }
 

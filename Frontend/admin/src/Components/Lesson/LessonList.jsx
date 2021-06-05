@@ -7,6 +7,27 @@ import { Link } from 'react-router-dom'
 
 class LessonList extends Component {
 
+    constructor(props){
+        super(props);
+        this.state = {
+            lesson_id : 0,
+        }
+    }
+
+    handleDeleteButton = (id) => {
+        this.setState({
+            lesson_id : id,
+        })
+    }
+
+    
+    handleClickButtonConfirmDelete = async () => {
+        const res = await lessonService.delete(this.state.lesson_id);
+        this.setState({
+            lesson_id: 0,
+        })
+    }
+
     renderContent = () => {
         return this.props.lessonList.map((lesson, index) => {
             return <tr key={index}>
@@ -14,9 +35,9 @@ class LessonList extends Component {
                 <td>{lesson.title}</td>
                 <td>{lesson.is_preview === true ? "Cho phép" : "Không cho phép"}</td>
                 <td>
-                    <Link to={`/course-edit/}`}><button id="categoryEdit" title="Edit" class="pd-setting-ed"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></Link>
+                    <Link to={`/lesson-edit/${lesson.id}`}><button id="categoryEdit" title="Edit" class="pd-setting-ed"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></Link>
                     {/* Button trigger modal */}
-                    <button type="button" id="categoryRemove" title="Trash" className="pd-setting-ed" data-toggle="modal" data-target="#deleteCategory">
+                    <button type="button" id="categoryRemove" title="Trash" className="pd-setting-ed" data-toggle="modal" data-target="#deleteCategory" onClick={() => this.handleDeleteButton(lesson.id)}>
                         <i class="fa fa-trash-o" aria-hidden="true"></i>
                     </button>
                     {/* Modal */}
@@ -33,7 +54,7 @@ class LessonList extends Component {
                                     <p className="text-danger">Bạn có chắn chắn muốn xóa loại khóa học này không ???</p>
                                 </div>
                                 <div className="modal-footer">
-                                    <button type="button" className="btn btn-primary" onClick={() => this.handleClickButtonDelete(index)}>Đồng ý</button>
+                                    <button type="button" className="btn btn-primary" onClick={() => this.handleClickButtonConfirmDelete()}>Đồng ý</button>
                                     <button type="button" className="btn btn-secondary" data-dismiss="modal" >Quay lại</button>
                                 </div>
                             </div>

@@ -7,6 +7,13 @@ import { Link } from 'react-router-dom'
 
 class CourseList extends Component {
 
+    constructor(props){
+        super(props);
+        this.state = {
+            course_id : 0,
+        }
+    }
+
     renderContent = () => {
         return this.props.courseList.map((course, index) => {
             const isFinish = course.IsFinish === true ? "Đã hoàn thành" : "Chưa hoàn thành"
@@ -23,7 +30,7 @@ class CourseList extends Component {
                 <td>
                     <Link to={`/course-edit/${course.id}`}><button id="categoryEdit" title="Edit" class="pd-setting-ed"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></Link>
                     {/* Button trigger modal */}
-                    <button type="button" id="categoryRemove" title="Trash" className="pd-setting-ed" data-toggle="modal" data-target="#deleteCategory">
+                    <button type="button" id="categoryRemove" title="Trash" className="pd-setting-ed" data-toggle="modal" data-target="#deleteCategory" onClick={() => this.handleButtonDelete(course.id)}>
                         <i class="fa fa-trash-o" aria-hidden="true"></i>
                     </button>
                     {/* Modal */}
@@ -40,7 +47,7 @@ class CourseList extends Component {
                                     <p className="text-danger">Bạn có chắn chắn muốn xóa loại khóa học này không ???</p>
                                 </div>
                                 <div className="modal-footer">
-                                    <button type="button" className="btn btn-primary" onClick={() => this.handleClickButtonDelete(course.id)}>Đồng ý</button>
+                                    <button type="button" className="btn btn-primary" onClick={() => this.handleClickButtonConfirmDelete()}>Đồng ý</button>
                                     <button type="button" className="btn btn-secondary" data-dismiss="modal" >Quay lại</button>
                                 </div>
                             </div>
@@ -52,8 +59,14 @@ class CourseList extends Component {
         })
     }
 
-    handleClickButtonDelete = async (id) => {
-        const res = await courseService.deleteCourse(id);
+    handleButtonDelete =(id) =>{
+        this.setState({
+            course_id: id,
+        })
+    }
+
+    handleClickButtonConfirmDelete = async () => {
+        const res = await courseService.deleteCourse(this.state.course_id);
     }
 
     render() {

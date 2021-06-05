@@ -12,6 +12,7 @@ import CourseList from './Components/Course/CourseList';
 import CourseAdd from './Components/Course/CourseAdd';
 import CourseEdit from './Components/Course/CourseEdit';
 import LessonAdd from './Components/Lesson/LessonAdd';
+import LessonEdit from './Components/Lesson/LessonEdit';
 class App extends Component {
 
   render() {
@@ -32,6 +33,7 @@ class App extends Component {
               <Route path="/course-edit/:id" component={CourseEdit}></Route>
               
               <Route path="/lesson-add/:course_id" component={LessonAdd}></Route>
+              <Route path="/lesson-edit/:id" component={LessonEdit}></Route>
             </Switch>
             <Footer></Footer>
           </div>

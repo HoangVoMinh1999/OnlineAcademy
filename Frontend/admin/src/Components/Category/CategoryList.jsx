@@ -8,9 +8,21 @@ import { categoryService } from '../../Services/';
 import { Pagination } from 'antd';
 class CategoryList extends Component {
 
-    handleClickButtonDelete = async (id) => {
-        const res = await categoryService.deleteCategory(id);
-        console.log(res);
+    constructor(props){
+        super(props);
+        this.state = {
+            category_id : 0,
+        }
+    }
+
+    handleButtonDelete = (id) => {
+        this.setState({
+            category_id : id,
+        })
+    }
+
+    handleClickButtonConfirmDelete = async () => {
+        const res = await categoryService.deleteCategory(this.state.category_id);
     }
 
     handleClickButtonEdit = async (id) => {
@@ -31,7 +43,7 @@ class CategoryList extends Component {
                     <td>
                         <Link to={`/category-edit/${category.id}`}><button id="categoryEdit" title="Edit" class="pd-setting-ed"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></Link>
                         {/* Button trigger modal */}
-                        <button type="button" id="categoryRemove" title="Trash" className="pd-setting-ed" data-toggle="modal" data-target="#deleteCategory">
+                        <button type="button" id="categoryRemove" title="Trash" className="pd-setting-ed" data-toggle="modal" data-target="#deleteCategory" onClick={() => this.handleButtonDelete(category.id)}>
                             <i class="fa fa-trash-o" aria-hidden="true"></i>
                         </button>
                         {/* Modal */}
@@ -48,7 +60,7 @@ class CategoryList extends Component {
                                         <p className="text-danger">Bạn có chắn chắn muốn xóa loại khóa học này không ???</p>
                                     </div>
                                     <div className="modal-footer">
-                                        <button type="button" className="btn btn-primary" onClick={() => this.handleClickButtonDelete(category.id)}>Đồng ý</button>
+                                        <button type="button" className="btn btn-primary" onClick={() => this.handleClickButtonConfirmDelete()}>Đồng ý</button>
                                         <button type="button" className="btn btn-secondary" data-dismiss="modal" >Quay lại</button>
                                     </div>
                                 </div>
