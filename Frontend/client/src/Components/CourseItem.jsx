@@ -24,7 +24,7 @@ class CourseItem extends Component {
                                 {this.props.sale === 0 ? <span className="offer">{this.props.info.price} VND</span> : <p></p>}
                                 <p>
                                     <span className="active_prise">
-                                        {this.props.info.price - this.props.info.price * this.props.info.sale} VND
+                                        {this.props.info.price - this.props.info.price * this.props.info.sale / 100} VND
                                     </span>
                                 </p>
                             </div>

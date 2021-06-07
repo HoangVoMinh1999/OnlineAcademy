@@ -10,7 +10,6 @@ class HomePage extends Component {
     render() {
         return(
             <div>
-                <Slider></Slider>
                 <PopularCourse></PopularCourse>
             </div>
         )

@@ -59,5 +59,9 @@ module.exports = {
             })
         }
         return null;
+    },
+
+    listChildCategory(category_id){
+        return db('category').where('category_id',category_id).andWhere('isdeleted',false);
     }
 }
