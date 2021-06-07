@@ -45,12 +45,5 @@ module.exports = {
         return db('user').where('id',id).update(obj);
     },
 
-    async login(username){
-        const user = await this.singleByUserName(username);
-        if (user === null){
-            return null;
-        }
-        
-        
-    }
+    
 }
