@@ -7,6 +7,7 @@ import { Footer } from './Components/Footer';
 import HomePage from './Screens/HomePage';
 import { Slider } from './Components/Slider';
 import CourseListByCategory from './Screens/CourseListByCategoryId';
+import CourseDetail from './Components/CourseDetail';
 
 class App extends Component {
   render(){
@@ -14,9 +15,9 @@ class App extends Component {
       <div>
         <Router>
           <Header></Header>
-          <Slider></Slider>
           <Route path="/" exact component={HomePage} />
           <Route path="/course/:category_id" component={CourseListByCategory}></Route>
+          <Route path="/course_detail/:course_id" component={CourseDetail}></Route>
           <Footer></Footer>
         </Router>
       </div>

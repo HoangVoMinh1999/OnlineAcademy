@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { Slider } from '../Components/Slider';
 import SubTabCourse from '../Components/SubTabCourse'
 
 class CourseListByCategory extends Component {
@@ -35,6 +36,7 @@ class CourseListByCategory extends Component {
     render() {
         return (
             <div>
+                <Slider></Slider>
                 {/* popular_courses_start */}
                 <div className="popular_courses">
                     <div className="container">

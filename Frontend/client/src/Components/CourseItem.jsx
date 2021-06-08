@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import {Link} from 'react-router-dom'
 
 class CourseItem extends Component {
     render() {
@@ -8,13 +9,13 @@ class CourseItem extends Component {
             <div>
                 <div className="single_courses">
                     <div className="thumb">
-                        <a href="#">
+                        <Link to={`/course_detail/${this.props.info.id}`}>
                             <img src="img/courses/1.png" alt />
-                        </a>
+                        </Link>
                     </div>
                     <div className="courses_info">
                         <span>{category.name}</span>
-                        <h3><a href="#">{this.props.info.name}</a></h3>
+                        <h3><Link to={`/course_detail/${this.props.info.id}`}>{this.props.info.name}</Link></h3>
                         <div className="star_prise d-flex justify-content-between">
                             <div className="star">
                                 <i className="flaticon-mark-as-favorite-star" />

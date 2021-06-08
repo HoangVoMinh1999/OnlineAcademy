@@ -1,28 +1,42 @@
 import React, { Component } from 'react'
-import { CourseDetailBanner } from './CourseDetailBanner'
+import { connect } from 'react-redux'
+import { lessonService } from '../Services';
+import CourseDetailBanner from './CourseDetailBanner'
 import { CourseDetailPreview } from './CourseDetailPreview'
 
-export class CourseDetail extends Component {
+class CourseDetail extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            detail: {},
+            lessonPreview : [],
+        }
+    }
+
+    renderLessonPreview = () => {
+        return this.state.lessonPreview.map((lesson) => {
+            return <CourseDetailPreview lesson={lesson}></CourseDetailPreview>
+        })
+    }
+
     render() {
         return (
             <div>
-                <CourseDetailBanner></CourseDetailBanner>
+                <CourseDetailBanner info={this.state.detail}></CourseDetailBanner>
 
                 <div className="courses_details_info">
                     <div className="container">
                         <div className="row">
                             <div className="col-xl-7 col-lg-7">
                                 <div className="single_courses">
-                                    <h3>Objectives</h3>
-                                    <p>Our set he for firmament morning sixth subdue darkness creeping gathered divide our let god moving. Moving in fourth air night bring upon you’re it beast let you dominion likeness open place day great wherein heaven sixth lesser subdue fowl male signs his day face waters itself and make be to our itself living. Fish in thing lights moveth. Over god spirit morning, greater had man years green multiply creature, form them in, likeness him behold two cattle for divided. Fourth darkness had. Living light there place moved divide under earth. Light face, fly dry us </p>
-                                    <h3 className="second_title">Course Outline</h3>
+                                    <h3>Mô tả chung</h3>
+                                    <p>{this.state.detail.short_description}</p>
+                                    <h3 className="second_title">Xem trước</h3>
                                 </div>
                                 <div className="outline_courses_info">
                                     <div id="accordion">
-                                        <CourseDetailPreview chapter="chapter-1"></CourseDetailPreview>
-                                        <CourseDetailPreview chapter="chapter-2"></CourseDetailPreview>
-                                        <CourseDetailPreview chapter="chapter-3"></CourseDetailPreview>
-                                        </div>
+                                        {this.renderLessonPreview()}
+                                    </div>
                                 </div>
                             </div>
                             <div className="col-xl-5 col-lg-5">
@@ -77,4 +91,28 @@ export class CourseDetail extends Component {
             </div>
         )
     }
+    async componentDidMount() {
+        const course_id = this.props.match.params.course_id;
+        const course = this.props.courseList.find(t => t.id == course_id);
+        this.setState({
+            ...this.state,
+            detail : course
+        })
+
+        const res = await lessonService.getLessons4Course(course_id);
+        const lessonPreview = res.data.filter(t => Boolean(t.is_preview) === true)
+        console.log(lessonPreview);
+        this.setState({
+            ...this.state,
+            lessonPreview : lessonPreview
+        })
+    }
 }
+
+const mapStateToProps = (state) => {
+    return {
+        courseList: state.CourseReducer.CourseList
+    }
+}
+
+export default connect(mapStateToProps)(CourseDetail)

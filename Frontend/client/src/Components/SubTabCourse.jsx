@@ -66,7 +66,6 @@ class SubTabCourse extends Component {
     }
 
     render() {
-        console.log(this.props.isActive +"&&"+ this.props.id);
         const isActive = this.props.isActive == this.props.id ? "show active" : "";
         return (
             <div className={`tab-pane fade ${isActive}`} id={this.props.id} role="tabpanel" aria-labelledby={this.props.id}>
