@@ -1,21 +1,21 @@
-import React,{Component} from 'react'
+import React, { Component } from 'react'
 import { PopularCourse } from '../Components/PopularCourse'
 import { Slider } from '../Components/Slider'
 import createAction from '../Redux/Action'
 import { GET_CATEGORY_LIST, GET_COURSE_LIST } from '../Redux/Action/type'
-import {categoryService, courseService} from '../Services/index'
-import {connect} from 'react-redux'
+import { categoryService, courseService } from '../Services/index'
+import { connect } from 'react-redux'
 
 class HomePage extends Component {
     render() {
-        return(
+        return (
             <div>
                 <Slider></Slider>
                 <PopularCourse></PopularCourse>
             </div>
         )
     }
-    async componentDidMount(){
+    async componentDidMount() {
         const res_category = await categoryService.getAllCategory();
         this.props.dispatch(
             createAction(
@@ -36,8 +36,8 @@ class HomePage extends Component {
 
 
 const mapStateToProps = (state) => {
-    return{
-        categoryList :  state.CategoryReducer.CategoryList
+    return {
+        categoryList: state.CategoryReducer.CategoryList
     }
 }
 

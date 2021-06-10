@@ -6,6 +6,7 @@ class SubTabCourse extends Component {
 
     renderContent = () => {
         if (this.props.id === "suggested-course"){
+            this.props.courseList.sort((a,b) => b.rate - a.rate);
             return this.props.courseList.map((course,index) => {
                 if (index < 6){
                     return(
@@ -17,8 +18,7 @@ class SubTabCourse extends Component {
             })
         }
         else if (this.props.id === "most-view"){
-            this.props.courseList.sort(t => t.view);
-            this.props.courseList.reverse();
+            this.props.courseList.sort((a,b) => b.view - a.view);
             return this.props.courseList.map((course,index) => {
                 if (index < 6){
                     return(
@@ -30,8 +30,7 @@ class SubTabCourse extends Component {
             })
         }
         else if (this.props.id === "most-popular"){
-            this.props.courseList.sort(t => t.current_student / t.max_students);
-            this.props.courseList.reverse();
+            this.props.courseList.sort((a,b) => (b.current_student / b.max_students)-(a.current_student / a.max_students));
             return this.props.courseList.map((course,index) => {
                 if (index < 6){
                     return(
@@ -43,8 +42,7 @@ class SubTabCourse extends Component {
             })
         }
         else if (this.props.id === "new-course"){
-            this.props.courseList.sort(t => t.id);
-            this.props.courseList.reverse();
+            this.props.courseList.sort((a,b) => b.id - a.id);
             return this.props.courseList.map((course,index) => {
                 if (index < 6){
                     return(
@@ -55,15 +53,23 @@ class SubTabCourse extends Component {
                 }
             })
         }
-
+        else {
+            const cList = this.props.courseList.filter(t => t.category_id == this.props.isActive)
+            return cList.map((course,index) => {
+                return(
+                    <div className="col-xl-4 col-lg-4 col-md-6">
+                        <CourseItem info={course}></CourseItem>
+                    </div>
+                )
+            })
+        }
     }
 
     render() {
-        const isActive = this.props.isActive === this.props.id ? "show active" : "";
+        const isActive = this.props.isActive == this.props.id ? "show active" : "";
         return (
             <div className={`tab-pane fade ${isActive}`} id={this.props.id} role="tabpanel" aria-labelledby={this.props.id}>
                 <div className="row">
-
                     {this.renderContent()}
                 </div>
             </div>

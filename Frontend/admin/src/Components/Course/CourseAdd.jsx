@@ -21,6 +21,7 @@ class CourseAdd extends Component {
                 current_student: 0,
                 short_description: '',
                 full_description: '',
+                image : '',
             },
             errors: {
                 name: '',
@@ -217,57 +218,24 @@ class CourseAdd extends Component {
                                             <div className={`product-tab-list tab-pane fade ${this.state.activeTab === "reviews" ? "active in" : ""}`} id="reviews">
                                                 <div className="row">
                                                     <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                        <div className="review-content-section">
+                                                        <form onSubmit={this.handleSubmit}>
                                                             <div className="row">
-                                                                <div className="col-lg-4">
-                                                                    <div className="pro-edt-img mg-b-0">
-                                                                        <img src="img/new-product/7-small.jpg" alt />
-                                                                    </div>
-                                                                </div>
-                                                                <div className="col-lg-8">
-                                                                    <div className="row">
-                                                                        <div className="col-lg-12">
-                                                                            <div className="product-edt-pix-wrap">
-                                                                                <div className="input-group">
-                                                                                    <span className="input-group-addon">TT</span>
-                                                                                    <input type="text" className="form-control" placeholder="Label Name" />
-                                                                                </div>
-                                                                                <div className="row">
-                                                                                    <div className="col-lg-6">
-                                                                                        <div className="form-radio">
-                                                                                            <form>
-                                                                                                <div className="radio radiofill">
-                                                                                                    <label>
-                                                                                                        <input type="radio" name="radio" /><i className="helper" />Largest Image
-                                                                                                    </label>
-                                                                                                </div>
-                                                                                                <div className="radio radiofill">
-                                                                                                    <label>
-                                                                                                        <input type="radio" name="radio" /><i className="helper" />Medium Image
-                                                                                                    </label>
-                                                                                                </div>
-                                                                                                <div className="radio radiofill">
-                                                                                                    <label>
-                                                                                                        <input type="radio" name="radio" /><i className="helper" />Small Image
-                                                                                                    </label>
-                                                                                                </div>
-                                                                                            </form>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div className="col-lg-6">
-                                                                                        <div className="product-edt-remove">
-                                                                                            <button type="button" className="btn btn-ctl-bt waves-effect waves-light">Remove
-                                                                                                <i className="fa fa-times" aria-hidden="true" />
-                                                                                            </button>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
+                                                                <div className="review-content-section">
+                                                                    <div className="input-group mg-b-pro-edt">
+                                                                        <span className="input-group-addon"><i className="icon nalika-edit" aria-hidden="true" /></span>
+                                                                        <input type="file" className="form-control" name="image" value={this.state.values.image} placeholder="Tên khóa học" onChange={this.handleChange} onBlur={this.handleBlur} />
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
+                                                            <div className="row">
+                                                                <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                    <div className="text-center custom-pro-edt-ds">
+                                                                        <button type="submit" className="btn btn-ctl-bt waves-effect waves-light m-r-10">Save</button>
+                                                                        <button type="button" className="btn btn-ctl-bt waves-effect waves-light" onClick={() => this.props.history.goBack()}>Discard</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </form>
                                                     </div>
                                                 </div>
                                             </div>

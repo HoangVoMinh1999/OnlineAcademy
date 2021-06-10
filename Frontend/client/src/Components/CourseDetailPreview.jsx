@@ -8,15 +8,14 @@ export class CourseDetailPreview extends Component {
                 <div className="card">
                     <div className="card-header" id="headingTwo">
                         <h5 className="mb-0">
-                            <button className="btn btn-link collapsed" data-toggle="collapse" data-target={this.chapter} aria-expanded="false" aria-controls="collapseTwo">
-                                <i className="flaticon-question" /> Is WordPress hosting worth it?
+                            <button className="btn btn-link collapsed" data-toggle="collapse" data-target={`#${this.props.lesson.id}`} aria-expanded="false" aria-controls={this.props.lesson.id}>
+                                <i className="flaticon-question" /> {this.props.lesson.title}
                             </button>
                         </h5>
                     </div>
-                    <div id={this.props.chapter} className="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                    <div id={this.props.lesson.id} className="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
                         <div className="card-body">
-                            Our set he for firmament morning sixth subdue darkness creeping gathered divide our
-                            let god moving. Moving in fourth air night bring upon
+                        {this.props.lesson.content}
                         </div>
                     </div>
                 </div>

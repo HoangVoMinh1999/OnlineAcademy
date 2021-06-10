@@ -1,7 +1,16 @@
 import React, { Component } from 'react'
 import { LoginModal } from './LoginModal'
+import {connect} from 'react-redux'
+import { Link } from 'react-router-dom'
 
-export class Header extends Component {
+class Header extends Component {
+
+    renderMainCategory =() => {
+        return this.props.mainCategoryList.map((category,index) => {
+            return <li key={index}><Link to={`/course/${category.id}`}>{category.name}</Link></li>
+        })
+    }
+
     render() {
         return (
             <div>
@@ -13,23 +22,19 @@ export class Header extends Component {
                                 <div className="row align-items-center no-gutters">
                                     <div className="col-xl-2 col-lg-2">
                                         <div className="logo-img">
-                                            <a href="index.html">
+                                            <Link to="/">
                                                 <img src="img/logo.png" alt />
-                                            </a>
+                                            </Link>
                                         </div>
                                     </div>
                                     <div className="col-xl-7 col-lg-7">
                                         <div className="main-menu  d-none d-lg-block">
                                             <nav>
                                                 <ul id="navigation">
-                                                    <li><a className="active" href="index.html">home</a></li>
+                                                    <li><Link className="active" to="/">home</Link></li>
                                                     <li><a href="#">Course <i className="ti-angle-down" /></a>
                                                         <ul className="submenu">
-                                                            <li><a href="#">IT</a></li>
-                                                            <li><a href="#">Business</a></li>
-                                                            <li><a href="#">Art</a></li>
-                                                            <li><a href="#">Music</a></li>
-                                                            <li><a href="#">Other</a></li>
+                                                            {this.renderMainCategory()}
                                                         </ul>
                                                     </li>
                                                     <li><a href="about.html">About</a></li>
@@ -66,3 +71,11 @@ export class Header extends Component {
         )
     }
 }
+
+const mapStateToProps = (state) => {
+    return {
+        mainCategoryList : state.CategoryReducer.MainCategoryList
+    }
+}
+
+export default connect(mapStateToProps)(Header);
