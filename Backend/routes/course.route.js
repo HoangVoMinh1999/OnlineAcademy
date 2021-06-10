@@ -37,7 +37,7 @@ router.patch('/delete/:id',async function(req,res,next){
     const isDeleted = await courseModel.delete(id);
     if (isDeleted === null){
         res.json({
-            'err_message':'Cateogory is not exist !!!'
+            'err_message':'Course is not exist !!!'
         })
     }
     else if (isDeleted !== 1){
@@ -56,7 +56,26 @@ router.patch('/:id', async function(req,res,next){
     const isUpdated = await courseModel.update(id,course);
     if (isUpdated === null){
         res.json({
-            'err_message':'Cateogory is not exist !!!'
+            'err_message':'Course is not exist !!!'
+        })
+    }
+    else if (isUpdated !== 1){
+        res.json({
+            'err_message': 'Update failed !!!'
+        })
+    }
+    res.json({
+        'message':'Update successfully !!!'
+    })
+})
+
+router.patch('/course_img/:id',async (req,res) => {
+    const id = req.params.id;
+    const img = req.body;
+    const isUpdated = await courseModel.updateImage(id,img);
+    if (isUpdated === null){
+        res.json({
+            'err_message':'Course is not exist !!!'
         })
     }
     else if (isUpdated !== 1){

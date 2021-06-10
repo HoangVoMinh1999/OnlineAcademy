@@ -5,7 +5,7 @@ module.exports = {
         return db('user').where('isdeleted',0);
     },
 
-    addteacher(obj){
+    register(obj){
         return db('user').insert(obj);
     },
 
@@ -26,8 +26,8 @@ module.exports = {
     },
 
     async delete(id){
-        const teacher = await this.singleById(id);
-        if (teacher === null){
+        const user = await this.singleById(id);
+        if (user === null){
             return null;
         }
         return db('user').where('id',id).update({
@@ -37,13 +37,32 @@ module.exports = {
     },
 
     async update(id,obj){
-        const teacher = await this.singleById(id);
-        if (teacher === null){
+        const user = await this.singleById(id);
+        if (user === null){
             return null;
         }
         obj.Log_UpdatedDate = new Date();
         return db('user').where('id',id).update(obj);
     },
 
-    
+    async updateRfToken(id,rfToken){
+        const user = await this.singleById(id);
+        if (user === null){
+            return null;
+        }
+        user.Log_UpdatedDate = new Date();
+        user.rfToken = rfToken
+        return db('user').where('id',id).update(user);
+    },
+
+    async isValidRFToken(id,rfToken){
+        const user = await this.singleById(id);
+        if (user === null){
+            return null;
+        }
+        if (user.rfToken === rfToken){
+            return true;
+        }
+        return false;
+    },
 }

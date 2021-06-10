@@ -55,5 +55,14 @@ module.exports = {
                                                     'view':course.view + 1,
                                                     'Log_UpdatedDate': new Date(),
                                                     });
+    },
+
+
+    async updateImage(id,img){
+        const course = await this.singleById(id);
+        if (course === null){
+            return null;
+        }
+        return db('course').where('id',id).update({'image':img})
     }
 }

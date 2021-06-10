@@ -7,6 +7,8 @@ app.use(morgan('dev'));
 app.use(express.json());
 app.use(cors('*'));
 
+const auth = require('./middlewares/auth.mdw')
+
 app.use('/api/category',require('./routes/category.route'))
 app.use('/api/user',require('./routes/user.route'))
 app.use('/api/course',require('./routes/course.route'))

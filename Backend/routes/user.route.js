@@ -1,42 +1,30 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
-const { singleByUserName } = require('../models/user.model');
 const userModel = require('../models/user.model');
+const jwt = require('jsonwebtoken');
+const randomstring = require('randomstring');
 
 const router = express.Router();
 
 router.get('/', async function (req, res, next) {
     const listteacher = await userModel.all();
-    res.json(listteacher);
+    return res.json(listteacher);
 })
-
-// router.post('/', async function (req, res, next) {
-//     const user = req.body;
-//     if (teacher.name !== undefined) {
-//         user.Log_CreatedDate = new Date();
-//         const ids = await userModel.addteacher(teacher);
-//         user.id = ids[0];
-//         res.status(200).json(teacher);
-//     }
-//     res.json({
-//         'err_message': 'No content for user'
-//     });
-// })
 
 router.patch('/delete/:id', async function (req, res, next) {
     const id = req.params.id;
     const isDeleted = await userModel.delete(id);
     if (isDeleted === null) {
-        res.json({
-            'message': 'User is not exist !!!'
+        return res.json({
+            message: 'User is not exist !!!'
         })
     } else if (isDeleted !== 1) {
-        res.json({
-            'message': 'Delete failed !!!'
+        return res.json({
+            message: 'Delete failed !!!'
         })
     }
-    res.json({
-        'message': 'Delete successfully !!!'
+    return res.json({
+        message: 'Delete successfully !!!'
     })
 })
 
@@ -45,38 +33,39 @@ router.patch('/:id', async function (req, res, next) {
     constuser = req.body;
     const isUpdated = await userModel.update(id, teacher);
     if (isUpdated === null) {
-        res.json({
-            'message': 'User is not exist !!!'
+        return res.json({
+            message: 'User is not exist !!!'
         })
     } else if (isUpdated !== 1) {
-        res.json({
-            'message': 'Update failed !!!'
+        return res.json({
+            message: 'Update failed !!!'
         })
     }
-    res.json({
-        'message': 'Update successfully !!!'
+    return res.json({
+        message: 'Update successfully !!!'
     })
 })
 
 router.post('/register', async function (req, res, next) {
     const user = req.body;
     if (user.username === undefined || user.password === undefined) {
-        return res.status(400).json({
-            'message': 'Invalid username or password!'
+        return res.json({
+            message: 'Invalid username or password!'
         })
     }
     const tmp = await userModel.singleByUserName(user.username);
     if (tmp !== null) {
-        return res.status(400).json({
-            'message': 'Username is available!'
+        return res.json({
+            message: 'Username is not available!'
         })
     }
     user.password = bcrypt.hashSync(user.password, 10);
     user.Log_CreatedDate = new Date();
-    const ids = await userModel.addteacher(user);
+    const ids = await userModel.register(user);
     user.id = ids[0];
+    delete user.password;
     return res.status(200).json({
-        'message': 'Register successfully!'
+        account : user
     });
 
 })
@@ -86,18 +75,49 @@ router.post('/login', async function (req, res, next) {
     const tmp = await userModel.singleByUserName(user.username);
     if (tmp === null) {
         return res.status(404).json({
-            'message': 'Username is not exist!'
+            authenticated : false,
+            message: 'Username is not exist!'
         })
     }
     const isMatch = bcrypt.compareSync(user.password, tmp.password);
     if (isMatch === false)
     {
         return res.status(400).json({
-            'message': 'Password is incorrect!'
+            authenticated: false,
+            message: 'Password is incorrect!'
         })
     }
+    //--- input for jwt.sign
+    const payload = {
+        userId : tmp.id
+    }
+    const opts = {expiresIn : 10*60}
+    //--- Token
+    const accessToken = jwt.sign(payload,'SECRET_KEY',opts);
+    const rfToken = randomstring.generate(99);
+    await userModel.updateRfToken(tmp.id,rfToken)
     return res.status(200).json({
-        'message': 'Login successfully!'
+        authenticated: true,
+        accessToken : accessToken,
+        rfToken: rfToken,
     });
+})
+
+router.post('/refresh',async (req,res) => {
+    const {accessToken , rfToken} = req.body;
+    const {userId} = jwt.verify(accessToken,'SECRET_KEY',{
+        ignoreExpiration : true,
+    })
+    const ret = await userModel.isValidRFToken(userId,rfToken);
+    if (ret === true){
+        const opts = {expiresIn : 10*60}
+        const newAccessToken = jwt.sign({userId},'SECRET_KEY',opts);
+        return res.json({
+            accessToken : newAccessToken
+        })
+    }
+    return res.status(400).json({
+        message : 'Refresh token is revoked'
+    })
 })
 module.exports = router;

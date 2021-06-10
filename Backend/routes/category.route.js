@@ -1,4 +1,5 @@
-const express = require('express')
+const express = require('express');
+const categoryModel = require('../models/category.model');
 const CategoryModel = require('../models/category.model');
 
 const router = express.Router();
@@ -79,5 +80,11 @@ router.patch('/:id', async function(req,res,next){
     res.json({
         'message':'Update successfully !!!'
     })
+})
+
+router.get('/cateogry/:id', async (req,res) => {
+    const category_id = req.params.id;
+    const categoryList = await categoryModel.listChildCategory(category_id);
+    res.status(200).json(categoryList);
 })
 module.exports = router;
