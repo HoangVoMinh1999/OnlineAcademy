@@ -33,6 +33,15 @@ class CourseListByCategory extends Component {
         })
     }
 
+    shouldComponentUpdate(prevProps){
+        console.log(prevProps.match.params.category_id+ " + "+ this.props.match.params.category_id)
+        if (prevProps.match.params.category_id !== this.props.match.params.category_id){
+            console.log("true");
+            return true;
+        }
+        return false;
+    }
+
     render() {
         return (
             <div>
@@ -75,10 +84,12 @@ class CourseListByCategory extends Component {
     componentDidMount() {
         const category_id = this.props.match.params.category_id;
         const listCategory = this.props.categoryList.filter(t => t.category_id == category_id);
-        this.setState({
-            isActive: listCategory[0].id,
-            listCategory: listCategory,
-        })
+        if (listCategory.length > 0){
+            this.setState({
+                isActive: listCategory[0].id,
+                listCategory: listCategory,
+            })
+        }
     }
 }
 

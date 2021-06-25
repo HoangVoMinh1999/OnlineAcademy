@@ -1,4 +1,3 @@
-import './App.css';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { appendScript } from './utils/appendScript';
 import { Component } from 'react';
@@ -8,24 +7,35 @@ import HomePage from './Screens/HomePage';
 import { Slider } from './Components/Slider';
 import CourseListByCategory from './Screens/CourseListByCategoryId';
 import CourseDetail from './Components/CourseDetail';
-
+import { LoginModal } from "./Components/LoginModal";
+import Login from "./Screens/Login";
+import Register from "./Screens/Register";
 class App extends Component {
-  render(){
-    return(
+  render() {
+    return (
       <div>
         <Router>
+
+
           <Header></Header>
-          <Route path="/" exact component={HomePage} />
-          <Route path="/course/:category_id" component={CourseListByCategory}></Route>
-          <Route path="/course_detail/:course_id" component={CourseDetail}></Route>
+          <Switch>
+            <Route path="/" exact component={HomePage} />
+            <Route path="/course/:category_id" component={CourseListByCategory}></Route>
+            <Route path="/course_detail/:course_id" component={CourseDetail}></Route>
+            <Route path="/login" exact component={Login} />
+            <Route path="/register" exact component={Register} />
+          </Switch>
           <Footer></Footer>
+
+
+
         </Router>
-      </div>
+      </div >
     )
   }
 
-  componentDidMount(){
-    
+  componentDidMount() {
+
     appendScript("js/vendor/modernizr-3.5.0.min.js");
     appendScript("js/vendor/jquery-1.12.4.min.js");
     appendScript("js/popper.min.js");
@@ -44,13 +54,13 @@ class App extends Component {
     appendScript("js/jquery.magnific-popup.min.js");
     appendScript("js/plugins.js");
     appendScript("js/gijgo.min.js");
-  
+
     appendScript("js/contact.js");
     appendScript("js/jquery.ajaxchimp.min.js");
     appendScript("js/jquery.form.js");
     appendScript("js/jquery.validate.min.js");
     appendScript("js/mail-script.js");
-  
+
     appendScript("js/main.js");
   }
 }

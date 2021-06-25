@@ -1,15 +1,61 @@
 import React, { Component } from 'react'
 import { LoginModal } from './LoginModal'
-import {connect} from 'react-redux'
-import { Link } from 'react-router-dom'
+import { connect } from 'react-redux'
+import { Link} from 'react-router-dom'
 
 class Header extends Component {
 
-    renderMainCategory =() => {
-        return this.props.mainCategoryList.map((category,index) => {
+
+    renderMainCategory = () => {
+        return this.props.mainCategoryList.map((category, index) => {
             return <li key={index}><Link to={`/course/${category.id}`}>{category.name}</Link></li>
         })
     }
+
+    renderLogin = () => {
+        if (!localStorage.user_accessToken) {
+            return (
+                <div>
+                    <div className="log_chat_area d-flex align-items-center">
+                        < Link to="/login" className="login">
+                            <i className="flaticon-user" />
+                            <span>Đăng nhập</span>
+                        </Link>
+                    </div>
+                </div>
+            )
+        }
+        else {
+            return (
+                <div>
+                    <div className="main-menu  d-none d-lg-block">
+                        <nav>
+                            <ul id="navigation">
+                                <li><a href="#">{localStorage.user_username} <i className="ti-angle-down" /></a>
+                                    <ul className="submenu">
+                                        <li><Link to="/">Thông tin cá nhân</Link></li>
+                                        <li><Link to="/" onClick={this.handleLogout}>Dăng xuất</Link></li>
+                                    </ul>
+                                </li>
+                                {localStorage.user_IsAdmin === '1' ? <li><a href="about.html">Đến trang admin</a></li> : <span></span>}
+                                
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            )
+        }
+    }
+
+    handleLogout = (event) => {
+        event.preventDefault();
+        delete localStorage.user_accessToken ;
+        delete localStorage.user_UserId;
+        delete localStorage.user_username;
+        delete localStorage.user_IsAdmin;
+        window.location.reload();
+    }
+    
 
     render() {
         return (
@@ -44,18 +90,7 @@ class Header extends Component {
                                         </div>
                                     </div>
                                     <div className="col-xl-3 col-lg-3 d-none d-lg-block">
-                                        <div className="log_chat_area d-flex align-items-center">
-                                            <a href="#test-form" className="login popup-with-form">
-                                                <i className="flaticon-user" />
-                                                <span>log in</span>
-                                            </a>
-                                            <div className="live_chat_btn">
-                                                <a className="boxed_btn_orange" href="#">
-                                                    <i className="fa fa-phone" />
-                                                    <span>+10 378 467 3672</span>
-                                                </a>
-                                            </div>
-                                        </div>
+                                        {this.renderLogin()}
                                     </div>
                                     <div className="col-12">
                                         <div className="mobile_menu d-block d-lg-none" />
@@ -66,7 +101,6 @@ class Header extends Component {
                     </div>
                 </header>
                 {/* header-end */}
-                <LoginModal></LoginModal>
             </div>
         )
     }
@@ -74,7 +108,7 @@ class Header extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        mainCategoryList : state.CategoryReducer.MainCategoryList
+        mainCategoryList: state.CategoryReducer.MainCategoryList
     }
 }
 

@@ -74,7 +74,7 @@ router.post('/login', async function (req, res, next) {
     const user = req.body;
     const tmp = await userModel.singleByUserName(user.username);
     if (tmp === null) {
-        return res.status(404).json({
+        return res.json({
             authenticated : false,
             message: 'Username is not exist!'
         })
@@ -82,14 +82,15 @@ router.post('/login', async function (req, res, next) {
     const isMatch = bcrypt.compareSync(user.password, tmp.password);
     if (isMatch === false)
     {
-        return res.status(400).json({
+        return res.json({
             authenticated: false,
             message: 'Password is incorrect!'
         })
     }
     //--- input for jwt.sign
     const payload = {
-        userId : tmp.id
+        userId : tmp.id,
+        IsAdmin: tmp.IsAdmin,
     }
     const opts = {expiresIn : 10*60}
     //--- Token
