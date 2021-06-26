@@ -2,6 +2,9 @@ import React, { Component } from 'react'
 import { LoginModal } from './LoginModal'
 import { connect } from 'react-redux'
 import { Link} from 'react-router-dom'
+import { purchaseCourseService } from '../Services'
+import createAction from '../Redux/Action'
+import { GET_PURCHASED_COURSE_LIST } from '../Redux/Action/type'
 
 class Header extends Component {
 
@@ -103,6 +106,17 @@ class Header extends Component {
                 {/* header-end */}
             </div>
         )
+    }
+    async componentDidMount(){
+        if (localStorage.user_accessToken){
+            const res = await purchaseCourseService.getPurchasedCourse4User(localStorage.user_UserId);
+            this.props.dispatch(
+                createAction(
+                    GET_PURCHASED_COURSE_LIST,
+                    res.data
+                )
+            )
+        }
     }
 }
 

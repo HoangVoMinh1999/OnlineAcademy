@@ -36,16 +36,16 @@ router.patch('/delete/:id',async function(req,res,next){
     const id = req.params.id;
     const isDeleted = await courseModel.delete(id);
     if (isDeleted === null){
-        res.json({
+        return res.json({
             'err_message':'Course is not exist !!!'
         })
     }
     else if (isDeleted !== 1){
-        res.json({
+        return res.json({
             'err_message': 'Delete failed !!!'
         })
     }
-    res.json({
+    return res.json({
         'message':'Delete successfully !!!'
     })
 })
