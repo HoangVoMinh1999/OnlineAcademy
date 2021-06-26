@@ -19,6 +19,10 @@ class CourseDetail extends Component {
         })
     }
 
+    handleBuyCourse = () => {
+        
+    }
+
     render() {
         return (
             <div>
@@ -68,7 +72,7 @@ class CourseDetail extends Component {
                                             <li><a href="#"> <i className="ti-linkedin" /> </a></li>
                                         </ul>
                                     </div>
-                                    <a href="#" className="boxed_btn">Buy Course</a>
+                                    <button className="boxed_btn" onClick="">Buy Course</button>
                                     <div className="feedback_info">
                                         <h3>Write your feedback</h3>
                                         <p>Your rating</p>

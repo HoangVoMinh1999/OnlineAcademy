@@ -37,25 +37,67 @@ export default class Login extends Component {
     }
     handleSubmit = async (event) => {
         event.preventDefault(); 
-        const res = await userService.login(this.state.values.username, this.state.values.password);
-        if (!res.data.authenticated) {
-            swal({
-                title: "Error",
-                text: "Username or password is incorrect !!!",
-                icon: "error",
-                button: "Ok",
-            });
+        if (Object.keys(this.state.errors).every(t => this.state.errors[t] === '')){
+            const res = await userService.login(this.state.values.username, this.state.values.password);
+            if (!res.data.authenticated) {
+                swal({
+                    title: "Cảnh báo",
+                    text: "Username or password is incorrect !!!",
+                    icon: "error",
+                    button: "Ok",
+                });
+            }
+            else{
+                localStorage.user_accessToken = res.data.accessToken;
+                const obj = parseJwt(res.data.accessToken);
+                localStorage.user_UserId = obj.userId;
+                localStorage.user_username = this.state.values.username;
+                localStorage.user_IsAdmin = obj.IsAdmin.data[0];
+                this.props.history.push('/');
+            }
         }
         else{
-            localStorage.user_accessToken = res.data.accessToken;
-            const obj = parseJwt(res.data.accessToken);
-            localStorage.user_UserId = obj.userId;
-            localStorage.user_username = this.state.values.username;
-            localStorage.user_IsAdmin = obj.IsAdmin.data[0];
-            this.props.history.goBack();
+            swal({
+                title: "Cảnh báo",
+                text: "Vui lòng điền đầy đủ thông tin !!!",
+                icon: "error",
+                button: "Đồng ý",
+            });
         }
     }
 
+    validateError = (name,value) => {
+        let errMessage = '';
+        if (name === 'username'){
+            if (!value){
+                errMessage = 'Vui lòng nhập username !!!'
+            }
+        }
+        else if (name === 'password'){
+            if (!value){
+                errMessage = 'Vui lòng nhập password !!!'
+            }
+        }
+        return errMessage;
+    }
+
+    handleOnBlur = (event) => {
+        let {name,value} = event.target;
+        let error = this.validateError(name,value);
+        this.setState({
+            errors : {
+                ...this.state.errors,
+                [name]: error,
+            }
+        })
+    }
+
+    renderError = (errMessage) => {
+        if (errMessage !== '') {
+            return <div className="alert alert-danger">{errMessage}</div>
+        }
+        return ''
+    }
     
     render() {
         return (
@@ -74,10 +116,12 @@ export default class Login extends Component {
                                         <h3>Sign in</h3>
                                         <div className="row">
                                             <div className="col-xl-12 col-md-12">
-                                                <input type="text" placeholder="Enter email" value={this.state.values.username} name="username" onChange={this.hanlleOnChange} />
+                                                <input type="text" placeholder="Enter username" value={this.state.values.username} name="username" onChange={this.hanlleOnChange} onBlur={this.handleOnBlur}/>
+                                                {this.renderError(this.state.errors.username)}
                                             </div>
                                             <div className="col-xl-12 col-md-12">
-                                                <input type="password" placeholder="Password" value={this.state.values.password} name="password" onChange={this.hanlleOnChange} />
+                                                <input type="password" placeholder="Password" value={this.state.values.password} name="password" onChange={this.hanlleOnChange} onBlur={this.handleOnBlur}/>
+                                                {this.renderError(this.state.errors.password)}
                                             </div>
                                             <div className="col-xl-12">
                                                 <button type="submit" className="boxed_btn_orange">Sign in</button>

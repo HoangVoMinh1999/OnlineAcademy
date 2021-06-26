@@ -19,7 +19,7 @@ class Header extends Component {
                     <div className="log_chat_area d-flex align-items-center">
                         < Link to="/login" className="login">
                             <i className="flaticon-user" />
-                            <span>Đăng nhập</span>
+                            <span>Đăng nhập / Đăng ký</span>
                         </Link>
                     </div>
                 </div>
@@ -34,7 +34,7 @@ class Header extends Component {
                                 <li><a href="#">{localStorage.user_username} <i className="ti-angle-down" /></a>
                                     <ul className="submenu">
                                         <li><Link to="/">Thông tin cá nhân</Link></li>
-                                        <li><Link to="/" onClick={this.handleLogout}>Dăng xuất</Link></li>
+                                        <li><Link to="/" onClick={this.handleLogout}>Đăng xuất</Link></li>
                                     </ul>
                                 </li>
                                 {localStorage.user_IsAdmin === '1' ? <li><a href="about.html">Đến trang admin</a></li> : <span></span>}

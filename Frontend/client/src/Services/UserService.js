@@ -11,4 +11,9 @@ export class UserService {
         }
         return Axios.post(currentURL,data)
     }
+
+    register(info){
+        let currentURL = this.baseURL + '/register'
+        return Axios.post(currentURL,info)
+    }
 }

@@ -59,6 +59,7 @@ router.post('/register', async function (req, res, next) {
             message: 'Username is not available!'
         })
     }
+    delete user.password_02;
     user.password = bcrypt.hashSync(user.password, 10);
     user.Log_CreatedDate = new Date();
     const ids = await userModel.register(user);
