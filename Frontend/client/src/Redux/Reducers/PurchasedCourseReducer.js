@@ -1,16 +1,16 @@
 import { GET_PURCHASED_COURSE_LIST } from "../Action/type"
 
 const PurchasedCourseState = {
-    CourseList : [],
+    PurchasedCourseList : [],
 }
 
 
 export const PurchasedCourseReducer = (state = PurchasedCourseState, action) => {
     switch(action.type){
         case GET_PURCHASED_COURSE_LIST:{
-            let courseList = state.CourseList;
+            let courseList = state.PurchasedCourseList;
             courseList = action.payload;
-            state.CourseList = courseList;
+            state.PurchasedCourseList = courseList;
             return {...state};
         }
     }

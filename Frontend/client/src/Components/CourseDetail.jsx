@@ -1,8 +1,11 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { lessonService } from '../Services';
+import { lessonService, purchaseCourseService } from '../Services';
 import CourseDetailBanner from './CourseDetailBanner'
 import { CourseDetailPreview } from './CourseDetailPreview'
+import swal from 'sweetalert';
+import createAction from '../Redux/Action';
+import { GET_PURCHASED_COURSE_LIST } from '../Redux/Action/type';
 
 class CourseDetail extends Component {
     constructor(props) {
@@ -10,6 +13,7 @@ class CourseDetail extends Component {
         this.state = {
             detail: {},
             lessonPreview : [],
+            short_description : '',
         }
     }
 
@@ -19,8 +23,93 @@ class CourseDetail extends Component {
         })
     }
 
-    handleBuyCourse = () => {
-        
+    renderBuyCourseButton = () => {
+        const course_id = this.props.match.params.course_id;
+        const course = this.props.purchasedCourseList.find(t => t.course_id.toString() === course_id.toString());
+        if (course){
+            return <button className="boxed_btn btn-danger" onClick={this.cancelCourse}>Hủy khóa học</button>
+        }
+        return <button className="boxed_btn" onClick={this.buyCourse}>Mua khóa học</button>
+    }
+
+    buyCourse = (event) => {
+        event.preventDefault();
+        swal("Bạn có chắc chắn muốn mua khóa học này không ???", {
+            buttons: {
+              cancel: "Quay lại",
+              purchase: "Đồng ý",
+            },
+          })
+          .then(async (value) => {
+            switch (value) {
+           
+              case "purchase":
+                const course_id = this.props.match.params.course_id;
+                let data = {
+                    user_id : localStorage.user_UserId,
+                    course_id: course_id,
+                }
+                let res = await purchaseCourseService.buyCourse4User(data);
+                if (!res.data.err_message) {
+                    swal("Mua khóa học thành công !!!");
+                } 
+                else{
+                    swal("Mua khóa học không thành công !!!");
+                }
+                if (localStorage.user_accessToken){
+                    const res = await purchaseCourseService.getPurchasedCourse4User(localStorage.user_UserId);
+                    this.props.dispatch(
+                        createAction(
+                            GET_PURCHASED_COURSE_LIST,
+                            res.data
+                        )
+                    )
+                }
+                break;
+           
+              default:
+            }
+          });
+    }
+
+    cancelCourse = (event) => {
+        event.preventDefault();
+        swal("Bạn có chắc chắn muốn hủy khóa học này không ???", {
+            buttons: {
+              cancel: "Quay lại",
+              delete: "Đồng ý",
+            },
+          })
+          .then(async (value) => {
+            switch (value) {
+           
+              case "delete":
+                const course_id = this.props.match.params.course_id;
+                let data = {
+                    user_id : localStorage.user_UserId,
+                    course_id: course_id,
+                }
+                let res = await purchaseCourseService.deleteCourse4User(data);
+                if (!res.data.err_message) {
+                    swal("Hủy khóa học thành công !!!");
+                } 
+                else{
+                    swal("Hủy khóa học không thành công !!!");
+                }
+                if (localStorage.user_accessToken){
+                    const res = await purchaseCourseService.getPurchasedCourse4User(localStorage.user_UserId);
+                    this.props.dispatch(
+                        createAction(
+                            GET_PURCHASED_COURSE_LIST,
+                            res.data
+                        )
+                    )
+                }
+                break;
+           
+              default:
+            }
+          });
     }
 
     render() {
@@ -34,7 +123,7 @@ class CourseDetail extends Component {
                             <div className="col-xl-7 col-lg-7">
                                 <div className="single_courses">
                                     <h3>Mô tả chung</h3>
-                                    <p>{this.state.detail.short_description}</p>
+                                    <p>{this.state.short_description }</p>
                                     <h3 className="second_title">Xem trước</h3>
                                 </div>
                                 <div className="outline_courses_info">
@@ -72,7 +161,7 @@ class CourseDetail extends Component {
                                             <li><a href="#"> <i className="ti-linkedin" /> </a></li>
                                         </ul>
                                     </div>
-                                    <button className="boxed_btn" onClick="">Buy Course</button>
+                                    {this.renderBuyCourseButton()}
                                     <div className="feedback_info">
                                         <h3>Write your feedback</h3>
                                         <p>Your rating</p>
@@ -97,15 +186,18 @@ class CourseDetail extends Component {
     }
     async componentDidMount() {
         const course_id = this.props.match.params.course_id;
+        console.log("course_id:"+course_id)
         const course = this.props.courseList.find(t => t.id == course_id);
+        console.log("list"+ this.props.courseList);
+        console.log(course);
         this.setState({
             ...this.state,
-            detail : course
+            detail : course,
         })
 
+
         const res = await lessonService.getLessons4Course(course_id);
-        const lessonPreview = res.data.filter(t => Boolean(t.is_preview) === true)
-        console.log(lessonPreview);
+        const lessonPreview = res.data.filter(t => t.is_preview.data[0] === '1')
         this.setState({
             ...this.state,
             lessonPreview : lessonPreview
@@ -115,7 +207,8 @@ class CourseDetail extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        courseList: state.CourseReducer.CourseList
+        courseList: state.CourseReducer.CourseList,
+        purchasedCourseList : state.PurchasedCourseReducer.PurchasedCourseList,
     }
 }
 

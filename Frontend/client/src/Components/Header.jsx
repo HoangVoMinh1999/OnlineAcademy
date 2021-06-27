@@ -56,7 +56,6 @@ class Header extends Component {
         delete localStorage.user_UserId;
         delete localStorage.user_username;
         delete localStorage.user_IsAdmin;
-        window.location.reload();
     }
     
 
