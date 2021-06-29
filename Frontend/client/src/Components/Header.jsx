@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { LoginModal } from './LoginModal'
 import { connect } from 'react-redux'
-import { Link} from 'react-router-dom'
+import { Link,Redirect, useHistory} from 'react-router-dom'
 import { purchaseCourseService } from '../Services'
 import createAction from '../Redux/Action'
 import { GET_PURCHASED_COURSE_LIST } from '../Redux/Action/type'
@@ -37,7 +37,7 @@ class Header extends Component {
                                 <li><a href="#">{localStorage.user_username} <i className="ti-angle-down" /></a>
                                     <ul className="submenu">
                                         <li><Link to="/">Thông tin cá nhân</Link></li>
-                                        <li><Link to="/" onClick={this.handleLogout}>Đăng xuất</Link></li>
+                                        <li onClick={this.handleLogout}><Link to="/" > Đăng xuất</Link></li>
                                     </ul>
                                 </li>
                                 {localStorage.user_IsAdmin === '1' ? <li><a href="about.html">Đến trang admin</a></li> : <span></span>}
