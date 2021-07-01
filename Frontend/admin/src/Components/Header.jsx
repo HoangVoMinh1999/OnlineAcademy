@@ -87,11 +87,6 @@ export default class Header extends Component {
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div className="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-                                                    <div className="breadcomb-report">
-                                                        <button data-toggle="tooltip" data-placement="left" title="Download Report" className="btn"><i className="icon nalika-download" /></button>
-                                                    </div>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>

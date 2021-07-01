@@ -4,7 +4,11 @@ import swal from 'sweetalert'
 import { connect } from 'react-redux';
 import { GET_LIST } from '../../Redux/Action/type';
 import createAction from '../../Redux/Action';
-import wysiwyg from '../wysiwyg'
+import { Editor } from "react-draft-wysiwyg";
+import { EditorState, convertToRaw, ContentState } from 'draft-js';
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import draftToHtml from 'draftjs-to-html';
+import htmlToDraft from 'html-to-draftjs';
 
 class CourseAdd extends Component {
 
@@ -21,7 +25,7 @@ class CourseAdd extends Component {
                 current_student: 0,
                 short_description: '',
                 full_description: '',
-                image : '',
+                image: '',
             },
             errors: {
                 name: '',
@@ -34,6 +38,7 @@ class CourseAdd extends Component {
                 full_description: '',
             },
             activeTab: 'description',
+            editorState: EditorState.createEmpty(),
         }
     };
 
@@ -68,7 +73,6 @@ class CourseAdd extends Component {
     };
 
     handleBlur = (e) => {
-        console.log('Blur')
         const { name, value } = e.target;
         const errMessage = this.validateData(name, value);
         this.setState({ errors: { ...this.state.errors, [name]: errMessage } })
@@ -147,7 +151,18 @@ class CourseAdd extends Component {
         })
     }
 
+    onEditorStateChange = (editorState) => {
+        this.setState({
+            editorState,
+            values : {
+                ...this.state.values,
+                full_description: draftToHtml(convertToRaw(editorState.getCurrentContent())),
+            }
+        });
+    };
+
     render() {
+        const { editorState } = this.state;
         return (
             <div>
                 <div className="single-product-tab-area mg-b-30">
@@ -198,13 +213,27 @@ class CourseAdd extends Component {
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div className="row">
-                                                        <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                            <div className="text-center custom-pro-edt-ds">
-                                                                <h3 className="text-white">Mô tả chi tiết</h3>
+                                                    <div class="row">
+                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                            <div class="lead-head">
+                                                                <h3 style={{ color : 'white'}}>Leave A Comment</h3>
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <div className="row">
+                                                        <div className="coment-area">
+                                                            <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                <Editor
+                                                                    editorState={editorState}
+                                                                    editorStyle={{ border: "1px solid" , backgroundColor : 'white'}}
+                                                                    wrapperClassName="demo-wrapper"
+                                                                    editorClassName="demo-editor"
+                                                                    onEditorStateChange={this.onEditorStateChange}
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
                                                     <div className="row">
                                                         <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                                             <div className="text-center custom-pro-edt-ds">
