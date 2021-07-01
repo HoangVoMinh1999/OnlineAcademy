@@ -5,6 +5,11 @@ import { connect } from 'react-redux';
 import { GET_LIST } from '../../Redux/Action/type';
 import createAction from '../../Redux/Action';
 import LessonList from '../Lesson/LessonList';
+import { Editor } from "react-draft-wysiwyg";
+import { EditorState, convertToRaw, ContentState, convertFromHTML } from 'draft-js';
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import draftToHtml from 'draftjs-to-html';
+import htmlToDraft from 'html-to-draftjs';
 
 class CourseEdit extends Component {
 
@@ -35,8 +40,7 @@ class CourseEdit extends Component {
                 short_description: '',
                 full_description: '',
             },
-
-
+            editorState: EditorState.createEmpty(),
         }
     };
 
@@ -44,9 +48,7 @@ class CourseEdit extends Component {
         const { name, value } = e.target;
         console.log(name + " " + e.target.checked)
         if (name === "IsFinish") {
-            this.setState({
-                IsFinish: e.target.checked
-            })
+            this.setState({ values: { ...this.state.values, IsFinish: e.target.checked } })
         }
         else {
             this.setState({ values: { ...this.state.values, [name]: value } })
@@ -98,31 +100,6 @@ class CourseEdit extends Component {
         const body = this.state.values;
         const id = this.props.match.params.id;
         const res = await courseService.updateCourse(id, body)
-        this.setState({
-            values: {
-                name: '',
-                category_id: null,
-                rate: 0,
-                price: 0,
-                sale: 0,
-                max_students: 0,
-                current_student: 0,
-                short_description: '',
-                full_description: '',
-                IsFinish: false,
-                sale_info: '',
-            },
-            errors: {
-                name: '',
-                category_id: '',
-                rate: '',
-                price: '',
-                sale: '',
-                max_students: '',
-                short_description: '',
-                full_description: '',
-            },
-        })
         if (!res.data.err_message) {
             swal({
                 title: "Chúc mừng",
@@ -161,8 +138,18 @@ class CourseEdit extends Component {
         })
     }
 
-    
+    onEditorStateChange = (editorState) => {
+        this.setState({
+            editorState,
+            values: {
+                ...this.state.values,
+                full_description: draftToHtml(convertToRaw(editorState.getCurrentContent())),
+            }
+        });
+    };
+
     render() {
+        const { editorState } = this.state;
         return (
             <div>
                 <div className="single-product-tab-area mg-b-30">
@@ -219,8 +206,8 @@ class CourseEdit extends Component {
                                                                 <div className="input-group mg-b-pro-edt">
                                                                     <span className="input-group-addon">Mô tả chung</span>
                                                                     <textarea className="form-control" name="short_description" value={this.state.values.short_description} cols="30" rows="10" placeholder="Mô tả ngắn gọn" onChange={this.handleChange} onBlur={this.handleBlur}></textarea>
-                                                                    {this.renderError(this.state.errors.short_description)}
                                                                 </div>
+                                                                {this.renderError(this.state.errors.short_description)}
                                                                 <div className="input-group mg-b-pro-edt">
                                                                     <p className="input-group-addon">Thông tin giảm giá</p>
                                                                     <textarea className="form-control" name="sale_info" value={this.state.values.sale_info} cols="30" rows="4" placeholder="Mô tả ngắn gọn" onChange={this.handleChange} onBlur={this.handleBlur}></textarea>
@@ -228,10 +215,23 @@ class CourseEdit extends Component {
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <div class="row">
+                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                            <div class="lead-head">
+                                                                <h3 style={{ color: 'white' }}>Mô tả chi tiết</h3>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                     <div className="row">
-                                                        <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                            <div className="text-center custom-pro-edt-ds">
-                                                                <h3 className="text-white">Mô tả chi tiết</h3>
+                                                        <div className="coment-area">
+                                                            <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                <Editor
+                                                                    editorState={editorState}
+                                                                    editorStyle={{ border: "1px solid", backgroundColor: 'white' }}
+                                                                    wrapperClassName="demo-wrapper"
+                                                                    editorClassName="demo-editor"
+                                                                    onEditorStateChange={this.onEditorStateChange}
+                                                                />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -246,61 +246,43 @@ class CourseEdit extends Component {
                                                 </form>
                                             </div>
                                             <div className={`product-tab-list tab-pane fade ${this.state.activeTab === "reviews" ? "active in" : ""}`} id="reviews">
-                                                <div className="row">
-                                                    <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                        <div className="review-content-section">
-                                                            <div className="row">
-                                                                <div className="col-lg-4">
-                                                                    <div className="pro-edt-img">
-                                                                        <img src="img/new-product/5-small.jpg" alt />
+                                                {/* Multi Upload Start*/}
+                                                <div className="multi-uploaded-area mg-tb-15">
+                                                    <div className="container-fluid">
+                                                        <div className="row">
+                                                            <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                <div className="dropzone-pro mg-tb-30">
+                                                                    <div id="dropzone1">
+                                                                        <form action="/upload" className="dropzone dropzone-custom needsclick" id="demo1-upload">
+                                                                            <div className="dz-message needsclick download-custom">
+                                                                                <i className="fa fa-download" aria-hidden="true" />
+                                                                                <h2>Drop files here or click to upload.</h2>
+                                                                                <p><span className="note needsclick">(This is just a demo dropzone. Selected files are <strong>not</strong> actually uploaded.)</span>
+                                                                                </p>
+                                                                            </div>
+                                                                        </form>
                                                                     </div>
                                                                 </div>
-                                                                <div className="col-lg-8">
-                                                                    <div className="row">
-                                                                        <div className="col-lg-12">
-                                                                            <div className="product-edt-pix-wrap">
-                                                                                <div className="input-group">
-                                                                                    <span className="input-group-addon">TT</span>
-                                                                                    <input type="text" className="form-control" placeholder="Label Name" />
-                                                                                </div>
-                                                                                <div className="row">
-                                                                                    <div className="col-lg-6">
-                                                                                        <div className="form-radio">
-                                                                                            <form>
-                                                                                                <div className="radio radiofill">
-                                                                                                    <label>
-                                                                                                        <input type="radio" name="radio" /><i className="helper" />Largest Image
-                                                                                                    </label>
-                                                                                                </div>
-                                                                                                <div className="radio radiofill">
-                                                                                                    <label>
-                                                                                                        <input type="radio" name="radio" /><i className="helper" />Medium Image
-                                                                                                    </label>
-                                                                                                </div>
-                                                                                                <div className="radio radiofill">
-                                                                                                    <label>
-                                                                                                        <input type="radio" name="radio" /><i className="helper" />Small Image
-                                                                                                    </label>
-                                                                                                </div>
-                                                                                            </form>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div className="col-lg-6">
-                                                                                        <div className="product-edt-remove">
-                                                                                            <button type="button" className="btn btn-ctl-bt waves-effect waves-light">Remove
-                                                                                                <i className="fa fa-times" aria-hidden="true" />
-                                                                                            </button>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
+                                                            </div>
+                                                            <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                <div className="dropzone-pro">
+                                                                    <div id="dropzone">
+                                                                        <form action="/upload" className="dropzone dropzone-custom needsclick" id="demo-upload">
+                                                                            <div className="dz-message needsclick download-custom">
+                                                                                <i className="fa fa-cloud-download" aria-hidden="true" />
+                                                                                <h2>Drop files here or click to upload.</h2>
+                                                                                <p><span className="note needsclick">(This is just a demo dropzone. Selected files are <strong>not</strong> actually uploaded.)</span>
+                                                                                </p>
                                                                             </div>
-                                                                        </div>
+                                                                        </form>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
+                                                {/* Multi Upload End*/}
+
                                             </div>
                                             <div className={`product-tab-list tab-pane fade ${this.state.activeTab === "INFORMATION" ? "active in" : ""}`} id="INFORMATION" >
                                                 <div className="row">
@@ -334,14 +316,20 @@ class CourseEdit extends Component {
             short_description: detail.data.short_description,
             full_description: detail.data.full_description,
             sale_info: detail.data.sale_info,
-            IsFinish: detail.data.IsFinish,
+            IsFinish: detail.data.IsFinish.data[0] === 1 ? true : false,
         }
+        console.log(detail.data.IsFinish.data[0] === 1)
+        const blocksFromHtml = htmlToDraft(newCourse.full_description);
+        const { contentBlocks, entityMap } = blocksFromHtml;
+        const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap);
+        const editorState = EditorState.createWithContent(contentState);
         this.setState({
             ...this.state,
             values: newCourse,
             lessonValues: {
                 course_id: id
-            }
+            },
+            editorState: editorState,
         })
     }
 }
