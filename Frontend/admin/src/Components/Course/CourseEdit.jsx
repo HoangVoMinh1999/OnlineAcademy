@@ -46,7 +46,6 @@ class CourseEdit extends Component {
 
     handleChange = (e) => {
         const { name, value } = e.target;
-        console.log(name + " " + e.target.checked)
         if (name === "IsFinish") {
             this.setState({ values: { ...this.state.values, IsFinish: e.target.checked } })
         }

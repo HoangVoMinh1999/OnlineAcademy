@@ -56,7 +56,7 @@ export default class LessonAdd extends Component {
         const res = await lessonService.addLesson4Course(body);
         this.setState({
             lessonValues: {
-                course_id: 0,
+                course_id: this.props.match.params.course_id,
                 title: '',
                 content: '',
                 videoURL: '',

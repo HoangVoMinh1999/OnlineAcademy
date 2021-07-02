@@ -33,7 +33,7 @@ class LessonList extends Component {
             return <tr key={index}>
                 <td>{index}</td>
                 <td>{lesson.title}</td>
-                <td>{lesson.is_preview === true ? "Cho phép" : "Không cho phép"}</td>
+                <td>{lesson.is_preview.data[0] === 1 ? "Cho phép" : "Không cho phép"}</td>
                 <td>
                     <Link to={`/lesson-edit/${lesson.id}`}><button id="categoryEdit" title="Edit" class="pd-setting-ed"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></Link>
                     {/* Button trigger modal */}

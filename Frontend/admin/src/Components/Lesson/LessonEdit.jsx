@@ -11,6 +11,7 @@ export default class LessonEdit extends Component {
                 title: '',
                 content: '',
                 videoURL: '',
+                is_preview : false,
             },
             lessonError: {
                 title: '',
@@ -22,9 +23,13 @@ export default class LessonEdit extends Component {
     //--- Lesson
     handleChangeLesson = (event) => {
         const { name, value } = event.target;
-        this.setState({
-            lessonValues: { ...this.state.lessonValues, [name]: value }
-        })
+        console.log(value);
+        if (name === "is_preview") {
+            this.setState({ lessonValues: { ...this.state.lessonValues, is_preview: event.target.checked } })
+        }
+        else {
+            this.setState({ lessonValues: { ...this.state.lessonValues, [name]: value } })
+        }
     }
 
     handleBlurLesson = (event) => {
@@ -109,7 +114,7 @@ export default class LessonEdit extends Component {
                             </div>
                             <div className="input-group mg-b-15">
                                 <span className="input-group-addon">Cho phép xem review</span>
-                                <input type="checkbox" />
+                                <input type="checkbox" name="is_preview" checked={this.state.lessonValues.is_preview} className="form-control" onClick={this.handleChangeLesson} onBlur={this.handleBlurLesson} />
                             </div>
                         </div>
                         <div className="row">
@@ -133,6 +138,7 @@ export default class LessonEdit extends Component {
                 title: res.data.title,
                 content: res.data.content,
                 videoURL: res.data.videoURL,
+                is_preview : res.data.is_preview.data[0] === 1 ? true : false,
             },
             lessonError: {
                 title: '',

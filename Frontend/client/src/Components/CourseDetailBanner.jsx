@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
+
 class CourseDetailBanner extends Component {
     render() {
         const category = this.props.categoryList.find(t => t.id === this.props.info.category_id)
@@ -15,7 +16,7 @@ class CourseDetailBanner extends Component {
                                     <h3>{this.props.info.name}</h3>
                                     <div className="prise">
                                         <span className="inactive">{this.props.info.price} VND</span>
-                                        <span className="active">{this.props.info.price - this.props.info.price*this.props.info.sale/100} VND</span>
+                                        <span className="active">{this.props.info.price - this.props.info.price * this.props.info.sale / 100} VND</span>
                                     </div>
                                     <div className="rating">
                                         <i className="flaticon-mark-as-favorite-star" />
@@ -24,6 +25,12 @@ class CourseDetailBanner extends Component {
                                         <i className="flaticon-mark-as-favorite-star" />
                                         <i className="flaticon-mark-as-favorite-star" />
                                         <span>{this.props.info.rate}</span>
+                                    </div>
+                                    <div>
+                                        <h4 style={{ color: 'white'}}>Mô tả chung</h4>
+                                        <div className="rating">
+                                            <span>{this.props.info.short_description}</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -38,8 +45,8 @@ class CourseDetailBanner extends Component {
 }
 
 const mapStateToProps = (state) => {
-    return{
-        categoryList : state.CategoryReducer.ChildCategoryList,
+    return {
+        categoryList: state.CategoryReducer.ChildCategoryList,
     }
 }
 

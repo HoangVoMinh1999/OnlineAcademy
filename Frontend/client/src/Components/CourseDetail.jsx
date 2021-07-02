@@ -7,6 +7,11 @@ import swal from 'sweetalert';
 import createAction from '../Redux/Action';
 import { GET_PURCHASED_COURSE_LIST, GET_COMMENT_LIST } from '../Redux/Action/type';
 import Comment from './Comment';
+import { Editor } from "react-draft-wysiwyg";
+import { EditorState, convertToRaw, ContentState, convertFromHTML } from 'draft-js';
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import draftToHtml from 'draftjs-to-html';
+import htmlToDraft from 'html-to-draftjs';
 
 
 
@@ -20,7 +25,8 @@ class CourseDetail extends Component {
             newComment: {
                 rate: 0,
                 comment: '',
-            }
+            },
+            editorState: EditorState.createEmpty(),
         }
     }
 
@@ -131,9 +137,9 @@ class CourseDetail extends Component {
             content: "input",
         }).then(async (value) => {
             this.setState({
-                newComment:{
+                newComment: {
                     ...this.state.newComment,
-                    comment : value,
+                    comment: value,
                 }
             })
             let data = this.state.newComment;
@@ -144,7 +150,7 @@ class CourseDetail extends Component {
             swal("Cảm ơn bạn đã đánh giá khóa học");
             const course_id = this.props.match.params.course_id;
             res = await commentService.getComments4Course(course_id);
-            res.data = res.data.sort((a,b) =>new Date(b.Log_UpdatedDate) - new Date(a.Log_UpdatedDate));
+            res.data = res.data.sort((a, b) => new Date(b.Log_UpdatedDate) - new Date(a.Log_UpdatedDate));
             this.props.dispatch(
                 createAction(
                     GET_COMMENT_LIST,
@@ -159,6 +165,18 @@ class CourseDetail extends Component {
             return <Comment info={comment}></Comment>
         })
     }
+    renderFullDescription = () => {
+        return (
+            <div>
+                <Editor
+                disabled
+                    editorState={this.state.editorState}
+                    editorStyle={{ border: "1px solid", backgroundColor: 'white' }}
+                />
+
+            </div>
+        )
+    }
 
     render() {
         return (
@@ -169,8 +187,8 @@ class CourseDetail extends Component {
                         <div className="row">
                             <div className="col-xl-7 col-lg-7">
                                 <div className="single_courses">
-                                    <h3>Mô tả chung</h3>
-                                    <p>{this.state.short_description}</p>
+                                    <h3>Mô tả chi tiết</h3>
+                                    {this.renderFullDescription()}
                                     <h3 className="second_title">Xem trước</h3>
                                 </div>
                                 <div className="outline_courses_info">
@@ -229,14 +247,19 @@ class CourseDetail extends Component {
     async componentDidMount() {
         const course_id = this.props.match.params.course_id;
         const course = this.props.courseList.find(t => t.id == course_id);
+        const blocksFromHtml = htmlToDraft(course.full_description);
+        const { contentBlocks, entityMap } = blocksFromHtml;
+        const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap);
+        const editorState = EditorState.createWithContent(contentState);
         this.setState({
             ...this.state,
             detail: course,
+            editorState : editorState
         })
 
 
         let res = await lessonService.getLessons4Course(course_id);
-        const lessonPreview = res.data.filter(t => t.is_preview.data[0] === '1')
+        const lessonPreview = res.data.filter(t => t.is_preview.data[0] === 1)
         this.setState({
             ...this.state,
             lessonPreview: lessonPreview
@@ -244,7 +267,7 @@ class CourseDetail extends Component {
 
 
         res = await commentService.getComments4Course(course_id);
-        res.data = res.data.sort((a,b) =>new Date(a.Log_UpdatedDate) - new Date(b.Log_UpdatedDate));
+        res.data = res.data.sort((a, b) => new Date(a.Log_UpdatedDate) - new Date(b.Log_UpdatedDate));
         this.props.dispatch(
             createAction(
                 GET_COMMENT_LIST,
