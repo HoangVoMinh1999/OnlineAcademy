@@ -37,9 +37,9 @@ class CourseListByCategory extends Component {
         console.log(prevProps.match.params.category_id+ " + "+ this.props.match.params.category_id)
         if (prevProps.match.params.category_id !== this.props.match.params.category_id){
             console.log("true");
-            return true;
+            return false;
         }
-        return false;
+        return true;
     }
 
     render() {

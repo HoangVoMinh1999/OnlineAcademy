@@ -1,29 +1,49 @@
 import axios from 'axios'
 
-class CourseService{
+class CourseService {
     baseURL = 'http://localhost:4000/api/course';
 
     addNewCourse = (course) => {
-        return axios.post(this.baseURL,course);
+        return axios.post(this.baseURL, course);
     }
 
     getAllCourses = () => {
         return axios.get(this.baseURL);
     }
 
+    getCoursesByQuery = (query) => {
+        return axios.get(this.baseURL,{params: query})
+    }
+
     deleteCourse = (id) => {
-        const currentURL = this.baseURL + "/delete/"+id;
+        const currentURL = this.baseURL + "/delete/" + id;
         return axios.patch(currentURL);
     }
 
     getCourseDetail = (id) => {
-        const currentURL = this.baseURL + "/"+id;
+        const currentURL = this.baseURL + "/" + id;
         return axios.get(currentURL);
     }
 
-    updateCourse = (id,course) => {
-        const currentURL = this.baseURL + "/"+id;
-        return axios.patch(currentURL,course);
+    getImage4CourseDetail = (id) => {
+        const currentURL = this.baseURL + "/image/" + id;
+        return axios.get(currentURL,{
+            responseType: 'blob'
+        });
+    }
+
+    updateCourse = (id, course) => {
+        const currentURL = this.baseURL + "/" + id;
+        return axios.patch(currentURL, course);
+    }
+
+    updateCourseImage(id, image) {
+        const currentURL = this.baseURL + "/course_img/" + id;
+        return axios.patch(currentURL,image,{
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+        })
     }
 }
 

@@ -24,7 +24,7 @@ router.post('/',async function(req,res,next){
 
 router.patch('/delete',async function(req,res,next){
     let data = req.body;
-    if (!data.user_id && !data.course_id){
+    if (!data.user_id || !data.course_id){
         return res.status(204).json({
             'err_message': 'No user or no course'
         })

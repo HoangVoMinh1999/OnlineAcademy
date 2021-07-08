@@ -58,11 +58,15 @@ module.exports = {
     },
 
 
-    async updateImage(id,img){
+    async updateImage(id,img,src){
         const course = await this.singleById(id);
         if (course === null){
             return null;
         }
-        return db('course').where('id',id).update({'image':img})
+        return db('course').where('id',id).update({'image':img,'Image_Source': src})
+    },
+
+    fullTextSearch4Course(name_course){
+        return db('course').whereRaw('Match(name) against(?)', name_course)
     }
 }

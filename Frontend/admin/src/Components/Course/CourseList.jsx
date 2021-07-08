@@ -7,16 +7,19 @@ import { Link } from 'react-router-dom'
 
 class CourseList extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
-            course_id : 0,
+            course_id: 0,
+            query:{
+                search : ''
+            }
         }
     }
 
     renderContent = () => {
         return this.props.courseList.map((course, index) => {
-            const isFinish = course.IsFinish === true ? "Đã hoàn thành" : "Chưa hoàn thành"
+            const isFinish = course.IsFinish.data[0] === 1 ? "Đã hoàn thành" : "Chưa hoàn thành"
             const category = this.props.categoryList.find(t => t.id === course.category_id);
             return <tr key={index}>
                 <td>{course.id}</td>
@@ -59,7 +62,7 @@ class CourseList extends Component {
         })
     }
 
-    handleButtonDelete =(id) =>{
+    handleButtonDelete = (id) => {
         this.setState({
             course_id: id,
         })
@@ -67,6 +70,30 @@ class CourseList extends Component {
 
     handleClickButtonConfirmDelete = async () => {
         const res = await courseService.deleteCourse(this.state.course_id);
+    }
+
+    handleSearch = (event) => {
+        let {name,value} = event.target;
+        this.setState({
+            query : {
+                ...this.state.query,
+                [name] : value
+            }
+        })
+    }
+
+    handleSubmitSearch = async (event) => {
+        event.preventDefault();
+        const obj = {
+            'search' : this.state.query.search
+        }
+        const res = await courseService.getCoursesByQuery(obj);
+        this.props.dispatch(
+            createAction(
+                GET_LIST,
+                res.data
+            )
+        )
     }
 
     render() {
@@ -80,6 +107,13 @@ class CourseList extends Component {
                                     <h4>Products List</h4>
                                     <div className="add-product">
                                         <Link to="/course-add">Thêm khóa học</Link>
+                                    </div>
+                                    <div className="header-top-menu tabl-d-n hd-search-rp">
+                                        <div className="breadcome-heading">
+                                            <form role="search" className="d-inline-flex p-2" onSubmit={this.handleSubmitSearch} method='GET'>
+                                                <input type="text" name="search" value={this.state.query.search} placeholder="Search..." className="form-control" onChange={this.handleSearch}/>
+                                            </form>
+                                        </div>
                                     </div>
                                     <table>
                                         <thead>

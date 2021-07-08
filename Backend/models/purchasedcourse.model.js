@@ -26,6 +26,7 @@ module.exports = {
         if (course !== null){
             course.IsDeleted = true;
             course.Log_UpdatedDate = new Date();
+            delete course.id;
             return db('purchasedcourse').where('user_id',user_id).andWhere('course_id',course_id).update(course);
         }
         return null;

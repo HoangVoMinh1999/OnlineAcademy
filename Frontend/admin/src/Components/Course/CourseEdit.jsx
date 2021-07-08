@@ -29,6 +29,8 @@ class CourseEdit extends Component {
                 full_description: '',
                 IsFinish: false,
                 sale_info: '',
+                selectedImage: null,
+                selectedImageData: null,
             },
             errors: {
                 name: '',
@@ -41,6 +43,7 @@ class CourseEdit extends Component {
                 full_description: '',
             },
             editorState: EditorState.createEmpty(),
+
         }
     };
 
@@ -97,6 +100,9 @@ class CourseEdit extends Component {
     handleSubmit = async (event) => {
         event.preventDefault();
         const body = this.state.values;
+        if (body.selectedImageData === null) {
+
+        }
         const id = this.props.match.params.id;
         const res = await courseService.updateCourse(id, body)
         if (!res.data.err_message) {
@@ -146,6 +152,39 @@ class CourseEdit extends Component {
             }
         });
     };
+
+    onChangeImage = (event) => {
+        this.setState({
+            values: {
+                ...this.state.values,
+                selectedImage: URL.createObjectURL(event.target.files[0]),
+                selectedImageData: event.target.files[0]
+            }
+        })
+    }
+
+    fileUploadHandler = async (event) => {
+        event.preventDefault();
+        const fd = new FormData();
+        fd.append('image', this.state.values.selectedImageData);
+        const id = this.props.match.params.id;
+        const res = await courseService.updateCourseImage(id, fd);
+        if (!res.data.err_message) {
+            swal({
+                title: "Chúc mừng",
+                text: "Cập nhật hình ảnh khóa học thành công !!!",
+                icon: "success",
+            });
+        }
+        else {
+            swal({
+                title: "Cảnh báo",
+                text: "Cập nhật hình ảnh khóa học không thành công !!!",
+                icon: "error",
+            });
+        }
+
+    }
 
     render() {
         const { editorState } = this.state;
@@ -245,42 +284,30 @@ class CourseEdit extends Component {
                                                 </form>
                                             </div>
                                             <div className={`product-tab-list tab-pane fade ${this.state.activeTab === "reviews" ? "active in" : ""}`} id="reviews">
-                                                {/* Multi Upload Start*/}
-                                                <div className="multi-uploaded-area mg-tb-15">
-                                                    <div className="container-fluid">
-                                                        <div className="row">
-                                                            <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                                <div className="dropzone-pro mg-tb-30">
-                                                                    <div id="dropzone1">
-                                                                        <form action="/upload" className="dropzone dropzone-custom needsclick" id="demo1-upload">
-                                                                            <div className="dz-message needsclick download-custom">
-                                                                                <i className="fa fa-download" aria-hidden="true" />
-                                                                                <h2>Drop files here or click to upload.</h2>
-                                                                                <p><span className="note needsclick">(This is just a demo dropzone. Selected files are <strong>not</strong> actually uploaded.)</span>
-                                                                                </p>
-                                                                            </div>
-                                                                        </form>
+                                                <div className="row">
+                                                    <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                        <form onSubmit={this.fileUploadHandler} encType="multipart/form-data">
+                                                            <div className="row">
+                                                                <div className="review-content-section">
+                                                                    <div className="input-group mg-b-pro-edt">
+                                                                        <span className="input-group-addon"><i className="icon nalika-edit" aria-hidden="true" /></span>
+                                                                        <input type="file" className="form-control"  accept='image/*' name="image" placeholder="Tên khóa học" onChange={this.onChangeImage} onBlur={this.handleBlur} />
+                                                                    </div>
+                                                                    <img src={this.state.values.selectedImage} alt="Hình ảnh khóa học" />
+
+                                                                </div>
+                                                            </div>
+                                                            <div className="row">
+                                                                <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                    <div className="text-center custom-pro-edt-ds">
+                                                                        <button type="submit" className="btn btn-ctl-bt waves-effect waves-light m-r-10">Save</button>
+                                                                        <button type="button" className="btn btn-ctl-bt waves-effect waves-light" onClick={() => this.props.history.goBack()}>Discard</button>
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                                <div className="dropzone-pro">
-                                                                    <div id="dropzone">
-                                                                        <form action="/upload" className="dropzone dropzone-custom needsclick" id="demo-upload">
-                                                                            <div className="dz-message needsclick download-custom">
-                                                                                <i className="fa fa-cloud-download" aria-hidden="true" />
-                                                                                <h2>Drop files here or click to upload.</h2>
-                                                                                <p><span className="note needsclick">(This is just a demo dropzone. Selected files are <strong>not</strong> actually uploaded.)</span>
-                                                                                </p>
-                                                                            </div>
-                                                                        </form>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                        </form>
                                                     </div>
                                                 </div>
-                                                {/* Multi Upload End*/}
 
                                             </div>
                                             <div className={`product-tab-list tab-pane fade ${this.state.activeTab === "INFORMATION" ? "active in" : ""}`} id="INFORMATION" >
@@ -316,12 +343,29 @@ class CourseEdit extends Component {
             full_description: detail.data.full_description,
             sale_info: detail.data.sale_info,
             IsFinish: detail.data.IsFinish.data[0] === 1 ? true : false,
+            selectedImage: null,
+            selectedImageData: null,
         }
-        console.log(detail.data.IsFinish.data[0] === 1)
+        //--- WYSIWYG
         const blocksFromHtml = htmlToDraft(newCourse.full_description);
         const { contentBlocks, entityMap } = blocksFromHtml;
         const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap);
         const editorState = EditorState.createWithContent(contentState);
+
+        //--- PHOTO
+        let res = await courseService.getImage4CourseDetail(id);
+        if (!res.err_message){
+            var reader = new FileReader();
+            reader.readAsDataURL(res.data); 
+            reader.onloadend = function() {
+                var base64data = reader.result;                
+                console.log(base64data);
+                newCourse.selectedImageData = base64data;
+                var url = URL.createObjectURL(res.data);
+                newCourse.selectedImage = url;
+            }
+        }
+
         this.setState({
             ...this.state,
             values: newCourse,

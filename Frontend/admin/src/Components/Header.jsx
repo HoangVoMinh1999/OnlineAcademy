@@ -30,14 +30,7 @@ export default class Header extends Component {
                                                     </div>
                                                 </div>
                                                 <div className="col-lg-6 col-md-7 col-sm-6 col-xs-12">
-                                                    <div className="header-top-menu tabl-d-n hd-search-rp">
-                                                        <div className="breadcome-heading">
-                                                            <form role="search" className>
-                                                                <input type="text" placeholder="Search..." className="form-control" />
-                                                                <a href><i className="fa fa-search" /></a>
-                                                            </form>
-                                                        </div>
-                                                    </div>
+
                                                 </div>
                                                 <div className="col-lg-5 col-md-5 col-sm-12 col-xs-12">
                                                     <div className="header-right-info">
