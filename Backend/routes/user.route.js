@@ -8,6 +8,12 @@ const router = express.Router();
 
 router.get('/', async function (req, res, next) {
     const listteacher = await userModel.all();
+    listteacher.forEach(function(item,index,array){
+        delete item.username;
+        delete item.password;
+        delete item.rfToken;
+        delete item.avatar;
+    })
     return res.json(listteacher);
 })
 

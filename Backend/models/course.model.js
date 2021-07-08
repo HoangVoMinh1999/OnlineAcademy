@@ -68,5 +68,9 @@ module.exports = {
 
     fullTextSearch4Course(name_course){
         return db('course').whereRaw('Match(name) against(?)', name_course)
+    },
+
+    paging4Course(page,limit){
+        return db('course').limit(limit).offset(page - 1);
     }
 }

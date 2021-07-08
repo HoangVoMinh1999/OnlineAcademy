@@ -13,6 +13,7 @@ import CourseAdd from './Components/Course/CourseAdd';
 import CourseEdit from './Components/Course/CourseEdit';
 import LessonAdd from './Components/Lesson/LessonAdd';
 import LessonEdit from './Components/Lesson/LessonEdit';
+import UserList from './Components/User/UserList';
 class App extends Component {
 
   render() {
@@ -24,6 +25,7 @@ class App extends Component {
             <Header></Header>
             <Switch>
               <Route path="/" exact component={Homepage} />
+
               <Route path="/category-list" component={CategoryList} />
               <Route path="/category-add" component={CategoryAdd} />
               <Route path="/category-edit/:id" component={CategoryEdit}></Route>
@@ -34,6 +36,9 @@ class App extends Component {
               
               <Route path="/lesson-add/:course_id" component={LessonAdd}></Route>
               <Route path="/lesson-edit/:id" component={LessonEdit}></Route>
+
+              <Route path="/user/all-user" component={UserList}></Route>
+
             </Switch>
             <Footer></Footer>
           </div>

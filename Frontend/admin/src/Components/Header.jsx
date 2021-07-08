@@ -15,7 +15,7 @@ export default class Header extends Component {
                             </div>
                         </div>
                     </div>
-                    <div className="header-advance-area">
+                    <div className="header-advance-area" style={{ marginBottom:'55px'}}>
                         <div className="header-top-area">
                             <div className="container-fluid">
                                 <div className="row">
@@ -55,29 +55,6 @@ export default class Header extends Component {
                                                                 </ul>
                                                             </li>
                                                         </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="breadcome-area">
-                            <div className="container-fluid">
-                                <div className="row">
-                                    <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <div className="breadcome-list">
-                                            <div className="row">
-                                                <div className="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-                                                    <div className="breadcomb-wp">
-                                                        <div className="breadcomb-icon">
-                                                            <i className="icon nalika-home" />
-                                                        </div>
-                                                        <div className="breadcomb-ctn">
-                                                            <h2>Dashboard One</h2>
-                                                            <p>Welcome to Nalika <span className="bread-ntd">Admin Template</span></p>
-                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>

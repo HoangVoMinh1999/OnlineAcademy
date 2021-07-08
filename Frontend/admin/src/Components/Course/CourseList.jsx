@@ -4,6 +4,7 @@ import createAction from '../../Redux/Action'
 import { connect } from 'react-redux'
 import { GET_COURSE_LIST, GET_LIST } from '../../Redux/Action/type'
 import { Link } from 'react-router-dom'
+import { Pagination } from 'antd';
 
 class CourseList extends Component {
 
@@ -11,20 +12,20 @@ class CourseList extends Component {
         super(props);
         this.state = {
             course_id: 0,
-            query:{
-                search : ''
-            }
+            query: {
+                search: ''
+            },
         }
     }
 
     renderContent = () => {
         return this.props.courseList.map((course, index) => {
             const isFinish = course.IsFinish.data[0] === 1 ? "Đã hoàn thành" : "Chưa hoàn thành"
-            const category = this.props.categoryList.find(t => t.id === course.category_id);
+            let category = course.category_id === null ? null : this.props.categoryList.find(t => t.id === course.category_id);
             return <tr key={index}>
                 <td>{course.id}</td>
                 <td>{course.name}</td>
-                <td>{category.name}</td>
+                <td>{(category === null || category === undefined) ? 'Chưa có thông tin' : category.name}</td>
                 <td>{course.rate}</td>
                 <td>{course.price}</td>
                 <td>{course.sale}%</td>
@@ -73,28 +74,71 @@ class CourseList extends Component {
     }
 
     handleSearch = (event) => {
-        let {name,value} = event.target;
+        let { name, value } = event.target;
         this.setState({
-            query : {
+            query: {
                 ...this.state.query,
-                [name] : value
+                [name]: value
             }
         })
     }
 
     handleSubmitSearch = async (event) => {
         event.preventDefault();
-        const obj = {
-            'search' : this.state.query.search
+        const searchParams = new URLSearchParams(this.props.location.search);
+        const query = {};
+        if (searchParams.get('page') !== '') {
+            query.page = searchParams.get('page');
         }
-        const res = await courseService.getCoursesByQuery(obj);
+        query.search = this.state.query.search;
+        const res = await courseService.getAllCourses(query);
         this.props.dispatch(
             createAction(
-                GET_LIST,
+                GET_COURSE_LIST,
                 res.data
             )
         )
     }
+
+    // async shouldComponentUpdate(nextProps){
+    //     if (nextProps.location.search !== this.props.location.search){
+    //         console.log(nextProps.location.search)  
+    //         const searchParams = new URLSearchParams(nextProps.location.search);
+    //         const query = {};
+    //         if (searchParams.get('page') !== '') {
+    //             query.page = searchParams.get('page');
+    //         }
+    //         query.search = this.state.query.search;
+    //         const res = await courseService.getAllCourses(query);
+    //         this.props.dispatch(
+    //             createAction(
+    //                 GET_COURSE_LIST,
+    //                 res.data
+    //             )
+    //         )
+    //         return true;
+    //     }
+    //     return true;
+    // }
+
+    async componentDidUpdate(prevProps){
+        if (prevProps.location.search !== this.props.location.search){ 
+            const searchParams = new URLSearchParams(this.props.location.search);
+            const query = {};
+            if (searchParams.get('page') !== '') {
+                query.page = searchParams.get('page');
+            }
+            query.search = this.state.query.search;
+            const res = await courseService.getAllCourses(query);
+            this.props.dispatch(
+                createAction(
+                    GET_COURSE_LIST,
+                    res.data
+                )
+            )
+        }
+    }
+
 
     render() {
         return (
@@ -111,7 +155,7 @@ class CourseList extends Component {
                                     <div className="header-top-menu tabl-d-n hd-search-rp">
                                         <div className="breadcome-heading">
                                             <form role="search" className="d-inline-flex p-2" onSubmit={this.handleSubmitSearch} method='GET'>
-                                                <input type="text" name="search" value={this.state.query.search} placeholder="Search..." className="form-control" onChange={this.handleSearch}/>
+                                                <input type="text" name="search" value={this.state.query.search} placeholder="Search..." className="form-control" onChange={this.handleSearch} />
                                             </form>
                                         </div>
                                     </div>
@@ -136,9 +180,9 @@ class CourseList extends Component {
                                     <div className="custom-pagination">
                                         <ul className="pagination">
                                             <li className="page-item"><a className="page-link" href="#">Previous</a></li>
-                                            <li className="page-item"><a className="page-link" href="#">1</a></li>
-                                            <li className="page-item"><a className="page-link" href="#">2</a></li>
-                                            <li className="page-item"><a className="page-link" href="#">3</a></li>
+                                            <li className="page-item"><Link to="/course-list?page=1" className="page-link">1</Link></li>
+                                            <li className="page-item"><Link to="/course-list?page=2" className="page-link">2</Link></li>
+                                            <li className="page-item"><Link to="/course-list?page=3" className="page-link">3</Link></li>
                                             <li className="page-item"><a className="page-link" href="#">Next</a></li>
                                         </ul>
                                     </div>
@@ -162,7 +206,13 @@ class CourseList extends Component {
                 )
             )
         }
-        const res = await courseService.getAllCourses();
+
+        const searchParams = new URLSearchParams(this.props.location.search);
+        const query = {};
+        if (searchParams.get('page') !== '') {
+            query.page = searchParams.get('page');
+        }
+        const res = await courseService.getAllCourses(query);
         this.props.dispatch(
             createAction(
                 GET_COURSE_LIST,
@@ -171,6 +221,10 @@ class CourseList extends Component {
         )
     }
 }
+
+function onChange(pageNumber) {
+    console.log('Page: ', pageNumber);
+  }
 
 const mapStateToProps = (state) => {
     return {

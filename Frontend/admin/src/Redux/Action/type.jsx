@@ -4,3 +4,5 @@ export const GET_LIST = 'GET_LIST';
 export const GET_COURSE_LIST = 'GET_COURSE_LIST';
 
 export const GET_LESSON_LIST = "GET_LESSON_LIST";
+
+export const GET_USER_LIST = 'GET_USER_LIST';

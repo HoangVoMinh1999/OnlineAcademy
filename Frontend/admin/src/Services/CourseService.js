@@ -7,8 +7,11 @@ class CourseService {
         return axios.post(this.baseURL, course);
     }
 
-    getAllCourses = () => {
-        return axios.get(this.baseURL);
+    getAllCourses = (query) => {
+        if (query === null || query === undefined) 
+            return axios.get(this.baseURL);
+        else 
+            return axios.get(this.baseURL,{params: query})
     }
 
     getCoursesByQuery = (query) => {

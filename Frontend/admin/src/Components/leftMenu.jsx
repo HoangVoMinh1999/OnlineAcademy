@@ -33,13 +33,14 @@ export default class LeftMenu extends Component {
                                             <span className="mini-click-non">Course List</span>
                                         </a>
                                         <ul className="submenu-angle" aria-expanded="true">
-                                            <li><Link title="Category" to="/category-list"><span className="mini-sub-pro">Category</span></Link></li>
-                                            <li><Link title="Product List" to="/course-list"><span className="mini-sub-pro">Courses</span></Link></li>
+                                            <li><Link to="/category-list"><span className="mini-sub-pro">Category</span></Link></li>
+                                            <li><Link to="/course-list?page=1"><span className="mini-sub-pro">Courses</span></Link></li>
                                         </ul>
                                     </li>
                                     <li>
                                         <a className="has-arrow" href="mailbox.html" aria-expanded="false"><i className="icon nalika-mail icon-wrap" /> <span className="mini-click-non">Accout List</span></a>
                                         <ul className="submenu-angle" aria-expanded="false">
+                                            <li><Link to="/user/all-user"><span className="mini-sub-pro">Tất cả tài khoản</span></Link></li>
                                             <li><a title="Inbox" href="mailbox.html"><span className="mini-sub-pro">Students</span></a></li>
                                             <li><a title="View Mail" href="mailbox-view.html"><span className="mini-sub-pro">Teachers</span></a></li>
                                             <li><a title="Compose Mail" href="mailbox-compose.html"><span className="mini-sub-pro">Admin</span></a></li>

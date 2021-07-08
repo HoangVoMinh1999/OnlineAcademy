@@ -20,15 +20,31 @@ var upload = multer({
 
 
 router.get('/', async function (req, res, next) {
+    const offset = 6;
     const query = req.query;
     let listCourse = []
     if (Object.keys(query).length !== 0) {
-        if (query.search && query.search !== '') {
-            listCourse = await courseModel.fullTextSearch4Course(query.search)
+        if (query.hasOwnProperty('search') && query.search !== '') {
+            if (query.search !== ''){
+                listCourse = await courseModel.fullTextSearch4Course(query.search);
+            }
+            else{
+                listCourse = await courseModel.all();
+            }
+        }
+        if (query.hasOwnProperty('page')){
+            if (query.page !== '' && listCourse.length === 0){
+                listCourse = await courseModel.all();
+                listCourse = listCourse.slice((query.page-1)*offset,query.page*offset)
+            }
+            else{
+                listCourse = listCourse.slice((query.page-1)*offset,query.page*offset)
+            }
         }
     } else {
         listCourse = await courseModel.all();
     }
+    console.log(listCourse.length)
     return res.json(listCourse);
 })
 router.get('/:id', async function (req, res, next) {
