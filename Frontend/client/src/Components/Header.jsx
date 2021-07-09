@@ -36,7 +36,7 @@ class Header extends Component {
                             <ul id="navigation">
                                 <li><a href="#">{localStorage.user_username} <i className="ti-angle-down" /></a>
                                     <ul className="submenu">
-                                        <li><Link to="/">Thông tin cá nhân</Link></li>
+                                        <li><Link to="/user_detail">Thông tin cá nhân</Link></li>
                                         <li onClick={this.handleLogout}><Link to="/" > Đăng xuất</Link></li>
                                     </ul>
                                 </li>
@@ -56,6 +56,7 @@ class Header extends Component {
         delete localStorage.user_UserId;
         delete localStorage.user_username;
         delete localStorage.user_IsAdmin;
+        this.forceUpdate()
     }
     
 
@@ -79,7 +80,7 @@ class Header extends Component {
                                         <div className="main-menu  d-none d-lg-block">
                                             <nav>
                                                 <ul id="navigation">
-                                                    <li><Link className="active" to="/">home</Link></li>
+                                                    <li><Link className="active" to="/" >home</Link></li>
                                                     <li><a href="#">Course <i className="ti-angle-down" /></a>
                                                         <ul className="submenu">
                                                             {this.renderMainCategory()}

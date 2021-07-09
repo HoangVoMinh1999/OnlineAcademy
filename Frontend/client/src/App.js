@@ -10,6 +10,7 @@ import CourseDetail from './Components/CourseDetail';
 import { LoginModal } from "./Components/LoginModal";
 import Login from "./Screens/Login";
 import Register from "./Screens/Register";
+import { UserDetail } from "./Components/UserDetail";
 class App extends Component {
   render() {
     return (
@@ -24,6 +25,7 @@ class App extends Component {
             <Route path="/course_detail/:course_id" component={CourseDetail}></Route>
             <Route path="/login" exact component={Login} />
             <Route path="/register" exact component={Register} />
+            <Route path="/user_detail" exact component={UserDetail}></Route>
           </Switch>
           <Footer></Footer>
 

@@ -6,4 +6,11 @@ export class CourseService {
     getAllCourse = () => {
         return Axios.get(this.baseURL);
     }
+
+    getImage4CourseDetail = (id) => {
+        const currentURL = this.baseURL + "/image/" + id;
+        return Axios.get(currentURL,{
+            responseType: 'blob'
+        });
+    }
 }

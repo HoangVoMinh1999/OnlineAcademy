@@ -17,6 +17,19 @@ router.get('/', async function (req, res, next) {
     return res.json(listteacher);
 })
 
+router.get('/:id',async function(req,res,next){
+    const id = req.params.id;
+    const user = await userModel.singleById(id);
+    if (user !== null){
+        delete user.username;
+        delete user.password;
+        return res.status(200).json(user);
+    }
+    return res.json({
+        'err_message': 'User is not exist !!!'
+    })
+})
+
 router.patch('/delete/:id', async function (req, res, next) {
     const id = req.params.id;
     const isDeleted = await userModel.delete(id);
@@ -36,20 +49,18 @@ router.patch('/delete/:id', async function (req, res, next) {
 
 router.patch('/:id', async function (req, res, next) {
     const id = req.params.id;
-    constuser = req.body;
-    const isUpdated = await userModel.update(id, teacher);
+    const user = req.body;
+    const isUpdated = await userModel.update(id, user);
     if (isUpdated === null) {
         return res.json({
-            message: 'User is not exist !!!'
+            'err_message': 'User is not exist !!!'
         })
     } else if (isUpdated !== 1) {
         return res.json({
-            message: 'Update failed !!!'
+            'err_message': 'Update failed !!!'
         })
     }
-    return res.json({
-        message: 'Update successfully !!!'
-    })
+    return res.json(user)
 })
 
 router.post('/register', async function (req, res, next) {

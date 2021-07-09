@@ -29,7 +29,7 @@ class CourseDetailBanner extends Component {
                                     <div>
                                         <h4 style={{ color: 'white'}}>Mô tả chung</h4>
                                         <div className="rating">
-                                            <span>{this.props.info.short_description}</span>
+                                            <span>{this.props.info.short_description === '' ? 'Không có ghi chú': this.props.info.short_description}</span>
                                         </div>
                                     </div>
                                 </div>

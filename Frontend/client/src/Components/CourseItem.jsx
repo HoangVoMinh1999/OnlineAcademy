@@ -1,20 +1,24 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import {Link} from 'react-router-dom'
+import { courseService } from '../Services'
 
 class CourseItem extends Component {
+
+
+
     render() {
-        const category = this.props.categoryList.find(t => t.id === this.props.info.category_id)
+        const category = this.props.info.category_id === null ? null : this.props.categoryList.find(t => t.id === this.props.info.category_id)
         return (
             <div>
                 <div className="single_courses">
-                    <div className="thumb">
+                    <div className="thumb" >
                         <Link to={`/course_detail/${this.props.info.id}`}>
-                            <img src="img/courses/1.png" alt />
+                            <img src={ this.props.info.imageURL === null ? "img/courses/1.png" : this.props.info.imageURL} alt="Hình minh họa" style={{width:"100%", height:"220px"}}/>
                         </Link>
                     </div>
                     <div className="courses_info">
-                        <span>{category.name}</span>
+                        <span>{category === null ? "Chưa có thông tin" : category.name}</span>
                         <h3><Link to={`/course_detail/${this.props.info.id}`}>{this.props.info.name}</Link></h3>
                         <div className="star_prise d-flex justify-content-between">
                             <div className="star">

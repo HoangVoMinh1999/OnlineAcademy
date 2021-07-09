@@ -10,19 +10,20 @@ class CourseListByCategory extends Component {
         this.state = {
             isActive: 0,
             listCategory: [],
+            reload: false,
         }
     }
     handleClick = (event) => {
         this.setState({
             ...this.state,
-            isActive : event.target.id
+            isActive: event.target.id
         })
     }
 
     renderTab = () => {
         return this.state.listCategory.map((category, index) => {
             return <li key={index} className="nav-item">
-                <a className={`nav-link ${this.state.isActive === category.id ? "active" : ""}`}  id={category.id} data-toggle="tab" href={`#${category.id}`} role="tab" aria-controls={category.id} aria-selected="false" onClick={this.handleClick}>{category.name}</a>
+                <a className={`nav-link ${this.state.isActive === category.id ? "active" : ""}`} id={category.id} data-toggle="tab" href={`#${category.id}`} role="tab" aria-controls={category.id} aria-selected="false" onClick={this.handleClick}>{category.name}</a>
             </li>
         })
     }
@@ -33,13 +34,17 @@ class CourseListByCategory extends Component {
         })
     }
 
-    shouldComponentUpdate(prevProps){
-        console.log(prevProps.match.params.category_id+ " + "+ this.props.match.params.category_id)
-        if (prevProps.match.params.category_id !== this.props.match.params.category_id){
-            console.log("true");
-            return false;
+    componentWillReceiveProps(nextProps){
+        const category_id = nextProps.match.params.category_id;
+        const listCategory = this.props.categoryList.filter(t => t.category_id == category_id);
+        if (listCategory.length > 0) {
+            this.setState({
+                isActive: listCategory[0].id,
+            })
         }
-        return true;
+        this.setState({
+            listCategory: listCategory,
+        })
     }
 
     render() {
@@ -84,12 +89,14 @@ class CourseListByCategory extends Component {
     componentDidMount() {
         const category_id = this.props.match.params.category_id;
         const listCategory = this.props.categoryList.filter(t => t.category_id == category_id);
-        if (listCategory.length > 0){
+        if (listCategory.length > 0) {
             this.setState({
                 isActive: listCategory[0].id,
-                listCategory: listCategory,
             })
         }
+        this.setState({
+            listCategory: listCategory,
+        })
     }
 }
 

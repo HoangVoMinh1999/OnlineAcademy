@@ -16,4 +16,14 @@ export class UserService {
         let currentURL = this.baseURL + '/register'
         return Axios.post(currentURL,info)
     }
+
+    getUserDetail(id){
+        let currentURL =  this.baseURL + '/'+ id;
+        return Axios.get(currentURL)
+    }
+
+    updateUserDetail(id,user){
+        let currentURL =  this.baseURL + '/'+ id;
+        return Axios.patch(currentURL,user)
+    }
 }

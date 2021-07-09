@@ -136,12 +136,6 @@ router.patch('/course_img/:id', upload.single('image'), async (req, res) => {
         newImage = ""
     }
     const isUpdated = await courseModel.updateImage(id,newImage,img_src);
-    // const id = req.params.id;
-    // let img = req.body;
-    // let imgFile = req.file;
-    // console.log(imgFile)
-    // let stringImg = img.toString('base64');
-    // const isUpdated = await courseModel.updateImage(id, stringImg);
     if (isUpdated === null) {
         res.json({
             'err_message': 'Course is not exist !!!'
