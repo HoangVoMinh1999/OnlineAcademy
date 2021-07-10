@@ -8,21 +8,29 @@ import { categoryService } from '../../Services/';
 import { Pagination } from 'antd';
 class CategoryList extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
-            category_id : 0,
+            category_id: 0,
         }
     }
 
     handleButtonDelete = (id) => {
         this.setState({
-            category_id : id,
+            category_id: id,
         })
     }
 
     handleClickButtonConfirmDelete = async () => {
-        const res = await categoryService.deleteCategory(this.state.category_id);
+        let res = await categoryService.deleteCategory(this.state.category_id);
+        res = await categoryService.getAllCategories();
+        this.props.dispatch(
+            createAction(
+                GET_LIST,
+                res.data
+            )
+        )
+        this.forceUpdate();
     }
 
     handleClickButtonEdit = async (id) => {
@@ -32,11 +40,11 @@ class CategoryList extends Component {
     renderContent = () => {
         return (
             this.props.categoryList.map((category, index) => {
-                const mainCategory = category.category_id !== null ? this.props.mainCategoryList.find(t => t.id === category.category_id).name : '';
+                const mainCategory = category.category_id !== null ? this.props.mainCategoryList.find(t => t.id === category.category_id) : '';
                 return <tr key={index}>
                     <td>{category.id}</td>
                     <td>{category.name}</td>
-                    <td>{mainCategory}</td>
+                    <td>{mainCategory === '' ? <i className="fa fa-star"></i> : mainCategory.name}</td>
                     <td>
                         <button class="pd-setting">Active</button>
                     </td>
@@ -85,6 +93,13 @@ class CategoryList extends Component {
                                     <div className="add-product">
                                         <Link to="/category-add">Thêm loại khóa học</Link>
                                     </div>
+                                    <div className="header-top-menu tabl-d-n hd-search-rp">
+                                        <div className="breadcome-heading">
+                                            <form role="search" className="d-inline-flex p-2"  method='GET'>
+                                                <input type="text" name="search" placeholder="Search..." className="form-control" />
+                                            </form>
+                                        </div>
+                                    </div>
                                     <table>
                                         <thead>
                                             <tr>
@@ -99,7 +114,7 @@ class CategoryList extends Component {
                                             {this.renderContent()}
                                         </tbody>
                                     </table>
-                                    {/* <div className="custom-pagination">
+                                    <div className="custom-pagination">
                                         <ul className="pagination">
                                             <li className="page-item"><a className="page-link" href="#">Previous</a></li>
                                             <li className="page-item"><a className="page-link" href="/">1</a></li>
@@ -107,7 +122,7 @@ class CategoryList extends Component {
                                             <li className="page-item"><a className="page-link" href="#">3</a></li>
                                             <li className="page-item"><a className="page-link" href="#">Next</a></li>
                                         </ul>
-                                    </div> */}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -120,7 +135,6 @@ class CategoryList extends Component {
 
     async componentDidMount() {
         const res = await categoryService.getAllCategories();
-        console.log(res.data)
         this.props.dispatch(
             createAction(
                 GET_LIST,

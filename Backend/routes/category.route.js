@@ -6,18 +6,18 @@ const router = express.Router();
 
 router.get('/',async function(req,res,next){
     const listCategory = await CategoryModel.all();
-    res.json(listCategory);
+    return res.json(listCategory);
 })
 
 router.get('/:id',async function(req,res,next){
     const id = req.params.id;
     const category = await CategoryModel.singleById(id);
     if (category === null){
-        res.status(204).json({
+        return res.status(204).json({
             'err_message':'No content for category'
         })
     }
-    res.status(200).json(category);
+    return res.status(200).json(category);
 })
 
 router.post('/',async function(req,res){
@@ -30,15 +30,15 @@ router.post('/',async function(req,res){
             category.Log_CreatedDate = new Date();
             const ids =await  CategoryModel.addCategory(category);
             category.id = ids[0];
-            res.status(200).json(category);
+            return res.status(200).json(category);
         }
         else{
-            res.json({
+            return res.json({
                 'err_message':'This category is existed'
             });
         }
     }
-    res.json({
+    return res.json({
         'err_message':'No content for category'
     });
 })
@@ -47,17 +47,17 @@ router.patch('/delete/:id',async function(req,res,next){
     const id = req.params.id;
     const isDeleted = await CategoryModel.delete(id);
     if (isDeleted === null){
-        res.json({
+        return res.json({
             'message':'Cateogory is not exist !!!'
         })
     }
     else if (isDeleted !== 1){
-        res.json({
+        return res.json({
             'message': 'Delete failed !!!'
         })
     }
     await CategoryModel.deleteChildren(id);
-    res.json({
+    return res.status(200).json({
         'message':'Delete successfully !!!'
     })
 })
@@ -68,16 +68,16 @@ router.patch('/:id', async function(req,res,next){
     category.Log_UpdatedDate = new Date();
     const isUpdated = await CategoryModel.update(id,category);
     if (isUpdated === null){
-        res.json({
+        return res.json({
             'message':'Cateogory is not exist !!!'
         })
     }
     else if (isUpdated !== 1){
-        res.json({
+        return res.json({
             'message': 'Update failed !!!'
         })
     }
-    res.json({
+    return res.json({
         'message':'Update successfully !!!'
     })
 })
@@ -85,6 +85,6 @@ router.patch('/:id', async function(req,res,next){
 router.get('/cateogry/:id', async (req,res) => {
     const category_id = req.params.id;
     const categoryList = await categoryModel.listChildCategory(category_id);
-    res.status(200).json(categoryList);
+    return res.status(200).json(categoryList);
 })
 module.exports = router;

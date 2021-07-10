@@ -15,10 +15,12 @@ class CourseList extends Component {
             query: {
                 search: ''
             },
+            lengthCourseList : 0,
         }
     }
 
     renderContent = () => {
+        console.log(this.props.courseList)
         return this.props.courseList.map((course, index) => {
             const isFinish = course.IsFinish.data[0] === 1 ? "Đã hoàn thành" : "Chưa hoàn thành"
             let category = course.category_id === null ? null : this.props.categoryList.find(t => t.id === course.category_id);
@@ -95,31 +97,14 @@ class CourseList extends Component {
         this.props.dispatch(
             createAction(
                 GET_COURSE_LIST,
-                res.data
+                res.data.listCourse
             )
         )
+        this.setState({
+            ...this.state,
+            lengthCourseList : res.data.length
+        })
     }
-
-    // async shouldComponentUpdate(nextProps){
-    //     if (nextProps.location.search !== this.props.location.search){
-    //         console.log(nextProps.location.search)  
-    //         const searchParams = new URLSearchParams(nextProps.location.search);
-    //         const query = {};
-    //         if (searchParams.get('page') !== '') {
-    //             query.page = searchParams.get('page');
-    //         }
-    //         query.search = this.state.query.search;
-    //         const res = await courseService.getAllCourses(query);
-    //         this.props.dispatch(
-    //             createAction(
-    //                 GET_COURSE_LIST,
-    //                 res.data
-    //             )
-    //         )
-    //         return true;
-    //     }
-    //     return true;
-    // }
 
     async componentDidUpdate(prevProps){
         if (prevProps.location.search !== this.props.location.search){ 
@@ -133,10 +118,26 @@ class CourseList extends Component {
             this.props.dispatch(
                 createAction(
                     GET_COURSE_LIST,
-                    res.data
+                    res.data.listCourse
                 )
             )
+            this.setState({
+                ...this.state,
+                lengthCourseList : res.data.length
+            })
         }
+    }
+
+    renderPagination = () => {
+        const offset = 6;
+        const amountOfPages = this.state.lengthCourseList % offset === 0 ? this.state.lengthCourseList / offset : (~~(this.state.lengthCourseList / offset) + 1);
+        let arr = []
+        for (var i = 1;i <= amountOfPages;i++){
+            arr.push(
+                <li key={i} className="page-item"><Link to={`/course-list?page=${i}`} className="page-link">{i}</Link></li>
+            )
+        }
+        return arr;
     }
 
 
@@ -180,9 +181,7 @@ class CourseList extends Component {
                                     <div className="custom-pagination">
                                         <ul className="pagination">
                                             <li className="page-item"><a className="page-link" href="#">Previous</a></li>
-                                            <li className="page-item"><Link to="/course-list?page=1" className="page-link">1</Link></li>
-                                            <li className="page-item"><Link to="/course-list?page=2" className="page-link">2</Link></li>
-                                            <li className="page-item"><Link to="/course-list?page=3" className="page-link">3</Link></li>
+                                            {this.renderPagination()}
                                             <li className="page-item"><a className="page-link" href="#">Next</a></li>
                                         </ul>
                                     </div>
@@ -206,7 +205,6 @@ class CourseList extends Component {
                 )
             )
         }
-
         const searchParams = new URLSearchParams(this.props.location.search);
         const query = {};
         if (searchParams.get('page') !== '') {
@@ -216,9 +214,13 @@ class CourseList extends Component {
         this.props.dispatch(
             createAction(
                 GET_COURSE_LIST,
-                res.data
+                res.data.listCourse
             )
         )
+        this.setState({
+            ...this.state,
+            lengthCourseList : res.data.length
+        })
     }
 }
 

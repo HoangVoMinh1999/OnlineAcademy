@@ -5,7 +5,13 @@ import { courseService } from '../Services'
 
 class CourseItem extends Component {
 
-
+    constructor(props){
+        super(props);
+        this.state = {
+            imgData : null,
+            imgURL : null,
+        }
+    }
 
     render() {
         const category = this.props.info.category_id === null ? null : this.props.categoryList.find(t => t.id === this.props.info.category_id)
@@ -14,7 +20,7 @@ class CourseItem extends Component {
                 <div className="single_courses">
                     <div className="thumb" >
                         <Link to={`/course_detail/${this.props.info.id}`}>
-                            <img src={ this.props.info.imageURL === null ? "img/courses/1.png" : this.props.info.imageURL} alt="Hình minh họa" style={{width:"100%", height:"220px"}}/>
+                            <img src={ this.state.imgURL === null ? "img/courses/1.png" : this.state.imgURL} alt="Hình minh họa" style={{width:"100%", height:"220px"}}/>
                         </Link>
                     </div>
                     <div className="courses_info">
@@ -38,6 +44,16 @@ class CourseItem extends Component {
                 </div>
             </div>
         )
+    }
+    async componentDidMount(){
+        const res = await courseService.getImage4CourseDetail(this.props.info.id);
+        if (!res.data.err_message){
+            var reader = new FileReader();
+            if (res.data.size > 0){
+                reader.readAsDataURL(res.data); 
+                reader.onloadend = () => this.setState({ imgData: reader.result,  imgURL : URL.createObjectURL(res.data)})
+            }
+        }
     }
 }
 

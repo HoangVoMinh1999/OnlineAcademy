@@ -22,11 +22,13 @@ var upload = multer({
 router.get('/', async function (req, res, next) {
     const offset = 6;
     const query = req.query;
-    let listCourse = []
+    let listCourse = [];
+    let lengthListCourse = 0;
     if (Object.keys(query).length !== 0) {
         if (query.hasOwnProperty('search') && query.search !== '') {
             if (query.search !== ''){
                 listCourse = await courseModel.fullTextSearch4Course(query.search);
+                lengthListCourse = listCourse.length;
             }
             else{
                 listCourse = await courseModel.all();
@@ -35,6 +37,7 @@ router.get('/', async function (req, res, next) {
         if (query.hasOwnProperty('page')){
             if (query.page !== '' && listCourse.length === 0){
                 listCourse = await courseModel.all();
+                lengthListCourse = listCourse.length;
                 listCourse = listCourse.slice((query.page-1)*offset,query.page*offset)
             }
             else{
@@ -43,9 +46,12 @@ router.get('/', async function (req, res, next) {
         }
     } else {
         listCourse = await courseModel.all();
+        lengthListCourse = listCourse.length;
     }
-    console.log(listCourse.length)
-    return res.json(listCourse);
+    return res.json({
+        'listCourse' : listCourse,
+        'length' : lengthListCourse,
+    });
 })
 router.get('/:id', async function (req, res, next) {
     const id = req.params.id;

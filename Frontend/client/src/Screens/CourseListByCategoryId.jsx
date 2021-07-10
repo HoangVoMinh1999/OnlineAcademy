@@ -34,7 +34,7 @@ class CourseListByCategory extends Component {
         })
     }
 
-    componentWillReceiveProps(nextProps){
+    componentWillReceiveProps(nextProps) {
         const category_id = nextProps.match.params.category_id;
         const listCategory = this.props.categoryList.filter(t => t.category_id == category_id);
         if (listCategory.length > 0) {
@@ -50,16 +50,21 @@ class CourseListByCategory extends Component {
     render() {
         return (
             <div>
-                <Slider></Slider>
+                <div className="slider_area ">
+                    <div className="single_slider d-flex align-items-center justify-content-center slider_bg_1" style={{height: '25rem'}}>
+                        <div className="container">
+                            <div className="section_title text-center" style={{marginTop: '5rem'}}>
+                                <h3  style={{ color:'white'}}>Danh sách khóa học</h3>
+                                <p  style={{ color:'whitesmoke'}}>Your domain control panel is designed for ease-of-use and <br /> allows for all aspects of your domains.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 {/* popular_courses_start */}
                 <div className="popular_courses">
                     <div className="container">
                         <div className="row">
                             <div className="col-xl-12">
-                                <div className="section_title text-center mb-100">
-                                    <h3>Popular Courses</h3>
-                                    <p>Your domain control panel is designed for ease-of-use and <br /> allows for all aspects of your domains.</p>
-                                </div>
                             </div>
                         </div>
                         <div className="row">

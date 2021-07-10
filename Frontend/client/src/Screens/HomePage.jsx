@@ -26,32 +26,15 @@ class HomePage extends Component {
         )
 
         const res_course = await courseService.getAllCourse();
-        await res_course.data.forEach( async (element) => {
+        await res_course.data.listCourse.forEach( async (element) => {
             element.image = null;
             element.imageURL = null;
             delete element.Image_Source;
-            const res = await courseService.getImage4CourseDetail(element.id);
-            if (!res.data.err_message){
-                var reader = new FileReader();
-                if (res.data.size > 0){
-                    reader.readAsDataURL(res.data); 
-                    reader.onloadend = function() {
-                        var base64data = reader.result;                
-                        element.image = base64data;
-                        var url = URL.createObjectURL(res.data);
-                        element.imageURL = url;
-                    }
-                }
-                else{
-                    element.image = null;
-                    element.imageURL = null;
-                }
-            }
         })
         this.props.dispatch(
             createAction(
                 GET_COURSE_LIST,
-                res_course.data
+                res_course.data.listCourse
             )
         )
     }
