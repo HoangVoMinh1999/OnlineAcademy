@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Slider } from '../Components/Slider';
 import SubTabCourse from '../Components/SubTabCourse'
+import {Link} from 'react-router-dom';
+import { Pagination } from 'antd';
+import 'antd/dist/antd.css';
 
 class CourseListByCategory extends Component {
 
@@ -14,9 +16,14 @@ class CourseListByCategory extends Component {
         }
     }
     handleClick = (event) => {
+        const category_id = this.props.match.params.category_id;
         this.setState({
             ...this.state,
-            isActive: event.target.id
+            isActive: parseInt(event.target.id)
+        })
+        this.props.history.push({
+            pathname: `/course/${category_id}`,
+            search : `?category=${event.target.id}&page=1`
         })
     }
 
@@ -35,16 +42,32 @@ class CourseListByCategory extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        const category_id = nextProps.match.params.category_id;
-        const listCategory = this.props.categoryList.filter(t => t.category_id == category_id);
-        if (listCategory.length > 0) {
+        if (nextProps.match.params.category_id !== this.props.match.params.category_id){
+            const category_id = nextProps.match.params.category_id;
+            const listCategory = this.props.categoryList.filter(t => t.category_id == category_id);
+            if (listCategory.length > 0) {
+                this.setState({
+                    isActive: listCategory[0].id,
+                })
+            }
             this.setState({
-                isActive: listCategory[0].id,
+                listCategory: listCategory,
             })
         }
-        this.setState({
-            listCategory: listCategory,
-        })
+        else if (nextProps.location.search !== this.props.location.search){
+            const searchParams = new URLSearchParams(this.props.location.search);
+            if (searchParams.hasOwnProperty('category')){
+                const category_id =  parseInt(searchParams.category);
+                this.setState({
+                    ...this.state,
+                    isActive:category_id,
+                })
+            }
+        }
+    }
+    
+    onChange = (pageNumber) => {
+        this.props.history.push(`${this.props.match.url}?page=${pageNumber}`)
     }
 
     render() {
@@ -80,10 +103,16 @@ class CourseListByCategory extends Component {
                         </div>
                     </div>
                     <div className="all_courses">
-                        <div className="container">
+                        <div className="container d-flex flex-column">
                             <div className="tab-content" id="myTabContent" >
                                 {this.renderTabContent()}
                             </div>
+                            <Pagination className="align-self-center" 
+                                showQuickJumper 
+                                defaultPageSize={6}
+                                defaultCurrent={1} 
+                                total={60} 
+                                onChange={this.onChange} />
                         </div>
                     </div>
                 </div>

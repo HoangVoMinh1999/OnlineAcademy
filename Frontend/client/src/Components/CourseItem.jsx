@@ -13,14 +13,34 @@ class CourseItem extends Component {
         }
     }
 
+    async componentDidUpdate(nextProps){
+        if (nextProps !== this.props){
+            const res = await courseService.getImage4CourseDetail(this.props.info.id);
+            if (!res.data.err_message){
+                var reader = new FileReader();
+                if (res.data.size > 0){
+                    reader.readAsDataURL(res.data); 
+                    reader.onloadend = () => this.setState({ imgData: reader.result,  imgURL : URL.createObjectURL(res.data)})
+                }
+                else{
+                    this.setState({
+                        imgData : null,
+                        imgURL : null,
+                    })
+                }
+            }
+        }
+    }
+
     render() {
         const category = this.props.info.category_id === null ? null : this.props.categoryList.find(t => t.id === this.props.info.category_id)
+        console.log(this.state.imgURL === null)
         return (
             <div>
                 <div className="single_courses">
                     <div className="thumb" >
                         <Link to={`/course_detail/${this.props.info.id}`}>
-                            <img src={ this.state.imgURL === null ? "img/courses/1.png" : this.state.imgURL} alt="Hình minh họa" style={{width:"100%", height:"220px"}}/>
+                            <img src={ this.state.imgURL === null ? "/img/courses/1.png"  : this.state.imgURL} alt="Hình minh họa" style={{width:"100%", height:"220px"}}/>
                         </Link>
                     </div>
                     <div className="courses_info">

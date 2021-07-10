@@ -58,7 +58,7 @@ class SubTabCourse extends Component {
             return cList.map((course,index) => {
                 return(
                     <div className="col-xl-4 col-lg-4 col-md-6">
-                        <CourseItem info={course}></CourseItem>
+                        <CourseItem info={course} key={index} reload='true'></CourseItem>
                     </div>
                 )
             })
