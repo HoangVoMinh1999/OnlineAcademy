@@ -72,5 +72,9 @@ module.exports = {
 
     paging4Course(page,limit){
         return db('course').limit(limit).offset(page - 1);
+    },
+
+    getCourseByCategory(category_id){
+        return db('course').where('isdeleted',false).andWhere('category_id',category_id);
     }
 }

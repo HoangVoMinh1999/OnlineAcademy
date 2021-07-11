@@ -36,8 +36,9 @@ class CourseListByCategory extends Component {
     }
 
     renderTabContent = () => {
+        const searchParams = new URLSearchParams(this.props.location.search);
         return this.state.listCategory.map((category, index) => {
-            return <SubTabCourse isActive={this.state.isActive} id={category.id} key={index}></SubTabCourse>
+            return <SubTabCourse isActive={this.state.isActive} id={category.id} key={index} page={searchParams.get('page')}></SubTabCourse>
         })
     }
 
@@ -64,21 +65,24 @@ class CourseListByCategory extends Component {
                 })
             }
         }
+        window.scrollTo(0, 0)
     }
     
     onChange = (pageNumber) => {
-        this.props.history.push(`${this.props.match.url}?page=${pageNumber}`)
+        this.props.history.push({
+            pathname: this.props.match.url,
+            search : `?category=${this.state.isActive}&page=${pageNumber}`
+        })
     }
 
     render() {
         return (
             <div>
                 <div className="slider_area ">
-                    <div className="single_slider d-flex align-items-center justify-content-center slider_bg_1" style={{height: '25rem'}}>
+                    <div className="single_slider d-flex align-items-center justify-content-center slider_bg_1" style={{height: '20rem'}}>
                         <div className="container">
                             <div className="section_title text-center" style={{marginTop: '5rem'}}>
                                 <h3  style={{ color:'white'}}>Danh sách khóa học</h3>
-                                <p  style={{ color:'whitesmoke'}}>Your domain control panel is designed for ease-of-use and <br /> allows for all aspects of your domains.</p>
                             </div>
                         </div>
                     </div>
@@ -130,6 +134,10 @@ class CourseListByCategory extends Component {
         }
         this.setState({
             listCategory: listCategory,
+        })
+        this.props.history.push({
+            pathname: this.props.match.url,
+            search : `?category=${listCategory[0].id}&page=1`
         })
     }
 }

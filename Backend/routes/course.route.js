@@ -32,7 +32,12 @@ router.get('/', async function (req, res, next) {
             }
             else{
                 listCourse = await courseModel.all();
+                lengthListCourse = listCourse.length;
             }
+        }
+        if(query.hasOwnProperty('category')){
+            listCourse = await courseModel.getCourseByCategory(query.category);
+            lengthListCourse = listCourse.length;
         }
         if (query.hasOwnProperty('page')){
             if (query.page !== '' && listCourse.length === 0){

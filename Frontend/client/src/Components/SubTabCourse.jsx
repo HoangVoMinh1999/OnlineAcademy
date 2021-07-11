@@ -54,7 +54,10 @@ class SubTabCourse extends Component {
             })
         }
         else {
-            const cList = this.props.courseList.filter(t => t.category_id == this.props.isActive)
+            const temp = this.props.courseList.filter(t => t.category_id == this.props.isActive)
+            const page = this.props.page;
+            const offset = 6;
+            const cList = temp.slice((page-1)*offset,page*offset) 
             return cList.map((course,index) => {
                 return(
                     <div className="col-xl-4 col-lg-4 col-md-6">

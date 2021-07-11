@@ -3,12 +3,13 @@ const bcrypt = require('bcryptjs');
 const userModel = require('../models/user.model');
 const jwt = require('jsonwebtoken');
 const randomstring = require('randomstring');
+const nodemailer = require('../configs/nodemailler.config');
 
 const router = express.Router();
 
 router.get('/', async function (req, res, next) {
     const listteacher = await userModel.all();
-    listteacher.forEach(function(item,index,array){
+    listteacher.forEach(function (item, index, array) {
         delete item.username;
         delete item.password;
         delete item.rfToken;
@@ -17,10 +18,10 @@ router.get('/', async function (req, res, next) {
     return res.json(listteacher);
 })
 
-router.get('/:id',async function(req,res,next){
+router.get('/:id', async function (req, res, next) {
     const id = req.params.id;
     const user = await userModel.singleById(id);
-    if (user !== null){
+    if (user !== null) {
         delete user.username;
         delete user.password;
         return res.status(200).json(user);
@@ -82,8 +83,15 @@ router.post('/register', async function (req, res, next) {
     const ids = await userModel.register(user);
     user.id = ids[0];
     delete user.password;
+
+    nodemailer.sendConfirmationEmail(
+        user.username,
+        user.email,
+        user.id,
+    )
+
     return res.status(200).json({
-        account : user
+        account: user
     });
 
 })
@@ -93,13 +101,12 @@ router.post('/login', async function (req, res, next) {
     const tmp = await userModel.singleByUserName(user.username);
     if (tmp === null) {
         return res.json({
-            authenticated : false,
+            authenticated: false,
             message: 'Username is not exist!'
         })
     }
     const isMatch = bcrypt.compareSync(user.password, tmp.password);
-    if (isMatch === false)
-    {
+    if (isMatch === false) {
         return res.json({
             authenticated: false,
             message: 'Password is incorrect!'
@@ -107,36 +114,47 @@ router.post('/login', async function (req, res, next) {
     }
     //--- input for jwt.sign
     const payload = {
-        userId : tmp.id,
+        userId: tmp.id,
         IsAdmin: tmp.IsAdmin,
     }
-    const opts = {expiresIn : 10*60}
+    const opts = {
+        expiresIn: 10 * 60
+    }
     //--- Token
-    const accessToken = jwt.sign(payload,'SECRET_KEY',opts);
+    const accessToken = jwt.sign(payload, 'SECRET_KEY', opts);
     const rfToken = randomstring.generate(99);
-    await userModel.updateRfToken(tmp.id,rfToken)
+    await userModel.updateRfToken(tmp.id, rfToken)
     return res.status(200).json({
         authenticated: true,
-        accessToken : accessToken,
+        accessToken: accessToken,
         rfToken: rfToken,
     });
 })
 
-router.post('/refresh',async (req,res) => {
-    const {accessToken , rfToken} = req.body;
-    const {userId} = jwt.verify(accessToken,'SECRET_KEY',{
-        ignoreExpiration : true,
+router.post('/refresh', async (req, res) => {
+    const {
+        accessToken,
+        rfToken
+    } = req.body;
+    const {
+        userId
+    } = jwt.verify(accessToken, 'SECRET_KEY', {
+        ignoreExpiration: true,
     })
-    const ret = await userModel.isValidRFToken(userId,rfToken);
-    if (ret === true){
-        const opts = {expiresIn : 10*60}
-        const newAccessToken = jwt.sign({userId},'SECRET_KEY',opts);
+    const ret = await userModel.isValidRFToken(userId, rfToken);
+    if (ret === true) {
+        const opts = {
+            expiresIn: 10 * 60
+        }
+        const newAccessToken = jwt.sign({
+            userId
+        }, 'SECRET_KEY', opts);
         return res.json({
-            accessToken : newAccessToken
+            accessToken: newAccessToken
         })
     }
     return res.status(400).json({
-        message : 'Refresh token is revoked'
+        message: 'Refresh token is revoked'
     })
 })
 module.exports = router;

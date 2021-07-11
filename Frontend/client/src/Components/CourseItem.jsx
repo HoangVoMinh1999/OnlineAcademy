@@ -32,6 +32,10 @@ class CourseItem extends Component {
         }
     }
 
+    onChange = (pageNumber) => {
+        this.props.history.push(`${this.props.match.url}?page=${pageNumber}`)
+    }
+
     render() {
         const category = this.props.info.category_id === null ? null : this.props.categoryList.find(t => t.id === this.props.info.category_id)
         console.log(this.state.imgURL === null)
