@@ -112,6 +112,13 @@ router.post('/login', async function (req, res, next) {
             message: 'Password is incorrect!'
         })
     }
+    var value = [...tmp.IsConfirmed];
+    if (value[0] === 0){
+        return res.json({
+            authenticated: false,
+            message: 'User is not confirmed !!!'
+        })
+    }
     //--- input for jwt.sign
     const payload = {
         userId: tmp.id,
@@ -156,5 +163,24 @@ router.post('/refresh', async (req, res) => {
     return res.status(400).json({
         message: 'Refresh token is revoked'
     })
+})
+
+router.post('/confirm/:id',async function(req,res,next){
+    let id = req.params.id;
+    let user = await userModel.singleById(id);
+    if (user === null){
+        return res.status(204).json({
+            'err_message': 'No user for confirm !!!'
+        })
+    }
+    user.Log_UpdatedDate = new Date();
+    user.Log_UpdatedBy = user.username;
+    user.IsConfirmed = true;
+
+    delete user.username;
+    delete user.password;
+
+    await userModel.confirmAccount(id,user);
+    return res.redirect('http://localhost:3000/')
 })
 module.exports = router;

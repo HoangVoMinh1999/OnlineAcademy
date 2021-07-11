@@ -40,12 +40,22 @@ export default class Login extends Component {
         if (Object.keys(this.state.errors).every(t => this.state.errors[t] === '')){
             const res = await userService.login(this.state.values.username, this.state.values.password);
             if (!res.data.authenticated) {
-                swal({
-                    title: "Cảnh báo",
-                    text: "Username or password is incorrect !!!",
-                    icon: "error",
-                    button: "Ok",
-                });
+                if (res.data.message === 'User is not confirmed !!!'){
+                    swal({
+                        title: "Cảnh báo",
+                        text: "Vui lòng xác nhận tài khoản qua email !!!",
+                        icon: "error",
+                        button: "Xác nhận",
+                    });
+                }
+                else{
+                    swal({
+                        title: "Cảnh báo",
+                        text: "Username hoặc password không chính xác !!!",
+                        icon: "error",
+                        button: "Xác nhận",
+                    });
+                }
             }
             else{
                 localStorage.user_accessToken = res.data.accessToken;

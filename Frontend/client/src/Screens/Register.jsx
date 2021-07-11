@@ -35,8 +35,8 @@ export default class Login extends Component {
         if (Object.keys(this.state.errors).every((k) => this.state.errors[k] === '')) {
             const res = await userService.register(this.state.values);
             swal({
-                title: "Thông báo",
-                text: "Đăng ký thành công !!!",
+                title: "Đăng ký thành công",
+                text: "Khách hàng vui lòng xác nhận qua email nha !!!",
                 icon: "success",
                 button: "Đồng ý",
             }).then(() => {
@@ -99,11 +99,11 @@ export default class Login extends Component {
     render() {
         return (
             <div>
-                <div className="slider_area ">
+                <div className="slider_area">
                     <div className="single_slider d-flex align-items-center justify-content-center slider_bg_1">
                         <div className="container">
                             <form onSubmit={this.handleSubmit}>
-                                <div className="popup_box ">
+                                <div className="popup_box">
                                     <div className="popup_inner">
                                         <div className="logo text-center">
                                             <a href="#">

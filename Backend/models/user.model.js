@@ -65,4 +65,8 @@ module.exports = {
         }
         return false;
     },
+
+    async confirmAccount(id,data){
+        return db('user').where('isdeleted',false).andWhere('id',id).update(data);
+    }
 }
