@@ -41,18 +41,16 @@ export default class LeftMenu extends Component {
                                         <a className="has-arrow" href="mailbox.html" aria-expanded="false"><i className="icon nalika-mail icon-wrap" /> <span className="mini-click-non">Accout List</span></a>
                                         <ul className="submenu-angle" aria-expanded="false">
                                             <li><Link to="/user/all-user"><span className="mini-sub-pro">Tất cả tài khoản</span></Link></li>
-                                            <li><a title="Inbox" href="mailbox.html"><span className="mini-sub-pro">Students</span></a></li>
-                                            <li><a title="View Mail" href="mailbox-view.html"><span className="mini-sub-pro">Teachers</span></a></li>
-                                            <li><a title="Compose Mail" href="mailbox-compose.html"><span className="mini-sub-pro">Admin</span></a></li>
+                                            <li><Link to="/user/student"><span className="mini-sub-pro">Students</span></Link></li>
+                                            <li><Link to="/user/teacher"><span className="mini-sub-pro">Teachers</span></Link></li>
+                                            <li><Link to="/user/admin"><span className="mini-sub-pro">Admin</span></Link></li>
                                         </ul>
                                     </li>
                                     <li id="removable">
                                         <a className="has-arrow" href="#" aria-expanded="false"><i className="icon nalika-new-file icon-wrap" /> <span className="mini-click-non">Pages</span></a>
                                         <ul className="submenu-angle" aria-expanded="false">
-                                            <li><a title="Login" href="login.html"><span className="mini-sub-pro">Login</span></a></li>
+                                            <li><Link title="Login" to='/login'><span className="mini-sub-pro">Login</span></Link></li>
                                             <li><a title="Register" href="register.html"><span className="mini-sub-pro">Register</span></a></li>
-                                            <li><a title="Lock" href="lock.html"><span className="mini-sub-pro">Lock</span></a></li>
-                                            <li><a title="Password Recovery" href="password-recovery.html"><span className="mini-sub-pro">Password Recovery</span></a></li>
                                         </ul>
                                     </li>
                                 </ul>
@@ -89,13 +87,9 @@ export default class LeftMenu extends Component {
                                                 </li>
                                                 <li><a data-toggle="collapse" data-target="#Pagemob" href="#">Pages <span className="admin-project-icon nalika-icon nalika-down-arrow" /></a>
                                                     <ul id="Pagemob" className="collapse dropdown-header-top">
-                                                        <li><a href="login.html">Login</a>
+                                                        <li><Link to="/login">Login</Link>
                                                         </li>
                                                         <li><a href="register.html">Register</a>
-                                                        </li>
-                                                        <li><a href="lock.html">Lock</a>
-                                                        </li>
-                                                        <li><a href="password-recovery.html">Password Recovery</a>
                                                         </li>
                                                     </ul>
                                                 </li>

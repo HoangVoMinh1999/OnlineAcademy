@@ -5,14 +5,14 @@ import { userService } from '../../Services'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 
-class UserList extends Component {
+class AdminList extends Component {
 
     renderContent = () => {
-        if (this.props.userList !== undefined && this.props.userList !== null && this.props.userList.length > 0) {
-            return this.props.userList.map((item, index) => {
+        if (this.props.adminList !== undefined && this.props.adminList !== null && this.props.adminList.length > 0) {
+            return this.props.adminList.map((item, index) => {
                 return <tr key={index}>
                     <td>{item.id}</td>
-                    <td>{item.name === null ? 'Chưa có thông tin' : item.name}{item.IsAdmin.data[0] === 1 ? <i className="fa fa-star"></i> : ''}</td>
+                    <td>{item.name === null ? 'Chưa có thông tin' : item.name}</td>
                     <td>{item.address === null ? 'Chưa có thông tin' : item.address}</td>
                     <td>{item.phone === null ? 'Chưa có thông tin' : item.phone}</td>
                     <td>{item.email === null ? 'Chưa có thông tin' : item.email}</td>
@@ -107,8 +107,8 @@ class UserList extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        userList: state.UserReducer.UserList,
+        adminList: state.UserReducer.AdminList,
     }
 }
 
-export default connect(mapStateToProps)(UserList)
+export default connect(mapStateToProps)(AdminList)

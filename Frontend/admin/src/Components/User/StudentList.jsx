@@ -5,18 +5,17 @@ import { userService } from '../../Services'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 
-class UserList extends Component {
+class StudentList extends Component {
 
     renderContent = () => {
-        if (this.props.userList !== undefined && this.props.userList !== null && this.props.userList.length > 0) {
-            return this.props.userList.map((item, index) => {
+        if (this.props.studentList !== undefined && this.props.studentList !== null && this.props.studentList.length > 0) {
+            return this.props.studentList.map((item, index) => {
                 return <tr key={index}>
                     <td>{item.id}</td>
                     <td>{item.name === null ? 'Chưa có thông tin' : item.name}{item.IsAdmin.data[0] === 1 ? <i className="fa fa-star"></i> : ''}</td>
                     <td>{item.address === null ? 'Chưa có thông tin' : item.address}</td>
                     <td>{item.phone === null ? 'Chưa có thông tin' : item.phone}</td>
                     <td>{item.email === null ? 'Chưa có thông tin' : item.email}</td>
-                    <td>{item.IsTeacher.data[0] === 0 ? 'Không' : 'Có'}</td>
                     <td>
                         <Link to={`/course-edit/${item.id}`}><button id="categoryEdit" title="Edit" class="pd-setting-ed"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></Link>
                         {/* Button trigger modal */}
@@ -67,7 +66,6 @@ class UserList extends Component {
                                                 <th>Địa chỉ</th>
                                                 <th>Số điện thoại</th>
                                                 <th>Email</th>
-                                                <th>Là giáo viên</th>
                                                 <th>More</th>
                                             </tr>
                                         </thead>
@@ -107,8 +105,8 @@ class UserList extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        userList: state.UserReducer.UserList,
+        studentList : state.UserReducer.StudentList,
     }
 }
 
-export default connect(mapStateToProps)(UserList)
+export default connect(mapStateToProps)(StudentList)

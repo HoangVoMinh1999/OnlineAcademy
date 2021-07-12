@@ -14,6 +14,10 @@ import CourseEdit from './Components/Course/CourseEdit';
 import LessonAdd from './Components/Lesson/LessonAdd';
 import LessonEdit from './Components/Lesson/LessonEdit';
 import UserList from './Components/User/UserList';
+import Login from './Components/User/Login';
+import TeacherList from './Components/User/TeacherList';
+import StudentList from './Components/User/StudentList';
+import AdminList from './Components/User/AdminList';
 class App extends Component {
 
   render() {
@@ -21,8 +25,8 @@ class App extends Component {
       <div>
         <Router>
           <LeftMenu />
-          <div class="all-content-wrapper">
-            <Header></Header>
+          <div className="all-content-wrapper d-flex flex-column">
+            <Header position = "p-2"></Header>
             <Switch>
               <Route path="/" exact component={Homepage} />
 
@@ -38,9 +42,14 @@ class App extends Component {
               <Route path="/lesson-edit/:id" component={LessonEdit}></Route>
 
               <Route path="/user/all-user" component={UserList}></Route>
+              <Route path="/user/student" component={StudentList}></Route>
+              <Route path="/user/teacher" component={TeacherList}></Route>
+              <Route path="/user/admin" component={AdminList}></Route>
+
+              <Route path="/login" component={Login}></Route>
 
             </Switch>
-            <Footer></Footer>
+            <Footer position ="ml-auto p-2"></Footer>
           </div>
         </Router>
 

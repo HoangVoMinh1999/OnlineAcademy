@@ -1,31 +1,31 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { courseService } from '../Services'
 
 class CourseItem extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
-            imgData : null,
-            imgURL : null,
+            imgData: null,
+            imgURL: null,
         }
     }
 
-    async componentDidUpdate(nextProps){
-        if (nextProps !== this.props){
+    async componentDidUpdate(nextProps) {
+        if (nextProps !== this.props) {
             const res = await courseService.getImage4CourseDetail(this.props.info.id);
-            if (!res.data.err_message){
+            if (!res.data.err_message) {
                 var reader = new FileReader();
-                if (res.data.size > 0){
-                    reader.readAsDataURL(res.data); 
-                    reader.onloadend = () => this.setState({ imgData: reader.result,  imgURL : URL.createObjectURL(res.data)})
+                if (res.data.size > 0) {
+                    reader.readAsDataURL(res.data);
+                    reader.onloadend = () => this.setState({ imgData: reader.result, imgURL: URL.createObjectURL(res.data) })
                 }
-                else{
+                else {
                     this.setState({
-                        imgData : null,
-                        imgURL : null,
+                        imgData: null,
+                        imgURL: null,
                     })
                 }
             }
@@ -41,16 +41,16 @@ class CourseItem extends Component {
         console.log(this.state.imgURL === null)
         return (
             <div>
-                <div className="single_courses">
+                <div className="single_courses" >
                     <div className="thumb" >
                         <Link to={`/course_detail/${this.props.info.id}`}>
-                            <img src={ this.state.imgURL === null ? "/img/courses/1.png"  : this.state.imgURL} alt="Hình minh họa" style={{width:"100%", height:"220px"}}/>
+                            <img src={this.state.imgURL === null ? "/img/courses/1.png" : this.state.imgURL} alt="Hình minh họa" style={{ width: "100%", height: "220px" }} />
                         </Link>
                     </div>
-                    <div className="courses_info">
+                    <div className="courses_info d-flex flex-column justify-content-between" style={{ height: "300px" }}>
                         <span>{category === null ? "Chưa có thông tin" : category.name}</span>
                         <h3><Link to={`/course_detail/${this.props.info.id}`}>{this.props.info.name}</Link></h3>
-                        <div className="star_prise d-flex justify-content-between">
+                        <div className="star_prise d-flex justify-content-between ">
                             <div className="star">
                                 <i className="flaticon-mark-as-favorite-star" />
                                 <span>({this.props.info.rate})</span>
@@ -64,18 +64,21 @@ class CourseItem extends Component {
                                 </p>
                             </div>
                         </div>
+                        <div className="d-flex justify-content-center">
+                            <a href="#" className="genric-btn primary circle e-large ">Thêm vào danh sách yêu thích</a>
+                        </div>
                     </div>
                 </div>
             </div>
         )
     }
-    async componentDidMount(){
+    async componentDidMount() {
         const res = await courseService.getImage4CourseDetail(this.props.info.id);
-        if (!res.data.err_message){
+        if (!res.data.err_message) {
             var reader = new FileReader();
-            if (res.data.size > 0){
-                reader.readAsDataURL(res.data); 
-                reader.onloadend = () => this.setState({ imgData: reader.result,  imgURL : URL.createObjectURL(res.data)})
+            if (res.data.size > 0) {
+                reader.readAsDataURL(res.data);
+                reader.onloadend = () => this.setState({ imgData: reader.result, imgURL: URL.createObjectURL(res.data) })
             }
         }
     }
@@ -83,7 +86,7 @@ class CourseItem extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        categoryList : state.CategoryReducer.ChildCategoryList
+        categoryList: state.CategoryReducer.ChildCategoryList
     }
 }
 

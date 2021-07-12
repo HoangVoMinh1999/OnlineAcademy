@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 export default class Footer extends Component {
     render() {
         return (
-            <div className="footer-copyright-area">
+            <div className={`footer-copyright-area ${this.props.position}`}>
                 <div className="container-fluid">
                     <div className="row">
                         <div className="col-lg-12">
