@@ -48,16 +48,30 @@ class CourseListByCategory extends Component {
 
     async componentWillReceiveProps(nextProps) {
         if (nextProps.match.params.category_id !== this.props.match.params.category_id){
-            const category_id = nextProps.match.params.category_id;
-            const listCategory = this.props.categoryList.filter(t => t.category_id == category_id);
-            if (listCategory.length > 0) {
+            const searchParams = new URLSearchParams(nextProps.location.search);
+            if (searchParams.get('page') === null && searchParams.get('category') === null){
+                const category_id = nextProps.match.params.category_id;
+                let listCategory = this.props.categoryList.filter(t => t.category_id == category_id);
+                if (listCategory.length > 0 ){
+                    this.props.history.push({
+                        pathname: `/course/${category_id}`,
+                        search : `?category=${listCategory[0].id}&page=1`
+                    })
+                }
+                else{
+                    this.props.history.push({
+                        pathname: nextProps.match.url
+                    })
+                }
+                if (listCategory.length > 0) {
+                    this.setState({
+                        isActive: listCategory[0].id,
+                    })
+                }
                 this.setState({
-                    isActive: listCategory[0].id,
+                    listCategory: listCategory,
                 })
             }
-            this.setState({
-                listCategory: listCategory,
-            })
         }
         else if (nextProps.location.search !== this.props.location.search){
             const searchParams = new URLSearchParams(this.props.location.search);
@@ -83,7 +97,6 @@ class CourseListByCategory extends Component {
                 query.search = searchParams.get('search');
             }
             const res = await courseService.getCoursesByQuery(query);
-            console.log(res.data.listCourse);
             this.props.dispatch(
                 createAction(
                     GET_COURSE_LIST,
@@ -166,10 +179,12 @@ class CourseListByCategory extends Component {
         this.setState({
             listCategory: listCategory,
         })
-        this.props.history.push({
-            pathname: this.props.match.url,
-            search : `?category=${listCategory[0].id}&page=1`
-        })
+        if (listCategory.length > 0){
+            this.props.history.push({
+                pathname: this.props.match.url,
+                search : `?category=${listCategory[0].id}&page=1`
+            })
+        }
     }
 }
 
