@@ -13,4 +13,8 @@ export class CourseService {
             responseType: 'blob'
         });
     }
+
+    getCoursesByQuery = (query) => {
+        return Axios.get(this.baseURL,{params: query})
+    }
 }

@@ -38,7 +38,6 @@ class CourseItem extends Component {
 
     render() {
         const category = this.props.info.category_id === null ? null : this.props.categoryList.find(t => t.id === this.props.info.category_id)
-        console.log(this.state.imgURL === null)
         return (
             <div>
                 <div className="single_courses" >

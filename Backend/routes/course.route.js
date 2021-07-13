@@ -36,8 +36,18 @@ router.get('/', async function (req, res, next) {
             }
         }
         if(query.hasOwnProperty('category')){
-            listCourse = await courseModel.getCourseByCategory(query.category);
-            lengthListCourse = listCourse.length;
+            if (query.category === '' && listCourse.length === 0){
+                listCourse = await courseModel.all();
+                lengthListCourse = listCourse.length;
+            }
+            else if (listCourse.length === 0){
+                listCourse = await courseModel.getCourseByCategory(query.category);
+                lengthListCourse = listCourse.length;
+            }
+            else{
+                listCourse = listCourse.filter(t => t.category_id.toString() === query.category);
+                lengthListCourse = listCourse.length;
+            }
         }
         if (query.hasOwnProperty('page')){
             if (query.page !== '' && listCourse.length === 0){

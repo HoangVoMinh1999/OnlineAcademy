@@ -4,6 +4,9 @@ import SubTabCourse from '../Components/SubTabCourse'
 import {Link} from 'react-router-dom';
 import { Pagination } from 'antd';
 import 'antd/dist/antd.css';
+import { courseService } from '../Services';
+import createAction from '../Redux/Action';
+import { GET_COURSE_LIST } from '../Redux/Action/type';
 
 class CourseListByCategory extends Component {
 
@@ -13,6 +16,7 @@ class CourseListByCategory extends Component {
             isActive: 0,
             listCategory: [],
             reload: false,
+            lengthCourseList : 0,
         }
     }
     handleClick = (event) => {
@@ -42,7 +46,7 @@ class CourseListByCategory extends Component {
         })
     }
 
-    componentWillReceiveProps(nextProps) {
+    async componentWillReceiveProps(nextProps) {
         if (nextProps.match.params.category_id !== this.props.match.params.category_id){
             const category_id = nextProps.match.params.category_id;
             const listCategory = this.props.categoryList.filter(t => t.category_id == category_id);
@@ -65,8 +69,35 @@ class CourseListByCategory extends Component {
                 })
             }
         }
+
+        if (nextProps.location.search !== this.props.location.search){
+            const searchParams = new URLSearchParams(nextProps.location.search);
+            const query = {};
+            if (searchParams.get('page') !== '') {
+                query.page = searchParams.get('page');
+            }
+            if (searchParams.get('category') !== ''){
+                query.category = searchParams.get('category');
+            }
+            if (searchParams.get('search') !== '') {
+                query.search = searchParams.get('search');
+            }
+            const res = await courseService.getCoursesByQuery(query);
+            console.log(res.data.listCourse);
+            this.props.dispatch(
+                createAction(
+                    GET_COURSE_LIST,
+                    res.data.listCourse
+                )
+            )
+            this.setState({
+                ...this.state,
+                lengthCourseList : res.data.length,
+            })
+        }
         window.scrollTo(0, 0)
     }
+
     
     onChange = (pageNumber) => {
         this.props.history.push({
@@ -115,7 +146,7 @@ class CourseListByCategory extends Component {
                                 showQuickJumper 
                                 defaultPageSize={6}
                                 defaultCurrent={1} 
-                                total={60} 
+                                total={this.state.lengthCourseList} 
                                 onChange={this.onChange} />
                         </div>
                     </div>
