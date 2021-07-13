@@ -130,6 +130,8 @@ router.patch('/delete/:id', async function (req, res, next) {
 router.patch('/:id', async function (req, res, next) {
     const id = req.params.id;
     const course = req.body;
+    delete course.selectedImage;
+    delete course.selectedImageData;
     const isUpdated = await courseModel.update(id, course);
     if (isUpdated === null) {
         res.json({

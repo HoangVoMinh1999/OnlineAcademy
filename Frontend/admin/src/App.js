@@ -25,31 +25,36 @@ class App extends Component {
       <div>
         <Router>
           <LeftMenu />
-          <div className="all-content-wrapper d-flex flex-column">
-            <Header position = "p-2"></Header>
-            <Switch>
-              <Route path="/" exact component={Homepage} />
+          <div className="all-content-wrapper">
+            <div>
+              <Header></Header>
+            </div>
+            <div id='App-Content' style={{marginBottom:'25px'}}>
+              <Switch>
+                <Route path="/" exact component={Homepage} />
 
-              <Route path="/category-list" component={CategoryList} />
-              <Route path="/category-add" component={CategoryAdd} />
-              <Route path="/category-edit/:id" component={CategoryEdit}></Route>
+                <Route path="/category-list" component={CategoryList} />
+                <Route path="/category-add" component={CategoryAdd} />
+                <Route path="/category-edit/:id" component={CategoryEdit}></Route>
 
-              <Route path="/course-list" component={CourseList}></Route>
-              <Route path="/course-add" component={CourseAdd}></Route>
-              <Route path="/course-edit/:id" component={CourseEdit}></Route>
+                <Route path="/course-list" component={CourseList}></Route>
+                <Route path="/course-add" component={CourseAdd}></Route>
+                <Route path="/course-edit/:id" component={CourseEdit}></Route>
               
-              <Route path="/lesson-add/:course_id" component={LessonAdd}></Route>
-              <Route path="/lesson-edit/:id" component={LessonEdit}></Route>
+                <Route path="/lesson-add/:course_id" component={LessonAdd}></Route>
+                <Route path="/lesson-edit/:id" component={LessonEdit}></Route>
 
-              <Route path="/user/all-user" component={UserList}></Route>
-              <Route path="/user/student" component={StudentList}></Route>
-              <Route path="/user/teacher" component={TeacherList}></Route>
-              <Route path="/user/admin" component={AdminList}></Route>
+                <Route path="/user/all-user" component={UserList}></Route>
+                <Route path="/user/student" component={StudentList}></Route>
+                <Route path="/user/teacher" component={TeacherList}></Route>
+                <Route path="/user/admin" component={AdminList}></Route>
 
-              <Route path="/login" component={Login}></Route>
-
-            </Switch>
-            <Footer position ="ml-auto p-2"></Footer>
+                <Route path="/login" component={Login}></Route>
+              </Switch>
+            </div>
+            <div>
+              <Footer></Footer>
+            </div>
           </div>
         </Router>
 

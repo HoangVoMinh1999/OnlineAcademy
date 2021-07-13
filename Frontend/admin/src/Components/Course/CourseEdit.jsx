@@ -20,6 +20,7 @@ class CourseEdit extends Component {
             values: {
                 name: '',
                 category_id: null,
+                teacher_id: null,
                 rate: 0,
                 price: 0,
                 sale: 0,
@@ -100,10 +101,17 @@ class CourseEdit extends Component {
     handleSubmit = async (event) => {
         event.preventDefault();
         const body = this.state.values;
-        if (body.selectedImageData === null) {
-
-        }
         const id = this.props.match.params.id;
+        if (this.state.selectedImage === undefined) {
+            this.setState({
+                ...this.state,
+                values: {
+                    ...this.state.values,
+                    selectedImage: null,
+                    selectedImageData: null,
+                }
+            })
+        }
         const res = await courseService.updateCourse(id, body)
         if (!res.data.err_message) {
             swal({
@@ -133,6 +141,12 @@ class CourseEdit extends Component {
     renderCategoryList = () => {
         return this.props.categoryList.map((category) => {
             return <option value={category.id}>{category.name}</option>
+        })
+    }
+
+    renderTeacherList = () => {
+        return this.props.teacherList.map((teacher) => {
+            return <option value={teacher.id}>{teacher.name}</option>
         })
     }
 
@@ -213,10 +227,20 @@ class CourseEdit extends Component {
                                                                     <input type="text" className="form-control" name="name" value={this.state.values.name} placeholder="Tên khóa học" onChange={this.handleChange} onBlur={this.handleBlur} />
                                                                 </div>
                                                                 {this.renderError(this.state.errors.name)}
-                                                                <select name="category_id" className="form-control pro-edt-select form-control-primary" value={this.state.values.category_id} placeholder="Loại khóa học" onChange={this.handleChange} onBlur={this.handleBlur}>
-                                                                    <option value>Loại khóa học</option>
-                                                                    {this.renderCategoryList()}
-                                                                </select>
+                                                                <div className="input-group mg-b-pro-edt">
+                                                                    <span className="input-group-addon">Loại khóa học</span>
+                                                                    <select  name="category_id" className="form-control" value={this.state.values.category_id} placeholder="Loại khóa học" onChange={this.handleChange} onBlur={this.handleBlur}>
+                                                                        <option value>Loại khóa học</option>
+                                                                        {this.renderCategoryList()}
+                                                                    </select>
+                                                                </div>
+                                                                <div className="input-group mg-b-pro-edt">
+                                                                    <span className="input-group-addon">Giáo viên giảng dạy</span>
+                                                                    <select name="teacher_id" className="form-control" value={this.state.values.teacher_id} placeholder="Giáo viên giảng dạy" onChange={this.handleChange} onBlur={this.handleBlur}>
+                                                                        <option value>Giáo viên giảng dạy</option>
+                                                                        {this.renderTeacherList()}
+                                                                    </select>
+                                                                </div>
                                                                 <div className="input-group mg-b-pro-edt">
                                                                     <span className="input-group-addon">Giá khóa học</span>
                                                                     <input type="text" name="price" value={this.state.values.price} className="form-control" placeholder="Giá khóa học" onChange={this.handleChange} onBlur={this.handleBlur} />
@@ -291,7 +315,7 @@ class CourseEdit extends Component {
                                                                 <div className="review-content-section">
                                                                     <div className="input-group mg-b-pro-edt">
                                                                         <span className="input-group-addon"><i className="icon nalika-edit" aria-hidden="true" /></span>
-                                                                        <input type="file" className="form-control"  accept='image/*' name="image" placeholder="Tên khóa học" onChange={this.onChangeImage} onBlur={this.handleBlur} />
+                                                                        <input type="file" className="form-control" accept='image/*' name="image" placeholder="Tên khóa học" onChange={this.onChangeImage} onBlur={this.handleBlur} />
                                                                     </div>
                                                                     <img src={this.state.values.selectedImage} alt="Hình ảnh khóa học" />
 
@@ -334,6 +358,7 @@ class CourseEdit extends Component {
         const newCourse = {
             name: detail.data.name,
             category_id: detail.data.category_id,
+            teacher_id : detail.data.teacher_id,
             rate: detail.data.rate,
             price: detail.data.price,
             sale: detail.data.sale,
@@ -354,11 +379,11 @@ class CourseEdit extends Component {
 
         //--- PHOTO
         let res = await courseService.getImage4CourseDetail(id);
-        if (!res.err_message){
+        if (!res.err_message) {
             var reader = new FileReader();
-            reader.readAsDataURL(res.data); 
-            reader.onloadend = function() {
-                var base64data = reader.result;                
+            reader.readAsDataURL(res.data);
+            reader.onloadend = function () {
+                var base64data = reader.result;
                 console.log(base64data);
                 newCourse.selectedImageData = base64data;
                 var url = URL.createObjectURL(res.data);
@@ -379,7 +404,8 @@ class CourseEdit extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        categoryList: state.CategoryReducer.ChildCategory
+        categoryList: state.CategoryReducer.ChildCategory,
+        teacherList: state.UserReducer.TeacherList,
     }
 }
 

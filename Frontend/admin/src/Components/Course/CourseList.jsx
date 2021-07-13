@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import { GET_COURSE_LIST, GET_LIST } from '../../Redux/Action/type'
 import { Link } from 'react-router-dom'
 import { Pagination } from 'antd';
+import 'antd/dist/antd.css';
 
 class CourseList extends Component {
 
@@ -15,12 +16,11 @@ class CourseList extends Component {
             query: {
                 search: ''
             },
-            lengthCourseList : 0,
+            lengthCourseList: 0,
         }
     }
 
     renderContent = () => {
-        console.log(this.props.courseList)
         return this.props.courseList.map((course, index) => {
             const isFinish = course.IsFinish.data[0] === 1 ? "Đã hoàn thành" : "Chưa hoàn thành"
             let category = course.category_id === null ? null : this.props.categoryList.find(t => t.id === course.category_id);
@@ -102,12 +102,12 @@ class CourseList extends Component {
         )
         this.setState({
             ...this.state,
-            lengthCourseList : res.data.length
+            lengthCourseList: res.data.length
         })
     }
 
-    async componentDidUpdate(prevProps){
-        if (prevProps.location.search !== this.props.location.search){ 
+    async componentDidUpdate(prevProps) {
+        if (prevProps.location.search !== this.props.location.search) {
             const searchParams = new URLSearchParams(this.props.location.search);
             const query = {};
             if (searchParams.get('page') !== '') {
@@ -123,7 +123,7 @@ class CourseList extends Component {
             )
             this.setState({
                 ...this.state,
-                lengthCourseList : res.data.length
+                lengthCourseList: res.data.length
             })
         }
     }
@@ -132,7 +132,7 @@ class CourseList extends Component {
         const offset = 6;
         const amountOfPages = this.state.lengthCourseList % offset === 0 ? this.state.lengthCourseList / offset : (~~(this.state.lengthCourseList / offset) + 1);
         let arr = []
-        for (var i = 1;i <= amountOfPages;i++){
+        for (var i = 1; i <= amountOfPages; i++) {
             arr.push(
                 <li key={i} className="page-item"><Link to={`/course-list?page=${i}`} className="page-link">{i}</Link></li>
             )
@@ -140,6 +140,12 @@ class CourseList extends Component {
         return arr;
     }
 
+    onChange = (pageNumber) => {
+        this.props.history.push({
+            pathname: this.props.match.url,
+            search : `?search=${this.state.query.search}&page=${pageNumber}`
+        })
+    }
 
     render() {
         return (
@@ -179,11 +185,12 @@ class CourseList extends Component {
                                         </tbody>
                                     </table>
                                     <div className="custom-pagination">
-                                        <ul className="pagination">
-                                            <li className="page-item"><a className="page-link" href="#">Previous</a></li>
-                                            {this.renderPagination()}
-                                            <li className="page-item"><a className="page-link" href="#">Next</a></li>
-                                        </ul>
+                                        <Pagination className="align-self-center"
+                                            showQuickJumper
+                                            defaultPageSize={6}
+                                            defaultCurrent={1}
+                                            total={this.state.lengthCourseList}
+                                            onChange={this.onChange} />
                                     </div>
                                 </div>
                             </div>
@@ -219,14 +226,14 @@ class CourseList extends Component {
         )
         this.setState({
             ...this.state,
-            lengthCourseList : res.data.length
+            lengthCourseList: res.data.length
         })
     }
 }
 
 function onChange(pageNumber) {
     console.log('Page: ', pageNumber);
-  }
+}
 
 const mapStateToProps = (state) => {
     return {

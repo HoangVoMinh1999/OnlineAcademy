@@ -13,11 +13,7 @@ class CourseService {
         else 
             return axios.get(this.baseURL,{params: query})
     }
-
-    getCoursesByQuery = (query) => {
-        return axios.get(this.baseURL,{params: query})
-    }
-
+    
     deleteCourse = (id) => {
         const currentURL = this.baseURL + "/delete/" + id;
         return axios.patch(currentURL);

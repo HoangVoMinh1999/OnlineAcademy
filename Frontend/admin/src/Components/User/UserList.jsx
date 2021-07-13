@@ -95,7 +95,6 @@ class UserList extends Component {
     }
     async componentDidMount() {
         const res = await userService.getAllUser();
-        console.log(res.data)
         this.props.dispatch(
             createAction(
                 GET_USER_LIST,
