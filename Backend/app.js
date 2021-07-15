@@ -1,7 +1,10 @@
+require('dotenv').config();
 const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
-const bodyParser   = require('body-parser');
+const bodyParser = require('body-parser');
+
+
 
 
 const app = express();
@@ -10,6 +13,7 @@ app.use(express.json());
 app.use(cors('*'));
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
+app.use(bodyParser.json()); // creates express http server
 
 
 
@@ -21,6 +25,7 @@ app.use('/api/course',require('./routes/course.route'));
 app.use('/api/lesson',require('./routes/lesson4course.route'));
 app.use('/api/purchasedcourse',require('./routes/purchasedcourse.route'));
 app.use('/api/comment',require('./routes/comment.route'))
+app.use('/api/chatbot',require('./routes/chatbot.route'));
 
 //handle error
 app.use(function(req,res,next){
@@ -40,4 +45,5 @@ const PORT = 4000;
 app.listen(PORT,function(){
     console.log("Start server!!!")
 })
+
 
