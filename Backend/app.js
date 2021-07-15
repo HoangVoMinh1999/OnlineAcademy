@@ -42,7 +42,7 @@ app.use(function(error,req,res,next){
 })
 
 const PORT = 4000;
-app.listen(PORT,function(){
+app.listen(process.env.PORT || PORT,function(){
     console.log("Start server!!!")
 })
 

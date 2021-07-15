@@ -46,7 +46,7 @@ class CourseList extends Component {
     }
 
     handleButtonDelete = (id) => {
-        swal("A wild Pikachu appeared! What do you want to do?", {
+        swal("Bạn có chắc chắn muốn xóa khóa học này không ???", {
             buttons: {
               confirm:{
                   text: "Xác nhận",

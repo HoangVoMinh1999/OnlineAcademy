@@ -21,7 +21,7 @@ class HomePage extends Component {
         this.props.dispatch(
             createAction(
                 GET_CATEGORY_LIST,
-                res_category.data
+                res_category.data.listCategory
             )
         )
 
