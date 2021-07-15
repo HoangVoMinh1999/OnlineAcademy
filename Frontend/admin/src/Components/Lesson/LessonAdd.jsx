@@ -11,7 +11,6 @@ export default class LessonAdd extends Component {
                 course_id: 0,
                 title: '',
                 content: '',
-                videoURL: '',
             },
             lessonError: {
                 title: '',
