@@ -7,4 +7,11 @@ export class LessonService {
         const currentURL = this.baseURL + "/"+ course_id;
         return Axios.get(currentURL)
     }
+
+    getVideo4Lesson = (id) => {
+        const currentURL = this.baseURL + "/single/video/" + id;
+        return Axios.get(currentURL,{
+            responseType: 'blob'
+        })
+    }
 }

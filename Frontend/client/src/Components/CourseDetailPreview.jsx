@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Modal from '@material-ui/core/Modal';
 import ReactPlayer from 'react-player'
+import { lessonService } from '../Services';
 
 export class CourseDetailPreview extends Component {
 
@@ -8,6 +9,9 @@ export class CourseDetailPreview extends Component {
         super(props);
         this.state = {
             isOpen: false,
+            video: null,
+            videoURL: null,
+
         }
     }
 
@@ -40,7 +44,7 @@ export class CourseDetailPreview extends Component {
                         <div style={
                             {
                                 position: 'absolute',
-                                width: 400,
+                                width: 1000,
                                 top: `50%`,
                                 left: `50%`,
                                 transform: `translate(-50%, -50%)`,
@@ -49,10 +53,12 @@ export class CourseDetailPreview extends Component {
                                 padding: 4,
 
                             }} >
-                            <h2 id="simple-modal-title">Text in a modal</h2>
-                            <p id="simple-modal-description">
-                                Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-                            </p>
+                            <ReactPlayer
+                                url={this.state.videoURL}
+                                width='100%'
+                                controls={true}
+
+                            />
                         </div>
                     </Modal>
                 </div>
@@ -85,5 +91,20 @@ export class CourseDetailPreview extends Component {
                 </div>
             </div>
         )
+    }
+
+    async componentDidMount() {
+        const res = await lessonService.getVideo4Lesson(this.props.lesson.id);
+        if (!res.err_message) {
+            if (res.data.size > 0) {
+                var reader = new FileReader();
+                reader.readAsDataURL(res.data);
+                reader.onloadend = () => this.setState({
+                    ...this.state,
+                    video: reader.result,
+                    videoURL: URL.createObjectURL(res.data)
+                })
+            }
+        }
     }
 }

@@ -185,7 +185,7 @@ class CourseDetail extends Component {
 
     async componentDidUpdate(nextProps){
         const course_id = this.props.match.params.course_id;
-        if (nextProps.PurchasedCourseList !== this.props.purchasedCourseList){
+        if (nextProps.purchasedCourseList !== this.props.purchasedCourseList){
             if (this.props.purchasedCourseList.find(t => t.course_id.toString() === course_id.toString()) === undefined){
                 let res = await lessonService.getLessons4Course(course_id);
                 const lessonPreview = res.data.filter(t => t.is_preview.data[0] === 1)
