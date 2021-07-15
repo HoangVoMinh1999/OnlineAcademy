@@ -46,13 +46,6 @@ export default class LeftMenu extends Component {
                                             <li><Link to="/user/admin"><span className="mini-sub-pro">Admin</span></Link></li>
                                         </ul>
                                     </li>
-                                    <li id="removable">
-                                        <a className="has-arrow" href="#" aria-expanded="false"><i className="icon nalika-new-file icon-wrap" /> <span className="mini-click-non">Pages</span></a>
-                                        <ul className="submenu-angle" aria-expanded="false">
-                                            <li><Link title="Login" to='/login'><span className="mini-sub-pro">Login</span></Link></li>
-                                            <li><a title="Register" href="register.html"><span className="mini-sub-pro">Register</span></a></li>
-                                        </ul>
-                                    </li>
                                 </ul>
                             </nav>
                         </div>

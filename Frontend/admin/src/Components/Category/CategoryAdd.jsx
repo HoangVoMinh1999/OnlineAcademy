@@ -119,7 +119,7 @@ class CategoryAdd extends Component {
                                                                 </div>
                                                                 {this.renderError(this.state.errors.name)}
                                                                 <select name="category_id" class="form-control pro-edt-select form-control-primary" value={this.state.values.category_id} onChange={this.handleChange}>
-                                                                    <option value={null}>Select One Value Only</option>
+                                                                    <option value="">Select One Value Only</option>
                                                                     {this.renderMainCategory()}
                                                                 </select>
                                                             </div>

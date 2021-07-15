@@ -8,8 +8,11 @@ class CategoryService {
         return axios.post(this.baseURL, cat);
     }
 
-    getAllCategories = () => {
-        return axios.get(this.baseURL);
+    getAllCategories = (query) => {
+        if (query === null || query === undefined){
+            return axios.get(this.baseURL);    
+        }
+        return axios.get(this.baseURL,{params: query});
     }
 
     deleteCategory = (id) => {

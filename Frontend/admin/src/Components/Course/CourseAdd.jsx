@@ -188,7 +188,7 @@ class CourseAdd extends Component {
                                                                 </div>
                                                                 {this.renderError(this.state.errors.name)}
                                                                 <select name="category_id" className="form-control pro-edt-select form-control-primary" value={this.state.values.category_id} placeholder="Loại khóa học" onChange={this.handleChange} onBlur={this.handleBlur}>
-                                                                    <option value="">Loại khóa học</option>
+                                                                    <option value={null}>Loại khóa học</option>
                                                                     {this.renderCategoryList()}
                                                                 </select>
                                                                 <div className="input-group mg-b-pro-edt">

@@ -1,36 +1,67 @@
 import React, { Component } from 'react'
 import Axios from 'axios'
 import { connect } from 'react-redux'
-import { GET_LIST } from "../../Redux/Action/type"
+import { GET_CHILD_CATEGORY_LIST, GET_LIST, GET_MAIN_CATEGORY_LIST } from "../../Redux/Action/type"
 import { Link } from 'react-router-dom';
 import createAction from '../../Redux/Action'
 import { categoryService } from '../../Services/';
 import { Pagination } from 'antd';
+import 'antd/dist/antd.css';
+import { Modal, Button } from "react-bootstrap";
+import swal from 'sweetalert'
+
 class CategoryList extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
             category_id: 0,
+            lengthCategoryList: 0,
         }
     }
 
     handleButtonDelete = (id) => {
-        this.setState({
-            category_id: id,
+        swal("Bạn có chắc chắn muốn xóa mục này không ???", {
+            buttons: {
+                confirm: {
+                    text: "Xác nhận",
+                    value: "confirm"
+                },
+                cancel: "Hủy bỏ"
+            },
         })
-    }
+            .then(async (value) => {
+                switch (value) {
+                    case "confirm":
+                        let res = await categoryService.deleteCategory(id);
+                        res = await categoryService.getAllCategories();
+                        this.props.dispatch(
+                            createAction(
+                                GET_MAIN_CATEGORY_LIST,
+                                res.data.listCategory
+                            )
+                        )
+                        this.props.dispatch(
+                            createAction(
+                                GET_CHILD_CATEGORY_LIST,
+                                res.data.listCategory
+                            )
+                        )
 
-    handleClickButtonConfirmDelete = async () => {
-        let res = await categoryService.deleteCategory(this.state.category_id);
-        res = await categoryService.getAllCategories();
-        this.props.dispatch(
-            createAction(
-                GET_LIST,
-                res.data
-            )
-        )
-        this.forceUpdate();
+                        res = await categoryService.getAllCategories({ page: 1 });
+                        this.props.dispatch(
+                            createAction(
+                                GET_LIST,
+                                res.data.listCategory
+                            )
+                        )
+                        this.setState({
+                            ...this.state,
+                            lengthCategoryList: res.data.lengthCategoryList,
+                        })
+                }
+            });
+
     }
 
     handleClickButtonEdit = async (id) => {
@@ -51,34 +82,49 @@ class CategoryList extends Component {
                     <td>
                         <Link to={`/category-edit/${category.id}`}><button id="categoryEdit" title="Edit" class="pd-setting-ed"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></Link>
                         {/* Button trigger modal */}
-                        <button type="button" id="categoryRemove" title="Trash" className="pd-setting-ed" data-toggle="modal" data-target="#deleteCategory" onClick={() => this.handleButtonDelete(category.id)}>
+                        <button type="button" id="categoryRemove" title="Trash" className="pd-setting-ed" onClick={() => this.handleButtonDelete(category.id)}>
                             <i class="fa fa-trash-o" aria-hidden="true"></i>
                         </button>
-                        {/* Modal */}
-                        <div className="modal fade" id="deleteCategory" tabIndex={-1} role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                            <div className="modal-dialog modal-dialog-centered" role="document">
-                                <div className="modal-content">
-                                    <div className="modal-header">
-                                        <h5 className="modal-title text-danger" id="exampleModalLongTitle">Thông báo</h5>
-                                        <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">×</span>
-                                        </button>
-                                    </div>
-                                    <div className="modal-body">
-                                        <p className="text-danger">Bạn có chắn chắn muốn xóa loại khóa học này không ???</p>
-                                    </div>
-                                    <div className="modal-footer">
-                                        <button type="button" className="btn btn-primary" onClick={() => this.handleClickButtonConfirmDelete()}>Đồng ý</button>
-                                        <button type="button" className="btn btn-secondary" data-dismiss="modal" >Quay lại</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
                     </td>
                 </tr>
             })
         )
+    }
+
+    onChange = (pageNumber) => {
+        this.props.history.push({
+            pathname: this.props.match.url,
+            search: `?page=${pageNumber}`
+        })
+    }
+
+    async componentWillReceiveProps(nextProps) {
+        if (nextProps.location.search !== this.props.location.search) {
+            if (nextProps.location.search === '') {
+                this.props.history.push({
+                    pathname: this.props.match.url,
+                    search: `?page=1`
+                })
+            }
+            else {
+                const searchParams = new URLSearchParams(nextProps.location.search);
+                let query = {};
+                if (searchParams.get('page') !== null) {
+                    query.page = searchParams.get('page');
+                }
+                const res = await categoryService.getAllCategories(query);
+                this.props.dispatch(
+                    createAction(
+                        GET_LIST,
+                        res.data.listCategory
+                    )
+                )
+                this.setState({
+                    ...this.state,
+                    lengthCategoryList: res.data.lengthCategoryList
+                })
+            }
+        }
     }
 
     render() {
@@ -95,7 +141,7 @@ class CategoryList extends Component {
                                     </div>
                                     <div className="header-top-menu tabl-d-n hd-search-rp">
                                         <div className="breadcome-heading">
-                                            <form role="search" className="d-inline-flex p-2"  method='GET'>
+                                            <form role="search" className="d-inline-flex p-2" method='GET'>
                                                 <input type="text" name="search" placeholder="Search..." className="form-control" />
                                             </form>
                                         </div>
@@ -115,13 +161,12 @@ class CategoryList extends Component {
                                         </tbody>
                                     </table>
                                     <div className="custom-pagination">
-                                        <ul className="pagination">
-                                            <li className="page-item"><a className="page-link" href="#">Previous</a></li>
-                                            <li className="page-item"><a className="page-link" href="/">1</a></li>
-                                            <li className="page-item"><a className="page-link" href="#">2</a></li>
-                                            <li className="page-item"><a className="page-link" href="#">3</a></li>
-                                            <li className="page-item"><a className="page-link" href="#">Next</a></li>
-                                        </ul>
+                                        <Pagination className="align-self-center"
+                                            showQuickJumper
+                                            defaultPageSize={6}
+                                            defaultCurrent={1}
+                                            total={this.state.lengthCategoryList}
+                                            onChange={this.onChange} />
                                     </div>
                                 </div>
                             </div>
@@ -134,13 +179,31 @@ class CategoryList extends Component {
     }
 
     async componentDidMount() {
-        const res = await categoryService.getAllCategories();
-        this.props.dispatch(
-            createAction(
-                GET_LIST,
-                res.data
+        const searchParams = new URLSearchParams(this.props.location.search);
+        if (searchParams.get('page') === null) {
+            this.props.history.push({
+                pathname: this.props.match.url,
+                search: `?page=1`
+            })
+        }
+        else {
+            const searchParams = new URLSearchParams(this.props.location.search);
+            let query = {};
+            if (searchParams.get('page') !== null) {
+                query.page = searchParams.get('page');
+            }
+            const res = await categoryService.getAllCategories(query);
+            this.props.dispatch(
+                createAction(
+                    GET_LIST,
+                    res.data.listCategory
+                )
             )
-        )
+            this.setState({
+                ...this.state,
+                lengthCategoryList: res.data.lengthCategoryList
+            })
+        }
     }
 }
 

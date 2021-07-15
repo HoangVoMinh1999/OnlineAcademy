@@ -26,6 +26,22 @@ class LessonService {
         const currentURL = this.baseURL + "/delete/"+ id;
         return Axios.patch(currentURL);
     }
+
+    updateVideo4Lesson = (id,video) => {
+        const currentURL = this.baseURL + "/uploadVideo/" + id;
+        return Axios.patch(currentURL,video,{
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+        })
+    }
+
+    getVideo4Lesson = (id) => {
+        const currentURL = this.baseURL + "/single/video/" + id;
+        return Axios.get(currentURL,{
+            responseType: 'blob'
+        })
+    }
 }
 
 export default LessonService

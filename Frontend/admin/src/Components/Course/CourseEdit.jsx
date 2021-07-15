@@ -318,7 +318,6 @@ class CourseEdit extends Component {
                                                                         <input type="file" className="form-control" accept='image/*' name="image" placeholder="Tên khóa học" onChange={this.onChangeImage} onBlur={this.handleBlur} />
                                                                     </div>
                                                                     <img src={this.state.values.selectedImage} alt="Hình ảnh khóa học" />
-
                                                                 </div>
                                                             </div>
                                                             <div className="row">

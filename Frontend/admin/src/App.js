@@ -29,7 +29,7 @@ class App extends Component {
             <div>
               <Header></Header>
             </div>
-            <div id='App-Content' style={{marginBottom:'25px'}}>
+            <div id='App-Content'>
               <Switch>
                 <Route path="/" exact component={Homepage} />
 
@@ -48,8 +48,6 @@ class App extends Component {
                 <Route path="/user/student" component={StudentList}></Route>
                 <Route path="/user/teacher" component={TeacherList}></Route>
                 <Route path="/user/admin" component={AdminList}></Route>
-
-                <Route path="/login" component={Login}></Route>
               </Switch>
             </div>
             <div>

@@ -35,5 +35,13 @@ module.exports = {
         lesson.Log_UpdatedDate = new Date();
         lesson.IsDeleted = true;
         return db('lessons4course').where('id',id).update(lesson);
-    }
+    },
+
+    async updateVideo(id,video){
+        const course = await this.singleById(id);
+        if (course === null){
+            return null;
+        }
+        return db('lessons4course').where('id',id).update({'video':video})
+    },
 }

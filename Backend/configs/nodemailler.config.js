@@ -29,6 +29,6 @@ module.exports.sendConfirmationEmail = (name, email, confirmationCode) => {
           <form action=${`http://localhost:4000/api/user/confirm/${confirmationCode}`} method="post">
             <button type="submit">Xác nhận</button>
             </form>
-          </div>`,
+          </div>`,  
     }).catch(err => console.log(err));
 };

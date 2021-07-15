@@ -117,10 +117,6 @@ export default class LessonAdd extends Component {
                             </div>
                             {this.renderError(this.state.lessonError.content)}
                             <div className="input-group mg-b-15">
-                                <span className="input-group-addon"><i className="icon nalika-mail" aria-hidden="true" /></span>
-                                <input type="text" className="form-control" name="videoURL" value={this.state.lessonValues.videoURL} placeholder="Link video bài giảng" onChange={this.handleChangeLesson} onBlur={this.handleBlurLesson} />
-                            </div>
-                            <div className="input-group mg-b-15">
                                 <span className="input-group-addon">Cho phép xem review</span>
                                 <input type="checkbox" />
                             </div>

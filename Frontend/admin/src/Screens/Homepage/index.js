@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import createAction from '../../Redux/Action';
-import { GET_COURSE_LIST, GET_LIST, GET_USER_LIST } from '../../Redux/Action/type';
+import { GET_CHILD_CATEGORY_LIST, GET_COURSE_LIST, GET_LIST, GET_MAIN_CATEGORY_LIST, GET_USER_LIST } from '../../Redux/Action/type';
 import { categoryService, courseService, userService } from '../../Services';
 import { connect } from 'react-redux'
 
@@ -17,7 +17,19 @@ class Homepage extends Component {
         this.props.dispatch(
             createAction(
                 GET_LIST,
-                res.data
+                res.data.listCategory
+            )
+        )
+        this.props.dispatch(
+            createAction(
+                GET_MAIN_CATEGORY_LIST,
+                res.data.listCategory
+            )
+        )
+        this.props.dispatch(
+            createAction(
+                GET_CHILD_CATEGORY_LIST,
+                res.data.listCategory
             )
         )
         let res_course = await courseService.getAllCourses();

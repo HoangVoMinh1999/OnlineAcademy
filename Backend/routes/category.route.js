@@ -5,8 +5,19 @@ const CategoryModel = require('../models/category.model');
 const router = express.Router();
 
 router.get('/',async function(req,res,next){
-    const listCategory = await CategoryModel.all();
-    return res.json(listCategory);
+    let query = req.query;
+    const offset = 6;
+    let listCategory = await CategoryModel.all();
+    const lengthCategoryList = listCategory.length
+    if(Object.keys(query).length !== 0){
+        if (query.hasOwnProperty('page') && query.page !== ''){
+            listCategory = listCategory.slice((query.page-1)*offset,query.page*offset)
+        }
+    }
+    return res.json({
+        listCategory : listCategory,
+        lengthCategoryList : lengthCategoryList,
+    });
 })
 
 router.get('/:id',async function(req,res,next){

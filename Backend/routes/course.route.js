@@ -84,7 +84,7 @@ router.get('/image/:id', async function (req, res, next) {
     const id = req.params.id;
     const course = await courseModel.singleById(id);
     if (course !== null) {
-        return res.status(201).send(course.image);
+        return res.status(200).send(course.image);
     }
     return res.status(204).json({
         'err_message': 'No course'
@@ -160,15 +160,15 @@ router.patch('/course_img/:id', upload.single('image'), async (req, res) => {
     }
     const isUpdated = await courseModel.updateImage(id,newImage,img_src);
     if (isUpdated === null) {
-        res.json({
+        return res.json({
             'err_message': 'Course is not exist !!!'
         })
     } else if (isUpdated !== 1) {
-        res.json({
+        return res.json({
             'err_message': 'Update failed !!!'
         })
     }
-    res.json({
+    return res.json({
         'message': 'Update successfully !!!'
     })
 })

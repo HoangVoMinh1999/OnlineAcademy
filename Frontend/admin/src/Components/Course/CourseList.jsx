@@ -6,6 +6,7 @@ import { GET_COURSE_LIST, GET_LIST } from '../../Redux/Action/type'
 import { Link } from 'react-router-dom'
 import { Pagination } from 'antd';
 import 'antd/dist/antd.css';
+import swal from 'sweetalert'
 
 class CourseList extends Component {
 
@@ -36,43 +37,46 @@ class CourseList extends Component {
                 <td>
                     <Link to={`/course-edit/${course.id}`}><button id="categoryEdit" title="Edit" class="pd-setting-ed"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></Link>
                     {/* Button trigger modal */}
-                    <button type="button" id="categoryRemove" title="Trash" className="pd-setting-ed" data-toggle="modal" data-target="#deleteCategory" onClick={() => this.handleButtonDelete(course.id)}>
+                    <button type="button" id="categoryRemove" title="Trash" className="pd-setting-ed" onClick={() => this.handleButtonDelete(course.id)}>
                         <i class="fa fa-trash-o" aria-hidden="true"></i>
                     </button>
-                    {/* Modal */}
-                    <div className="modal fade" id="deleteCategory" tabIndex={-1} role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                        <div className="modal-dialog modal-dialog-centered" role="document">
-                            <div className="modal-content">
-                                <div className="modal-header">
-                                    <h5 className="modal-title text-danger" id="exampleModalLongTitle">Thông báo</h5>
-                                    <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">×</span>
-                                    </button>
-                                </div>
-                                <div className="modal-body">
-                                    <p className="text-danger">Bạn có chắn chắn muốn xóa loại khóa học này không ???</p>
-                                </div>
-                                <div className="modal-footer">
-                                    <button type="button" className="btn btn-primary" onClick={() => this.handleClickButtonConfirmDelete()}>Đồng ý</button>
-                                    <button type="button" className="btn btn-secondary" data-dismiss="modal" >Quay lại</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                 </td>
             </tr>
         })
     }
 
     handleButtonDelete = (id) => {
-        this.setState({
-            course_id: id,
-        })
-    }
-
-    handleClickButtonConfirmDelete = async () => {
-        const res = await courseService.deleteCourse(this.state.course_id);
+        swal("A wild Pikachu appeared! What do you want to do?", {
+            buttons: {
+              confirm:{
+                  text: "Xác nhận",
+                  value:"confirm"
+              },
+              cancel : "Quay lại"
+            },
+          })
+          .then(async (value) => {
+            switch (value) {
+           
+              case "confirm":
+                let res = await courseService.deleteCourse(id);
+                res = await courseService.getAllCourses({page:1});
+                this.props.dispatch(
+                    createAction(
+                        GET_COURSE_LIST,
+                        res.data.listCourse
+                    )
+                )
+                this.setState({
+                    ...this.state,
+                    lengthCourseList: res.data.length
+                })
+                this.props.history.push({
+                    pathname: this.props.match.url,
+                    search: `?page=1`
+                })
+            }
+          });
     }
 
     handleSearch = (event) => {
@@ -126,18 +130,6 @@ class CourseList extends Component {
                 lengthCourseList: res.data.length
             })
         }
-    }
-
-    renderPagination = () => {
-        const offset = 6;
-        const amountOfPages = this.state.lengthCourseList % offset === 0 ? this.state.lengthCourseList / offset : (~~(this.state.lengthCourseList / offset) + 1);
-        let arr = []
-        for (var i = 1; i <= amountOfPages; i++) {
-            arr.push(
-                <li key={i} className="page-item"><Link to={`/course-list?page=${i}`} className="page-link">{i}</Link></li>
-            )
-        }
-        return arr;
     }
 
     onChange = (pageNumber) => {

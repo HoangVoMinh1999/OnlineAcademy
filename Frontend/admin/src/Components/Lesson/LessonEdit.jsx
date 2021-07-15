@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import swal from 'sweetalert'
 import { lessonService } from '../../Services';
+import ReactPlayer from 'react-player'
 
 export default class LessonEdit extends Component {
 
@@ -10,8 +11,9 @@ export default class LessonEdit extends Component {
             lessonValues: {
                 title: '',
                 content: '',
-                videoURL: '',
-                is_preview : false,
+                video: null,
+                videoURL: null,
+                is_preview: false,
             },
             lessonError: {
                 title: '',
@@ -23,12 +25,21 @@ export default class LessonEdit extends Component {
     //--- Lesson
     handleChangeLesson = (event) => {
         const { name, value } = event.target;
-        console.log(value);
         if (name === "is_preview") {
             this.setState({ lessonValues: { ...this.state.lessonValues, is_preview: event.target.checked } })
         }
         else {
             this.setState({ lessonValues: { ...this.state.lessonValues, [name]: value } })
+        }
+
+        if (name === 'video') {
+            this.setState({
+                lessonValues: {
+                    ...this.state.lessonValues,
+                    video: event.target.files[0],
+                    videoURL: URL.createObjectURL(event.target.files[0]),
+                }
+            })
         }
     }
 
@@ -57,8 +68,16 @@ export default class LessonEdit extends Component {
     handleSubmitLesson = async (event) => {
         event.preventDefault();
         const body = this.state.lessonValues;
-        const res = await lessonService.updateLesson4Course(this.props.match.params.id,body);
-        if (!res.data.err_message) {
+        let res_video = null;
+        if (body.video !== null) {
+            const fd = new FormData();
+            fd.append('video', body.video);
+            res_video = await lessonService.updateVideo4Lesson(this.props.match.params.id, fd);
+        }
+        delete body.video;
+        delete body.videoURL
+        const res = await lessonService.updateLesson4Course(this.props.match.params.id, body);
+        if (!res.data.err_message && !res_video.data.err_message) {
             swal({
                 title: "Chúc mừng",
                 text: "Cập nhật khóa học thành công !!!",
@@ -80,6 +99,13 @@ export default class LessonEdit extends Component {
                     icon: "error",
                 });
             }
+            if (res_video.data.err_message !== '') {
+                swal({
+                    title: "Cảnh báo",
+                    text: "Video chưa được upload",
+                    icon: "error",
+                });
+            }
         }
 
     }
@@ -96,7 +122,7 @@ export default class LessonEdit extends Component {
         return (
             <div>
                 <div className="review-content-section">
-                    <form onSubmit={this.handleSubmitLesson}>
+                    <form onSubmit={this.handleSubmitLesson} encType="multipart/form-data">
                         <div className="card-block">
                             <div className="input-group mg-b-15 mg-t-15">
                                 <span className="input-group-addon"><i className="icon nalika-user" aria-hidden="true" /></span>
@@ -109,12 +135,20 @@ export default class LessonEdit extends Component {
                             </div>
                             {this.renderError(this.state.lessonError.content)}
                             <div className="input-group mg-b-15">
-                                <span className="input-group-addon"><i className="icon nalika-mail" aria-hidden="true" /></span>
-                                <input type="text" className="form-control" name="videoURL" value={this.state.lessonValues.videoURL} placeholder="Link video bài giảng" onChange={this.handleChangeLesson} onBlur={this.handleBlurLesson} />
-                            </div>
-                            <div className="input-group mg-b-15">
                                 <span className="input-group-addon">Cho phép xem review</span>
                                 <input type="checkbox" name="is_preview" checked={this.state.lessonValues.is_preview} className="form-control" onClick={this.handleChangeLesson} onBlur={this.handleBlurLesson} />
+                            </div>
+                            <div className="review-content-section">
+                                <div className="input-group mg-b-pro-edt">
+                                    <span className="input-group-addon"><i className="icon nalika-edit" aria-hidden="true" /></span>
+                                    <input type="file" className="form-control" accept="video/mp4,video/x-m4v,video/*" name="video" placeholder="Video" onChange={this.handleChangeLesson} />
+                                </div>
+                                <ReactPlayer
+                                    url={this.state.lessonValues.videoURL}
+                                    width='100%'
+                                    controls={true}
+
+                                />
                             </div>
                         </div>
                         <div className="row">
@@ -132,19 +166,31 @@ export default class LessonEdit extends Component {
     }
     async componentDidMount() {
         const res = await lessonService.getLessonById(this.props.match.params.id);
-        console.log(res.data)
         this.setState({
             lessonValues: {
                 title: res.data.title,
                 content: res.data.content,
                 videoURL: res.data.videoURL,
-                is_preview : res.data.is_preview.data[0] === 1 ? true : false,
+                is_preview: res.data.is_preview.data[0] === 1 ? true : false,
             },
             lessonError: {
                 title: '',
                 content: '',
             }
         })
+        const video = await lessonService.getVideo4Lesson(this.props.match.params.id);
+        if (!video.err_message) {
+            var fr = new FileReader();
+            fr.readAsDataURL(video.data);
+            fr.onloadend = () => this.setState({
+                ...this.state,
+                lessonValues: {
+                    ...this.state.lessonValues,
+                    video: video.data,
+                    videoURL: URL.createObjectURL(video.data),
+                }
+            })
+        }
     }
 }
 
