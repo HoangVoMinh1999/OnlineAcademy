@@ -25,7 +25,7 @@ class HomePage extends Component {
             )
         )
 
-        const res_course = await courseService.getAllCourse();
+        const res_course = await courseService.getAllCourses();
         await res_course.data.listCourse.forEach( async (element) => {
             element.image = null;
             element.imageURL = null;

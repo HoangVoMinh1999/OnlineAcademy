@@ -3,8 +3,11 @@ import Axios from 'axios'
 export class CourseService {
     baseURL =  'http://localhost:4000/api/course';
 
-    getAllCourse = () => {
-        return Axios.get(this.baseURL);
+    getAllCourses = (query) => {
+        if (query === null || query === undefined) 
+            return Axios.get(this.baseURL);
+        else 
+            return Axios.get(this.baseURL,{params: query})
     }
 
     getImage4CourseDetail = (id) => {
@@ -14,7 +17,4 @@ export class CourseService {
         });
     }
 
-    getCoursesByQuery = (query) => {
-        return Axios.get(this.baseURL,{params: query})
-    }
 }

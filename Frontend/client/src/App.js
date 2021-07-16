@@ -11,6 +11,7 @@ import { LoginModal } from "./Components/LoginModal";
 import Login from "./Screens/Login";
 import Register from "./Screens/Register";
 import { UserDetail } from "./Components/UserDetail";
+import './App.css'
 class App extends Component {
   render() {
     return (

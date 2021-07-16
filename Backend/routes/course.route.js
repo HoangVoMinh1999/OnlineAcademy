@@ -50,14 +50,7 @@ router.get('/', async function (req, res, next) {
             }
         }
         if (query.hasOwnProperty('page')){
-            if (query.page !== '' && listCourse.length === 0){
-                listCourse = await courseModel.all();
-                lengthListCourse = listCourse.length;
-                listCourse = listCourse.slice((query.page-1)*offset,query.page*offset)
-            }
-            else{
-                listCourse = listCourse.slice((query.page-1)*offset,query.page*offset)
-            }
+            listCourse = listCourse.slice((query.page-1)*offset,query.page*offset)
         }
     } else {
         listCourse = await courseModel.all();

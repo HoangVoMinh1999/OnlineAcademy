@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import SubTabCourse from '../Components/SubTabCourse'
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Pagination } from 'antd';
 import 'antd/dist/antd.css';
 import { courseService } from '../Services';
@@ -16,7 +16,12 @@ class CourseListByCategory extends Component {
             isActive: 0,
             listCategory: [],
             reload: false,
-            lengthCourseList : 0,
+            lengthCourseList: 0,
+            query: {
+                name: '',
+                field: '',
+                desc: null,
+            }
         }
     }
     handleClick = (event) => {
@@ -27,7 +32,7 @@ class CourseListByCategory extends Component {
         })
         this.props.history.push({
             pathname: `/course/${category_id}`,
-            search : `?category=${event.target.id}&page=1`
+            search: `?category=${event.target.id}&page=1`
         })
     }
 
@@ -47,18 +52,18 @@ class CourseListByCategory extends Component {
     }
 
     async componentWillReceiveProps(nextProps) {
-        if (nextProps.match.params.category_id !== this.props.match.params.category_id){
+        if (nextProps.match.params.category_id !== this.props.match.params.category_id) {
             const searchParams = new URLSearchParams(nextProps.location.search);
-            if (searchParams.get('page') === null && searchParams.get('category') === null){
+            if (searchParams.get('page') === null && searchParams.get('category') === null) {
                 const category_id = nextProps.match.params.category_id;
                 let listCategory = this.props.categoryList.filter(t => t.category_id == category_id);
-                if (listCategory.length > 0 ){
+                if (listCategory.length > 0) {
                     this.props.history.push({
                         pathname: `/course/${category_id}`,
-                        search : `?category=${listCategory[0].id}&page=1`
+                        search: `?category=${listCategory[0].id}&page=1`
                     })
                 }
-                else{
+                else {
                     this.props.history.push({
                         pathname: nextProps.match.url
                     })
@@ -73,30 +78,30 @@ class CourseListByCategory extends Component {
                 })
             }
         }
-        else if (nextProps.location.search !== this.props.location.search){
+        else if (nextProps.location.search !== this.props.location.search) {
             const searchParams = new URLSearchParams(this.props.location.search);
-            if (searchParams.hasOwnProperty('category')){
-                const category_id =  parseInt(searchParams.category);
+            if (searchParams.hasOwnProperty('category')) {
+                const category_id = parseInt(searchParams.category);
                 this.setState({
                     ...this.state,
-                    isActive:category_id,
+                    isActive: category_id,
                 })
             }
         }
 
-        if (nextProps.location.search !== this.props.location.search){
+        if (nextProps.location.search !== this.props.location.search) {
             const searchParams = new URLSearchParams(nextProps.location.search);
             const query = {};
             if (searchParams.get('page') !== '') {
                 query.page = searchParams.get('page');
             }
-            if (searchParams.get('category') !== ''){
+            if (searchParams.get('category') !== '') {
                 query.category = searchParams.get('category');
             }
             if (searchParams.get('search') !== '') {
                 query.search = searchParams.get('search');
             }
-            const res = await courseService.getCoursesByQuery(query);
+            const res = await courseService.getAllCourses(query);
             this.props.dispatch(
                 createAction(
                     GET_COURSE_LIST,
@@ -105,17 +110,52 @@ class CourseListByCategory extends Component {
             )
             this.setState({
                 ...this.state,
-                lengthCourseList : res.data.length,
+                lengthCourseList: res.data.length,
             })
         }
         window.scrollTo(0, 0)
     }
 
-    
+
     onChange = (pageNumber) => {
         this.props.history.push({
             pathname: this.props.match.url,
-            search : `?category=${this.state.isActive}&page=${pageNumber}`
+            search: `?category=${this.state.isActive}&page=${pageNumber}`
+        })
+    }
+
+    handleQueryChange = (event) => {
+        let { name, value } = event.target;
+        if (name === 'desc') {
+            value = value === "1" ? true : false;
+        }
+        this.setState({
+            ...this.state,
+            query: {
+                ...this.state.query,
+                [name]: value
+            }
+        });
+    }
+
+    handleQuerySubmit = async (event) => {
+        event.preventDefault();
+        const searchParams = new URLSearchParams(this,this.props.location.search);
+        let query = {
+            category: searchParams.get('category'),
+            page : searchParams.get('page'),
+            search : this.state.query.name,
+        }
+        const res = await courseService.getAllCourses(query);
+        this.props.dispatch(
+            createAction(
+                GET_COURSE_LIST,
+                res.data.listCourse
+            )
+        )
+        this.setState({
+            ...this.state,
+            lengthCourseList: res.data.length,
         })
     }
 
@@ -123,10 +163,10 @@ class CourseListByCategory extends Component {
         return (
             <div>
                 <div className="slider_area ">
-                    <div className="single_slider d-flex align-items-center justify-content-center slider_bg_1" style={{height: '20rem'}}>
+                    <div className="single_slider d-flex align-items-center justify-content-center slider_bg_1" style={{ height: '20rem' }}>
                         <div className="container">
-                            <div className="section_title text-center" style={{marginTop: '5rem'}}>
-                                <h3  style={{ color:'white'}}>Danh sách khóa học</h3>
+                            <div className="section_title text-center" style={{ marginTop: '5rem' }}>
+                                <h3 style={{ color: 'white' }}>Danh sách khóa học</h3>
                             </div>
                         </div>
                     </div>
@@ -135,8 +175,31 @@ class CourseListByCategory extends Component {
                 <div className="popular_courses">
                     <div className="container">
                         <div className="row">
-                            <div className="col-xl-12">
-                            </div>
+                            <form style={{ width: '100%' }} onSubmit={this.handleQuerySubmit}>
+                                <div className="d-flex justify-content-between">
+                                    <div style={{ width: '40%', margin: '10px' }}>
+                                        <label >Nhập giá trị tìm kiếm</label>
+                                        <input type="text" name="name" value={this.state.query.name} style={{ padding: '10px', width: '100%' }} placeholder="Nhập tên khóa học cần tìm kiếm" onChange={this.handleQueryChange} />
+                                    </div>
+                                    <div style={{ width: '20%', margin: '10px' }}>
+                                        <label >Sắp xếp theo:</label>
+                                        <select name="field" value={this.state.query.field} style={{ padding: '10px', width: '100%' }} onChange={this.handleQueryChange}>
+                                            <option value="day">Mới nhất</option>
+                                            <option value="price">Giá</option>
+                                            <option value="students">Số lượng học viên</option>
+                                            <option value="rate">Đánh giá</option>
+                                        </select>
+                                    </div>
+                                    <div style={{ width: '20%', margin: '10px' }}>
+                                        <label>Giá trị sắp xếp</label>
+                                        <select name="desc" value={this.state.query.desc === true ? "1" : "0"} style={{ padding: '10px', width: '100%' }} onChange={this.handleQueryChange}>
+                                            <option value="0">Tăng dần</option>
+                                            <option value="1">Giảm dần</option>
+                                        </select>
+                                    </div>
+                                    <button type="submit" className="genric-btn default radius" style={{ height: '50%', padding: '10px 30px', marginTop: '1.5rem' }}>Tìm kiếm</button>
+                                </div>
+                            </form>
                         </div>
                         <div className="row">
                             <div className="col-xl-12">
@@ -155,11 +218,11 @@ class CourseListByCategory extends Component {
                             <div className="tab-content" id="myTabContent" >
                                 {this.renderTabContent()}
                             </div>
-                            <Pagination className="align-self-center" 
-                                showQuickJumper 
+                            <Pagination className="align-self-center"
+                                showQuickJumper
                                 defaultPageSize={6}
-                                defaultCurrent={1} 
-                                total={this.state.lengthCourseList} 
+                                defaultCurrent={1}
+                                total={this.state.lengthCourseList}
                                 onChange={this.onChange} />
                         </div>
                     </div>
@@ -179,10 +242,10 @@ class CourseListByCategory extends Component {
         this.setState({
             listCategory: listCategory,
         })
-        if (listCategory.length > 0){
+        if (listCategory.length > 0) {
             this.props.history.push({
                 pathname: this.props.match.url,
-                search : `?category=${listCategory[0].id}&page=1`
+                search: `?category=${listCategory[0].id}&page=1`
             })
         }
     }

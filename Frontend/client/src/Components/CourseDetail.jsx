@@ -3,17 +3,16 @@ import { connect } from 'react-redux'
 import { commentService, courseService, lessonService, purchaseCourseService } from '../Services';
 import CourseDetailBanner from './CourseDetailBanner'
 import { CourseDetailPreview } from './CourseDetailPreview'
-import swal from 'sweetalert';
 import createAction from '../Redux/Action';
 import { GET_PURCHASED_COURSE_LIST, GET_COMMENT_LIST } from '../Redux/Action/type';
-import Comment from './Comment';
+import Comment from './Comment/Comment';
 import { Editor } from "react-draft-wysiwyg";
 import { EditorState, convertToRaw, ContentState, convertFromHTML } from 'draft-js';
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
-
-
+import swal from '@sweetalert/with-react'
+import NewComment from './Comment/NewComment';
 
 class CourseDetail extends Component {
     constructor(props) {
@@ -22,20 +21,16 @@ class CourseDetail extends Component {
             detail: {},
             lessonPreview: [],
             short_description: '',
-            newComment: {
-                rate: 0,
-                comment: '',
-            },
             editorState: EditorState.createEmpty(),
-            image : null,
-            imageURL : null,
+            image: null,
+            imageURL: null,
         }
     }
 
     renderLessonPreview = () => {
         const course_id = this.props.match.params.course_id;
         const isPurchased = this.props.purchasedCourseList.find(t => t.course_id.toString() === course_id.toString()) === undefined ? false : true;
-        return this.state.lessonPreview.map((lesson,index) => {
+        return this.state.lessonPreview.map((lesson, index) => {
             return <CourseDetailPreview key={index} chapter={index} lesson={lesson} isPurchased={isPurchased}></CourseDetailPreview>
         })
     }
@@ -135,6 +130,8 @@ class CourseDetail extends Component {
             });
     }
 
+
+
     handleAddComment = (event) => {
         event.preventDefault();
         swal("Viết bình luận của bạn về khóa học tại đây:", {
@@ -183,10 +180,10 @@ class CourseDetail extends Component {
         )
     }
 
-    async componentDidUpdate(nextProps){
+    async componentDidUpdate(nextProps) {
         const course_id = this.props.match.params.course_id;
-        if (nextProps.purchasedCourseList !== this.props.purchasedCourseList){
-            if (this.props.purchasedCourseList.find(t => t.course_id.toString() === course_id.toString()) === undefined){
+        if (nextProps.purchasedCourseList !== this.props.purchasedCourseList) {
+            if (this.props.purchasedCourseList.find(t => t.course_id.toString() === course_id.toString()) === undefined) {
                 let res = await lessonService.getLessons4Course(course_id);
                 const lessonPreview = res.data.filter(t => t.is_preview.data[0] === 1)
                 this.setState({
@@ -229,17 +226,17 @@ class CourseDetail extends Component {
                                     <div className="video_thumb">
                                         <img src={this.state.imageURL === null ? "/img/courses/1.png" : this.state.imageURL} alt="Hình ảnh khóa học" />
                                     </div>
-                                    <div className="author_info" style={{backgroundColor:'rgba(0, 0, 0, 0.5)'}}>
+                                    <div className="author_info" style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
                                         <div className="auhor_header">
                                             <div className="thumb">
                                                 <img src="img/latest_blog/author.png" alt />
-                                            </div> 
+                                            </div>
                                             <div className="name">
-                                                <h3 style={{color:'white'}}>Macau Wilium</h3>
-                                                <p style={{color:'white'}}>UI/UX Designer</p>
+                                                <h3 style={{ color: 'white' }}>Macau Wilium</h3>
+                                                <p style={{ color: 'white' }}>UI/UX Designer</p>
                                             </div>
                                         </div>
-                                        <p className="text_info" style={{color:'white'}}>
+                                        <p className="text_info" style={{ color: 'white' }}>
                                             Our set he for firmament morning sixth subdue darkness creeping gathered divide our let
                                             god moving. Moving in fourth air night bring upon you’re it beast let you dominion
                                             likeness open place day
@@ -282,17 +279,18 @@ class CourseDetail extends Component {
         })
 
         let res = await courseService.getImage4CourseDetail(course_id);
-        if (!res.err_message){
+        if (!res.err_message) {
             var reader = new FileReader();
             if (res.data.size > 0) {
                 reader.readAsDataURL(res.data);
-                reader.onloadend = () => this.setState({ 
+                reader.onloadend = () => this.setState({
                     ...this.state,
                     image: reader.result,
-                    imageURL: URL.createObjectURL(res.data) })
+                    imageURL: URL.createObjectURL(res.data)
+                })
             }
         }
-        if (this.props.purchasedCourseList.find(t => t.course_id.toString() === course_id.toString()) === undefined){
+        if (this.props.purchasedCourseList.find(t => t.course_id.toString() === course_id.toString()) === undefined) {
             res = await lessonService.getLessons4Course(course_id);
             const lessonPreview = res.data.filter(t => t.is_preview.data[0] === 1)
             this.setState({

@@ -14,7 +14,7 @@ router.get('/',async function(req,res,next){
             listCategory = listCategory.slice((query.page-1)*offset,query.page*offset)
         }
     }
-    return res.json({
+    return res.status(200).json({
         listCategory : listCategory,
         lengthCategoryList : lengthCategoryList,
     });
