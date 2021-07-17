@@ -58,13 +58,11 @@ class CourseItem extends Component {
                                     <span>{this.props.info.current_student}</span>
                                 </p>
                             </div>
-                            <div className="price">
-                                {this.props.sale === 0 ? <span className="offer">{this.props.info.price} VND</span> : <p></p>}
-                                <p>
-                                    <span className="active_prise">
-                                        {this.props.info.price - this.props.info.price * this.props.info.sale / 100} VND
-                                    </span>
-                                </p>
+                            <div className="prise">
+                                {this.props.info.sale !== 0 ? <span className="offer">{this.props.info.price} VND</span> : <p></p>}
+                                <span className="active_prise">
+                                    {this.props.info.price - this.props.info.price * this.props.info.sale / 100} VND
+                                </span>
                             </div>
                         </div>
                         <div className="d-flex justify-content-center">
