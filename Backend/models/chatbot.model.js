@@ -87,22 +87,22 @@ function handleMessage(sender_psid, received_message) {
                   "template_type": "generic",
                   "elements": [{
                     "title": "Chọn yêu cầu mà bạn muốn?",
-                    "subtitle": "Bấm vào nút để trả lời.",
+                    "subtitle": "KH: Khóa học.",
                     // "image_url": attachment_url,
                     "buttons": [
                       {
                         "type": "postback",
-                        "title": "Tìm kiếm khoá học theo từ khóa",
+                        "title": "Tìm kiếm KH",
                         "payload": "search",
                       },
                       {
                         "type": "postback",
-                        "title": "Duyệt khoá học theo danh mục",
+                        "title": "Duyệt KH",
                         "payload": "category",
                       },
                       {
                         "type": "postback",
-                        "title": "Xem chi tiết khóa học",
+                        "title": "Xem chi tiết KH",
                         "payload": "course",
                       },
                     ],
