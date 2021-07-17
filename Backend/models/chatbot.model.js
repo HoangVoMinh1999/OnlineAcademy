@@ -86,20 +86,25 @@ function handleMessage(sender_psid, received_message) {
                 "payload": {
                   "template_type": "generic",
                   "elements": [{
-                    "title": "Which one?",
-                    "subtitle": "Tap a button to answer.",
+                    "title": "Chọn yêu cầu mà bạn muốn?",
+                    "subtitle": "Bấm vào nút để trả lời.",
                     // "image_url": attachment_url,
                     "buttons": [
                       {
                         "type": "postback",
-                        "title": "Yes!",
-                        "payload": "yes",
+                        "title": "Tìm kiếm khoá học theo từ khóa",
+                        "payload": "search",
                       },
                       {
                         "type": "postback",
-                        "title": "No!",
-                        "payload": "no",
-                      }
+                        "title": "Duyệt khoá học theo danh mục",
+                        "payload": "category",
+                      },
+                      {
+                        "type": "postback",
+                        "title": "Xem chi tiết khóa học",
+                        "payload": "course",
+                      },
                     ],
                   }]
                 }
