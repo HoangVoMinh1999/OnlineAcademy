@@ -1,4 +1,6 @@
 require('dotenv').config();
+const request = require('request');
+// import request from "request";
 
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
 const VERIFY_TOKEN = process.env.VERIFY_TOKEN;
@@ -70,13 +72,39 @@ const getWebhook = (req, res) => {
 function handleMessage(sender_psid, received_message) {
 
     let response;
-
+    console.log('---------------------------------------------------------------');
+    console.log(received_message.text);
+    console.log('---------------------------------------------------------------');
     // Check if the message contains text
     if (received_message.text) {
 
         // Create the payload for a basic text message
         response = {
-            "text": `You sent the message: "${received_message.text}". Now send me an image!`
+            // "text": `You sent the message: "${received_message.text}". Now choose a button!`
+            "attachment": {
+                "type": "template",
+                "payload": {
+                  "template_type": "generic",
+                  "elements": [{
+                    "title": "Which one?",
+                    "subtitle": "Tap a button to answer.",
+                    // "image_url": attachment_url,
+                    "buttons": [
+                      {
+                        "type": "postback",
+                        "title": "Yes!",
+                        "payload": "yes",
+                      },
+                      {
+                        "type": "postback",
+                        "title": "No!",
+                        "payload": "no",
+                      }
+                    ],
+                  }]
+                }
+              }
+            
         }
     }
 
@@ -102,11 +130,17 @@ function callSendAPI(sender_psid, response) {
     // Send the HTTP request to the Messenger Platform
     request({
         "uri": "https://graph.facebook.com/v2.6/me/messages",
-        "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN },
+        "qs": { "access_token": PAGE_ACCESS_TOKEN },
         "method": "POST",
         "json": request_body
     }, (err, res, body) => {
+        console.log('####################################');
+        console.log(request_body);
+        console.log('####################################');
+        console.log(body);
+        console.log('####################################');
         if (!err) {
+            // console.log(req);
             console.log('message sent!')
         } else {
             console.error("Unable to send message:" + err);
