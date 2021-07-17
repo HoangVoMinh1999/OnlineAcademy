@@ -126,11 +126,11 @@ function handlePostback(sender_psid, received_postback) {
   
     // Set the response based on the postback payload
     if (payload === 'search') {
-      response = { "text": "Thanks!" }
+      response = { "text": "Hãy gõ từ khóa cần tìm khóa học!" }
     } else if (payload === 'category') {
-      response = { "text": "Oops, try sending another image." }
+      response = { "text": "Hãy chọn danh mục!" }
     } else if (payload === 'course') {
-        response = { "text": "Try something new." }
+        response = { "text": "Hãy gõ tên khóa học!" }
     }
     // Send the message to acknowledge the postback
     callSendAPI(sender_psid, response);
