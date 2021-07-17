@@ -22,6 +22,7 @@ var upload = multer({
 router.get('/', async function (req, res, next) {
     const offset = 6;
     const query = req.query;
+    console.log(query)
     let listCourse = [];
     let lengthListCourse = 0;
     if (Object.keys(query).length !== 0) {
@@ -47,6 +48,14 @@ router.get('/', async function (req, res, next) {
             else{
                 listCourse = listCourse.filter(t => t.category_id.toString() === query.category);
                 lengthListCourse = listCourse.length;
+            }
+        }
+        if(query.hasOwnProperty('field') && query.hasOwnProperty('desc')){
+            if (query.desc === true){
+                listCourse = listCourse.sort((a,b) => b[query.field] - a[query.field])
+            }
+            else{
+                listCourse = listCourse.sort((a,b) => a[query.field] - b[query.field])
             }
         }
         if (query.hasOwnProperty('page')){

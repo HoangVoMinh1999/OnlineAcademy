@@ -53,8 +53,12 @@ class CourseItem extends Component {
                             <div className="star">
                                 <i className="flaticon-mark-as-favorite-star" />
                                 <span>({this.props.info.rate})</span>
+                                <p>
+                                    <i className="flaticon-user" />
+                                    <span>{this.props.info.current_student}</span>
+                                </p>
                             </div>
-                            <div className="prise">
+                            <div className="price">
                                 {this.props.sale === 0 ? <span className="offer">{this.props.info.price} VND</span> : <p></p>}
                                 <p>
                                     <span className="active_prise">

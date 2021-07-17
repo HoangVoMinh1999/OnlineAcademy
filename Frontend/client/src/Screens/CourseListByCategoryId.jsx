@@ -15,12 +15,11 @@ class CourseListByCategory extends Component {
         this.state = {
             isActive: 0,
             listCategory: [],
-            reload: false,
             lengthCourseList: 0,
             query: {
                 name: '',
-                field: '',
-                desc: null,
+                field: 'id',
+                desc: false,
             }
         }
     }
@@ -140,11 +139,13 @@ class CourseListByCategory extends Component {
 
     handleQuerySubmit = async (event) => {
         event.preventDefault();
-        const searchParams = new URLSearchParams(this,this.props.location.search);
+        const searchParams = new URLSearchParams(this.props.location.search);
         let query = {
             category: searchParams.get('category'),
             page : searchParams.get('page'),
             search : this.state.query.name,
+            field : this.state.query.field,
+            desc : this.state.query.desc
         }
         const res = await courseService.getAllCourses(query);
         this.props.dispatch(
@@ -184,9 +185,9 @@ class CourseListByCategory extends Component {
                                     <div style={{ width: '20%', margin: '10px' }}>
                                         <label >Sắp xếp theo:</label>
                                         <select name="field" value={this.state.query.field} style={{ padding: '10px', width: '100%' }} onChange={this.handleQueryChange}>
-                                            <option value="day">Mới nhất</option>
+                                            <option value="id">Mới nhất</option>
                                             <option value="price">Giá</option>
-                                            <option value="students">Số lượng học viên</option>
+                                            <option value="current_student">Số lượng học viên</option>
                                             <option value="rate">Đánh giá</option>
                                         </select>
                                     </div>

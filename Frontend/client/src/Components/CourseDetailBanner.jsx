@@ -19,6 +19,10 @@ class CourseDetailBanner extends Component {
                                         <span className="active">{this.props.info.price - this.props.info.price * this.props.info.sale / 100} VND</span>
                                     </div>
                                     <div className="rating">
+                                        <p >
+                                            <i className="flaticon-user" style={{fontSize:'25px'}}/>
+                                            <span style={{fontSize:'25px'}} >{this.props.info.current_student}</span>
+                                        </p>
                                         <i className="flaticon-mark-as-favorite-star" />
                                         <i className="flaticon-mark-as-favorite-star" />
                                         <i className="flaticon-mark-as-favorite-star" />
@@ -27,9 +31,9 @@ class CourseDetailBanner extends Component {
                                         <span>{this.props.info.rate}</span>
                                     </div>
                                     <div>
-                                        <h4 style={{ color: 'white'}}>Mô tả chung</h4>
+                                        <h4 style={{ color: 'white' }}>Mô tả chung</h4>
                                         <div className="rating">
-                                            <span>{this.props.info.short_description === '' ? 'Không có ghi chú': this.props.info.short_description}</span>
+                                            <span>{this.props.info.short_description === '' ? 'Không có ghi chú' : this.props.info.short_description}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -41,6 +45,9 @@ class CourseDetailBanner extends Component {
 
             </div>
         )
+    }
+    componentDidMount(){
+        window.scrollTo(0,0)
     }
 }
 

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { commentService, courseService, lessonService, purchaseCourseService } from '../Services';
+import { commentService, courseService, lessonService, purchaseCourseService, userService } from '../Services';
 import CourseDetailBanner from './CourseDetailBanner'
 import { CourseDetailPreview } from './CourseDetailPreview'
 import createAction from '../Redux/Action';
@@ -24,6 +24,8 @@ class CourseDetail extends Component {
             editorState: EditorState.createEmpty(),
             image: null,
             imageURL: null,
+            isAbleToComment: false,
+            teacher: {},
         }
     }
 
@@ -188,7 +190,8 @@ class CourseDetail extends Component {
                 const lessonPreview = res.data.filter(t => t.is_preview.data[0] === 1)
                 this.setState({
                     ...this.state,
-                    lessonPreview: lessonPreview
+                    lessonPreview: lessonPreview,
+                    isAbleToComment: false,
                 })
             }
             else {
@@ -196,7 +199,8 @@ class CourseDetail extends Component {
                 const lessonPreview = res.data
                 this.setState({
                     ...this.state,
-                    lessonPreview: lessonPreview
+                    lessonPreview: lessonPreview,
+                    isAbleToComment: false,
                 })
             }
         }
@@ -226,32 +230,30 @@ class CourseDetail extends Component {
                                     <div className="video_thumb">
                                         <img src={this.state.imageURL === null ? "/img/courses/1.png" : this.state.imageURL} alt="Hình ảnh khóa học" />
                                     </div>
-                                    <div className="author_info" style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+                                    <div className="author_info" style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)', fontSize: '17px' }}>
                                         <div className="auhor_header">
                                             <div className="thumb">
                                                 <img src="img/latest_blog/author.png" alt />
                                             </div>
                                             <div className="name">
-                                                <h3 style={{ color: 'white' }}>Macau Wilium</h3>
-                                                <p style={{ color: 'white' }}>UI/UX Designer</p>
+                                                <h3 style={{ color: 'white' }}>{this.state.teacher.name}</h3>
+                                                <p style={{ color: 'white' }}></p>
                                             </div>
                                         </div>
-                                        <p className="text_info" style={{ color: 'white' }}>
-                                            Our set he for firmament morning sixth subdue darkness creeping gathered divide our let
-                                            god moving. Moving in fourth air night bring upon you’re it beast let you dominion
-                                            likeness open place day
-                                        </p>
-                                        <ul>
-                                            <li><a href="#"> <i className="fa fa-envelope" /> </a></li>
-                                            <li><a href="#"> <i className="fa fa-twitter" /> </a></li>
-                                            <li><a href="#"> <i className="ti-linkedin" /> </a></li>
-                                        </ul>
+                                        <div className="text_info" style={{ color: 'white',margin:'10px'}}>
+                                            <div className="col">
+                                                <span>Số điện thoại: {this.state.teacher.phone}</span>
+                                            </div>
+                                            <div className="col">
+                                                <span>Email: {this.state.teacher.email}</span>
+                                            </div>
+                                        </div>
                                     </div>
                                     {this.renderBuyCourseButton()}
                                     <div className="feedback_info">
                                         <div className="m-1 d-flex justify-content-between">
                                             <span>Comment</span>
-                                            <button className="btn btn-outline-success" onClick={this.handleAddComment}>Thêm bình luận</button>
+                                            <button className="btn btn-outline-success" disabled={!this.state.isAbleToComment} onClick={this.handleAddComment}>Thêm bình luận</button>
                                         </div>
                                         <div className="comment">
                                             {this.renderComment()}
@@ -295,7 +297,8 @@ class CourseDetail extends Component {
             const lessonPreview = res.data.filter(t => t.is_preview.data[0] === 1)
             this.setState({
                 ...this.state,
-                lessonPreview: lessonPreview
+                lessonPreview: lessonPreview,
+                isAbleToComment: false,
             })
         }
         else {
@@ -303,8 +306,19 @@ class CourseDetail extends Component {
             const lessonPreview = res.data
             this.setState({
                 ...this.state,
-                lessonPreview: lessonPreview
+                lessonPreview: lessonPreview,
+                isAbleToComment: true,
             })
+        }
+
+        if (course.teacher_id !== null) {
+            const res_teacher = await userService.getUserDetail(course.teacher_id);
+            if (!res_teacher.data.err_message) {
+                this.setState({
+                    ...this.state,
+                    teacher: res_teacher.data
+                })
+            }
         }
 
 
