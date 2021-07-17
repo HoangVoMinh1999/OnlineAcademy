@@ -30,7 +30,7 @@ class SubTabCourse extends Component {
             })
         }
         else if (this.props.id === "most-popular"){
-            this.props.courseList.sort((a,b) => (b.current_student / b.max_students)-(a.current_student / a.max_students));
+            this.props.courseList.sort((a,b) => b.current_student -a.current_student);
             return this.props.courseList.map((course,index) => {
                 if (index < 6){
                     return(

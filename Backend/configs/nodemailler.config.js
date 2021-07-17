@@ -26,7 +26,7 @@ module.exports.sendConfirmationEmail = (name, email, confirmationCode) => {
         html: `<h1>Email Confirmation</h1>
           <h2>Hello ${name}</h2>
           <p>Thank you for signing up. Please confirm your email by clicking on the following link</p>
-          <form action=${`http://localhost:4000/api/user/confirm/${confirmationCode}`} method="post">
+          <form action=${` https://mybackend-onlineacademy.herokuapp.com/api/user/confirm/${confirmationCode}`} method="post">
             <button type="submit">Xác nhận</button>
             </form>
           </div>`,  

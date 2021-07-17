@@ -13,6 +13,7 @@ import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
 import swal from '@sweetalert/with-react'
 import NewComment from './Comment/NewComment';
+import CourseItem from './CourseItem';
 
 class CourseDetail extends Component {
     constructor(props) {
@@ -26,15 +27,19 @@ class CourseDetail extends Component {
             imageURL: null,
             isAbleToComment: false,
             teacher: {},
+            relativeCourse: [],
         }
     }
 
     renderLessonPreview = () => {
         const course_id = this.props.match.params.course_id;
         const isPurchased = this.props.purchasedCourseList.find(t => t.course_id.toString() === course_id.toString()) === undefined ? false : true;
-        return this.state.lessonPreview.map((lesson, index) => {
-            return <CourseDetailPreview key={index} chapter={index} lesson={lesson} isPurchased={isPurchased}></CourseDetailPreview>
-        })
+        if (this.state.lessonPreview.length > 0) {
+            return this.state.lessonPreview.map((lesson, index) => {
+                return <CourseDetailPreview key={index} chapter={index} lesson={lesson} isPurchased={isPurchased}></CourseDetailPreview>
+            })
+        }
+        return <p>Khóa học chưa có bài học preview</p>
     }
 
     renderBuyCourseButton = () => {
@@ -45,6 +50,7 @@ class CourseDetail extends Component {
         }
         return <button className="boxed_btn" onClick={this.buyCourse}>Mua khóa học</button>
     }
+
 
     buyCourse = (event) => {
         event.preventDefault();
@@ -182,7 +188,17 @@ class CourseDetail extends Component {
         )
     }
 
-    async componentDidUpdate(nextProps) {
+    renderRelativeCourses = () => {
+        if (this.state.relativeCourse.length > 0) {
+            return this.state.relativeCourse.map((course, index) => {
+                return <div className="col-xl-4 col-lg-4 col-md-6">
+                    <CourseItem info={course} key={index} reload='true'></CourseItem>
+                </div>
+            })
+        }
+    }
+
+    async componentWillReceiveProps(nextProps) {
         const course_id = this.props.match.params.course_id;
         if (nextProps.purchasedCourseList !== this.props.purchasedCourseList) {
             if (this.props.purchasedCourseList.find(t => t.course_id.toString() === course_id.toString()) === undefined) {
@@ -203,6 +219,81 @@ class CourseDetail extends Component {
                     isAbleToComment: false,
                 })
             }
+        }
+        if (nextProps.match.params !== this.props.match.params) {
+            const course_id = nextProps.match.params.course_id;
+            const course = nextProps.courseList.find(t => t.id == course_id);
+            const blocksFromHtml = htmlToDraft(course.full_description);
+            const { contentBlocks, entityMap } = blocksFromHtml;
+            const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap);
+            const editorState = EditorState.createWithContent(contentState);
+            this.setState({
+                ...this.state,
+                detail: course,
+                editorState: editorState
+            })
+
+            let res = await courseService.getImage4CourseDetail(course_id);
+            if (!res.err_message) {
+                var reader = new FileReader();
+                if (res.data.size > 0) {
+                    reader.readAsDataURL(res.data);
+                    reader.onloadend = () => this.setState({
+                        ...this.state,
+                        image: reader.result,
+                        imageURL: URL.createObjectURL(res.data)
+                    })
+                }
+            }
+            if (this.props.purchasedCourseList.find(t => t.course_id.toString() === course_id.toString()) === undefined) {
+                res = await lessonService.getLessons4Course(course_id);
+                const lessonPreview = res.data.filter(t => t.is_preview.data[0] === 1)
+                this.setState({
+                    ...this.state,
+                    lessonPreview: lessonPreview,
+                    isAbleToComment: false,
+                })
+            }
+            else {
+                res = await lessonService.getLessons4Course(course_id);
+                const lessonPreview = res.data
+                this.setState({
+                    ...this.state,
+                    lessonPreview: lessonPreview,
+                    isAbleToComment: true,
+                })
+            }
+
+            if (course.teacher_id !== null) {
+                const res_teacher = await userService.getUserDetail(course.teacher_id);
+                if (!res_teacher.data.err_message) {
+                    this.setState({
+                        ...this.state,
+                        teacher: res_teacher.data
+                    })
+                }
+            }
+
+            res = await commentService.getComments4Course(course_id);
+            res.data = res.data.sort((a, b) => new Date(a.Log_UpdatedDate) - new Date(b.Log_UpdatedDate));
+            this.props.dispatch(
+                createAction(
+                    GET_COMMENT_LIST,
+                    res.data,
+                )
+            )
+
+            res = await courseService.getAllCourses({ category: course.category_id });
+            if (res.data.length > 0) {
+                let relativeCourse = res.data.listCourse.filter(t => t.id.toString() !== course_id.toString());
+                relativeCourse = relativeCourse.sort((a,b) => b.current_student -a.current_student);
+                relativeCourse = relativeCourse.slice(0, 3);
+                this.setState({
+                    ...this.state,
+                    relativeCourse: relativeCourse
+                })
+            }
+            window.scrollTo(0, 0)
         }
     }
 
@@ -240,7 +331,7 @@ class CourseDetail extends Component {
                                                 <p style={{ color: 'white' }}></p>
                                             </div>
                                         </div>
-                                        <div className="text_info" style={{ color: 'white',margin:'10px'}}>
+                                        <div className="text_info" style={{ color: 'white', margin: '10px' }}>
                                             <div className="col">
                                                 <span>Số điện thoại: {this.state.teacher.phone}</span>
                                             </div>
@@ -257,6 +348,22 @@ class CourseDetail extends Component {
                                         </div>
                                         <div className="comment">
                                             {this.renderComment()}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="row" style={{ marginTop: '10rem' }}>
+                            <div className="single_courses">
+                                <h3>Cách khóa học tương tự</h3>
+                            </div>
+                            <div className="all_courses">
+                                <div className="container">
+                                    <div className="tab-content" id="myTabContent" >
+                                        <div className={`tab-pane fade show active`}  id="relativeCourses" role="tabpanel" aria-labelledby="relativeCourses">
+                                            <div className="row">
+                                                {this.renderRelativeCourses()}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -331,6 +438,16 @@ class CourseDetail extends Component {
                 res.data,
             )
         )
+
+        res = await courseService.getAllCourses({ category: course.category_id });
+        if (res.data.length > 0) {
+            let relativeCourse = res.data.listCourse.filter(t => t.id.toString() !== course_id.toString());
+            relativeCourse = relativeCourse.slice(0, 3);
+            this.setState({
+                ...this.state,
+                relativeCourse: relativeCourse
+            })
+        }
     }
 }
 
