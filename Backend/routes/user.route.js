@@ -61,7 +61,7 @@ router.patch('/:id', async function (req, res, next) {
             'err_message': 'Update failed !!!'
         })
     }
-    return res.json(user)
+    return res.status(200).json(user)
 })
 
 router.post('/register', async function (req, res, next) {

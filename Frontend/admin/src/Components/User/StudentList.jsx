@@ -17,32 +17,6 @@ class StudentList extends Component {
                     <td>{item.phone === null ? 'Chưa có thông tin' : item.phone}</td>
                     <td>{item.email === null ? 'Chưa có thông tin' : item.email}</td>
                     <td>
-                        <Link to={`/course-edit/${item.id}`}><button id="categoryEdit" title="Edit" class="pd-setting-ed"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></Link>
-                        {/* Button trigger modal */}
-                        <button type="button" id="categoryRemove" title="Trash" className="pd-setting-ed" data-toggle="modal" data-target="#deleteCategory" onClick={() => this.handleButtonDelete(item.id)}>
-                            <i class="fa fa-trash-o" aria-hidden="true"></i>
-                        </button>
-                        {/* Modal */}
-                        <div className="modal fade" id="deleteCategory" tabIndex={-1} role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                            <div className="modal-dialog modal-dialog-centered" role="document">
-                                <div className="modal-content">
-                                    <div className="modal-header">
-                                        <h5 className="modal-title text-danger" id="exampleModalLongTitle">Thông báo</h5>
-                                        <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">×</span>
-                                        </button>
-                                    </div>
-                                    <div className="modal-body">
-                                        <p className="text-danger">Bạn có chắn chắn muốn xóa loại khóa học này không ???</p>
-                                    </div>
-                                    <div className="modal-footer">
-                                        <button type="button" className="btn btn-primary" onClick={() => this.handleClickButtonConfirmDelete()}>Đồng ý</button>
-                                        <button type="button" className="btn btn-secondary" data-dismiss="modal" >Quay lại</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
                     </td>
                 </tr>
             })
@@ -66,7 +40,6 @@ class StudentList extends Component {
                                                 <th>Địa chỉ</th>
                                                 <th>Số điện thoại</th>
                                                 <th>Email</th>
-                                                <th>More</th>
                                             </tr>
                                         </thead>
                                         <tbody id="categoryContent">
@@ -74,13 +47,6 @@ class StudentList extends Component {
                                         </tbody>
                                     </table>
                                     <div className="custom-pagination">
-                                        <ul className="pagination">
-                                            <li className="page-item"><a className="page-link" href="#">Previous</a></li>
-                                            <li className="page-item"><a className="page-link" href="#">1</a></li>
-                                            <li className="page-item"><a className="page-link" href="#">2</a></li>
-                                            <li className="page-item"><a className="page-link" href="#">3</a></li>
-                                            <li className="page-item"><a className="page-link" href="#">Next</a></li>
-                                        </ul>
                                     </div>
                                 </div>
                             </div>

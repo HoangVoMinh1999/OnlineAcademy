@@ -22,10 +22,14 @@ var upload = multer({
 router.get('/', async function (req, res, next) {
     const offset = 6;
     const query = req.query;
-    console.log(query)
+    const queryWithoutPage = {...query};
+    delete queryWithoutPage.page
+    if (queryWithoutPage.hasOwnProperty('search') && queryWithoutPage.search === ''){
+        delete queryWithoutPage.search;
+    }
     let listCourse = [];
     let lengthListCourse = 0;
-    if (Object.keys(query).length !== 0) {
+    if (Object.keys(queryWithoutPage).length !== 0) {
         if (query.hasOwnProperty('search') && query.search !== '') {
             if (query.search !== ''){
                 listCourse = await courseModel.fullTextSearch4Course(query.search);
@@ -58,12 +62,13 @@ router.get('/', async function (req, res, next) {
                 listCourse = listCourse.sort((a,b) => a[query.field] - b[query.field])
             }
         }
-        if (query.hasOwnProperty('page')){
-            listCourse = listCourse.slice((query.page-1)*offset,query.page*offset)
-        }
     } else {
         listCourse = await courseModel.all();
         lengthListCourse = listCourse.length;
+    }
+
+    if (query.hasOwnProperty('page')){
+        listCourse = listCourse.slice((query.page-1)*offset,query.page*offset)
     }
     return res.json({
         'listCourse' : listCourse,

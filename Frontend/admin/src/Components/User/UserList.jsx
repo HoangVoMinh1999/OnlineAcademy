@@ -6,14 +6,71 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { Pagination } from 'antd';
 import 'antd/dist/antd.css';
+import swal from 'sweetalert'
 
 class UserList extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
-            lengthUserList : 0,
+            lengthUserList: 0,
         }
+    }
+
+    handleUpgradeUser = (id) => {
+        swal("Bạn có chắc chắn muốn nâng cấp tài khoản thành tài khoản giáo viên ???", {
+            buttons: {
+                confirm: {
+                    text: "Xác nhận",
+                    value: "confirm",
+                },
+                cancel: true,
+            },
+        })
+            .then(async (value) => {
+                switch (value) {
+                    case "confirm":
+                        const res = await userService.updateUser(id, { IsTeacher: true });
+                        if (!res.err_message){
+                            swal('Nâng cấp thành công !!!');
+                            const res = await userService.getAllUser();
+                            this.props.dispatch(
+                                createAction(
+                                    GET_USER_LIST,
+                                    res.data,
+                                )
+                            )
+                        }
+                }
+            });
+    }
+
+    handleDemoteUser = (id) => {
+        swal("Bạn có chắc chắn muốn giáng cấp tài khoản này không ???", {
+            buttons: {
+                confirm: {
+                    text: "Xác nhận",
+                    value: "confirm",
+                },
+                cancel: true,
+            },
+        })
+            .then(async (value) => {
+                switch (value) {
+                    case "confirm":
+                        const res = await userService.updateUser(id, { IsTeacher: false });
+                        if (!res.err_message){
+                            swal('Giáng cấp thành công !!!');
+                            const res = await userService.getAllUser();
+                            this.props.dispatch(
+                                createAction(
+                                    GET_USER_LIST,
+                                    res.data,
+                                )
+                            )
+                        }
+                }
+            });
     }
 
     renderContent = () => {
@@ -27,7 +84,10 @@ class UserList extends Component {
                     <td>{item.email === null ? 'Chưa có thông tin' : item.email}</td>
                     <td>{item.IsTeacher.data[0] === 0 ? 'Không' : 'Có'}</td>
                     <td>
-                        <button class="pd-setting">Active</button>
+                        {item.IsTeacher.data[0] === 0 ?
+                            <button type="button" class="btn btn-success" hidden={item.IsAdmin.data[0] === 1} onClick={() => this.handleUpgradeUser(item.id)}>Nâng cấp tài khoản</button> :
+                            <button type="button" class="btn btn-danger" hidden={item.IsAdmin.data[0] === 1} onClick={() => this.handleDemoteUser(item.id)}>Giáng cấp tài khoản</button>
+                        }
                     </td>
                 </tr>
             })
