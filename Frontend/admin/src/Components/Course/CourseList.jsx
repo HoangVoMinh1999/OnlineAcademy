@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { categoryService, courseService } from '../../Services'
 import createAction from '../../Redux/Action'
 import { connect } from 'react-redux'
-import { GET_COURSE_LIST, GET_LIST } from '../../Redux/Action/type'
+import { GET_CHILD_CATEGORY_LIST, GET_COURSE_LIST, GET_LIST, GET_MAIN_CATEGORY_LIST } from '../../Redux/Action/type'
 import { Link } from 'react-router-dom'
 import { Pagination } from 'antd';
 import 'antd/dist/antd.css';
@@ -23,7 +23,6 @@ class CourseList extends Component {
 
     renderContent = () => {
         return this.props.courseList.map((course, index) => {
-            const isFinish = course.IsFinish.data[0] === 1 ? "Đã hoàn thành" : "Chưa hoàn thành"
             let category = course.category_id === null ? null : this.props.categoryList.find(t => t.id === course.category_id);
             return <tr key={index}>
                 <td>{course.id}</td>
@@ -32,8 +31,9 @@ class CourseList extends Component {
                 <td>{course.rate}</td>
                 <td>{course.price}</td>
                 <td>{course.sale}%</td>
-                <td>{course.current_student} / {course.max_students}</td>
-                <td>{isFinish}</td>
+                <td>{course.current_student}</td>
+                <td>{course.IsCompleted.data[0] === 1 ? "Đã hoàn thành" : "Chưa hoàn thành"}</td>
+                <td>{course.IsFinish.data[0] === 1 ? "Đã kết thúc" : "Chưa kết thúc"}</td>
                 <td>
                     <Link to={`/course-edit/${course.id}`}><button id="categoryEdit" title="Edit" class="pd-setting-ed"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></Link>
                     {/* Button trigger modal */}
@@ -169,6 +169,7 @@ class CourseList extends Component {
                                                 <th>Giảm giá</th>
                                                 <th>Học sinh</th>
                                                 <th>Hoàn thành</th>
+                                                <th>Đã kết thúc</th>
                                                 <th>More</th>
                                             </tr>
                                         </thead>
@@ -200,7 +201,19 @@ class CourseList extends Component {
             this.props.dispatch(
                 createAction(
                     GET_LIST,
-                    res.data
+                    res.data.listCategory
+                )
+            )
+            this.props.dispatch(
+                createAction(
+                    GET_MAIN_CATEGORY_LIST,
+                    res.data.listCategory
+                )
+            )
+            this.props.dispatch(
+                createAction(
+                    GET_CHILD_CATEGORY_LIST,
+                    res.data.listCategory
                 )
             )
         }

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { categoryService, courseService } from '../../Services';
 import swal from 'sweetalert'
 import { connect } from 'react-redux';
-import { GET_LIST } from '../../Redux/Action/type';
+import { GET_CHILD_CATEGORY_LIST, GET_LIST, GET_MAIN_CATEGORY_LIST } from '../../Redux/Action/type';
 import createAction from '../../Redux/Action';
 import { Editor } from "react-draft-wysiwyg";
 import { EditorState, convertToRaw, ContentState } from 'draft-js';
@@ -94,6 +94,7 @@ class CourseAdd extends Component {
             values: {
                 name: '',
                 category_id: null,
+                teacher_id : null,
                 rate: 0,
                 price: 0,
                 sale: 0,
@@ -108,7 +109,7 @@ class CourseAdd extends Component {
                 rate: '',
                 price: '',
                 sale: '',
-                max_students: '',
+                max_students: 0,
                 short_description: '',
                 full_description: '',
             }
@@ -154,12 +155,18 @@ class CourseAdd extends Component {
     onEditorStateChange = (editorState) => {
         this.setState({
             editorState,
-            values : {
+            values: {
                 ...this.state.values,
                 full_description: draftToHtml(convertToRaw(editorState.getCurrentContent())),
             }
         });
     };
+
+    renderTeacherList = () => {
+        return this.props.teacherList.map((teacher) => {
+            return <option value={teacher.id}>{teacher.name}</option>
+        })
+    }
 
     render() {
         const { editorState } = this.state;
@@ -173,8 +180,7 @@ class CourseAdd extends Component {
                                 <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <div className="review-tab-pro-inner">
                                         <ul id="myTab3" className="tab-review-design">
-                                            <li className={this.state.activeTab === "description" ? "active" : ""}><a id="description" href="#description" onClick={this.handleClickTab}><i className="icon nalika-edit" aria-hidden="true" /> Product Edit</a></li>
-                                            <li className={this.state.activeTab === "reviews" ? "active" : ""}><a id="reviews" href="#reviews" onClick={this.handleClickTab}><i className="icon nalika-picture" aria-hidden="true" /> Pictures</a></li>
+                                            <li className={this.state.activeTab === "description" ? "active" : ""}><a id="description" href="#description" onClick={this.handleClickTab}><i className="icon nalika-edit" aria-hidden="true" /> Thông tin khóa học</a></li>
                                         </ul>
                                         <div id="myTabContent" className="tab-content custom-product-edit">
                                             <div className={`product-tab-list tab-pane fade ${this.state.activeTab === "description" ? "active in" : ""}`} id="description" >
@@ -192,15 +198,17 @@ class CourseAdd extends Component {
                                                                     {this.renderCategoryList()}
                                                                 </select>
                                                                 <div className="input-group mg-b-pro-edt">
+                                                                    <span className="input-group-addon">Giáo viên giảng dạy</span>
+                                                                    <select name="teacher_id" className="form-control" value={this.state.values.teacher_id} placeholder="Giáo viên giảng dạy" onChange={this.handleChange} onBlur={this.handleBlur}>
+                                                                        <option value>Giáo viên giảng dạy</option>
+                                                                        {this.renderTeacherList()}
+                                                                    </select>
+                                                                </div>
+                                                                <div className="input-group mg-b-pro-edt">
                                                                     <span className="input-group-addon"><i className="fa fa-usd" aria-hidden="true" /></span>
                                                                     <input type="text" name="price" value={this.state.values.price === 0 ? "" : this.state.values.price} className="form-control" placeholder="Giá khóa học" onChange={this.handleChange} onBlur={this.handleBlur} />
                                                                 </div>
                                                                 {this.renderError(this.state.errors.price)}
-                                                                <div className="input-group mg-b-pro-edt">
-                                                                    <span className="input-group-addon"><i className="icon nalika-favorites" aria-hidden="true" /></span>
-                                                                    <input type="text" name="max_students" value={this.state.values.max_students === 0 ? "" : this.state.values.max_students} className="form-control" placeholder="Số lượng học sinh/sinh viên" onChange={this.handleChange} onBlur={this.handleBlur} />
-                                                                </div>
-                                                                {this.renderError(this.state.errors.max_students)}
                                                             </div>
                                                         </div>
                                                         <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -216,7 +224,7 @@ class CourseAdd extends Component {
                                                     <div class="row">
                                                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                                             <div class="lead-head">
-                                                                <h3 style={{ color : 'white'}}>Leave A Comment</h3>
+                                                                <h3 style={{ color: 'white' }}>Mô tả chi tiết</h3>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -225,7 +233,7 @@ class CourseAdd extends Component {
                                                             <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                                                 <Editor
                                                                     editorState={editorState}
-                                                                    editorStyle={{ border: "1px solid" , backgroundColor : 'white'}}
+                                                                    editorStyle={{ border: "1px solid", backgroundColor: 'white' }}
                                                                     wrapperClassName="demo-wrapper"
                                                                     editorClassName="demo-editor"
                                                                     onEditorStateChange={this.onEditorStateChange}
@@ -244,30 +252,6 @@ class CourseAdd extends Component {
                                                     </div>
                                                 </form>
                                             </div>
-                                            <div className={`product-tab-list tab-pane fade ${this.state.activeTab === "reviews" ? "active in" : ""}`} id="reviews">
-                                                <div className="row">
-                                                    <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                        <form onSubmit={this.handleSubmit}>
-                                                            <div className="row">
-                                                                <div className="review-content-section">
-                                                                    <div className="input-group mg-b-pro-edt">
-                                                                        <span className="input-group-addon"><i className="icon nalika-edit" aria-hidden="true" /></span>
-                                                                        <input type="file" className="form-control" name="image" value={this.state.values.image} placeholder="Tên khóa học" onChange={this.handleChange} onBlur={this.handleBlur} />
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div className="row">
-                                                                <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                                    <div className="text-center custom-pro-edt-ds">
-                                                                        <button type="submit" className="btn btn-ctl-bt waves-effect waves-light m-r-10">Save</button>
-                                                                        <button type="button" className="btn btn-ctl-bt waves-effect waves-light" onClick={() => this.props.history.goBack()}>Discard</button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -281,11 +265,22 @@ class CourseAdd extends Component {
     async componentDidMount() {
         if (this.props.categoryList.length === 0) {
             const res = await categoryService.getAllCategories();
-            console.log(res.data)
             this.props.dispatch(
                 createAction(
                     GET_LIST,
-                    res.data
+                    res.data.listCategory
+                )
+            )
+            this.props.dispatch(
+                createAction(
+                    GET_MAIN_CATEGORY_LIST,
+                    res.data.listCategory
+                )
+            )
+            this.props.dispatch(
+                createAction(
+                    GET_CHILD_CATEGORY_LIST,
+                    res.data.listCategory
                 )
             )
         }
@@ -294,7 +289,8 @@ class CourseAdd extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        categoryList: state.CategoryReducer.ChildCategory
+        categoryList: state.CategoryReducer.ChildCategory,
+        teacherList: state.UserReducer.TeacherList,
     }
 }
 

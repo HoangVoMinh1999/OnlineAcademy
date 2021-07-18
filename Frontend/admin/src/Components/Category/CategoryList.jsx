@@ -199,6 +199,19 @@ class CategoryList extends Component {
                     res.data.listCategory
                 )
             )
+            this.props.dispatch(
+                createAction(
+                    GET_MAIN_CATEGORY_LIST,
+                    res.data.listCategory
+                )
+            )
+            this.props.dispatch(
+                createAction(
+                    GET_CHILD_CATEGORY_LIST,
+                    res.data.listCategory
+                )
+            )
+
             this.setState({
                 ...this.state,
                 lengthCategoryList: res.data.lengthCategoryList

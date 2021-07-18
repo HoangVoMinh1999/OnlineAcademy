@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { appendScript } from '../../utils/appendScript'
 import { categoryService } from '../../Services'
 import createAction from '../../Redux/Action'
-import { UPDATE_ITEM } from '../../Redux/Action/type'
+import { GET_CHILD_CATEGORY_LIST, GET_LIST, GET_MAIN_CATEGORY_LIST, UPDATE_ITEM } from '../../Redux/Action/type'
 
 class CategoryEdit extends Component {
 
@@ -53,7 +53,27 @@ class CategoryEdit extends Component {
         const id = this.props.match.params.id;
         const body = this.state.values;
         const res = await categoryService.updateCategogyDetail(id,body);
-        this.props.history.goBack();
+        if (!res.err_message){
+            const res = await categoryService.getAllCategories();
+            this.props.dispatch(
+                createAction(
+                    GET_LIST,
+                    res.data.listCategory
+                )
+            )
+            this.props.dispatch(
+                createAction(
+                    GET_MAIN_CATEGORY_LIST,
+                    res.data.listCategory
+                )
+            )
+            this.props.dispatch(
+                createAction(
+                    GET_CHILD_CATEGORY_LIST,
+                    res.data.listCategory
+                )
+            )
+        }
 
     }
 

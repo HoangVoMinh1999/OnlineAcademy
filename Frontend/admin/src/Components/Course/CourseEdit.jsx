@@ -29,6 +29,7 @@ class CourseEdit extends Component {
                 short_description: '',
                 full_description: '',
                 IsFinish: false,
+                IsCompleted: false,
                 sale_info: '',
                 selectedImage: null,
                 selectedImageData: null,
@@ -50,8 +51,8 @@ class CourseEdit extends Component {
 
     handleChange = (e) => {
         const { name, value } = e.target;
-        if (name === "IsFinish") {
-            this.setState({ values: { ...this.state.values, IsFinish: e.target.checked } })
+        if (name === "IsFinish" || name==="IsCompleted") {
+            this.setState({ values: { ...this.state.values, [name]: e.target.checked } })
         }
         else {
             this.setState({ values: { ...this.state.values, [name]: value } })
@@ -247,15 +248,15 @@ class CourseEdit extends Component {
                                                                 </div>
                                                                 {this.renderError(this.state.errors.price)}
                                                                 <div className="input-group mg-b-pro-edt">
-                                                                    <span className="input-group-addon">Số lượng hs/sv</span>
-                                                                    <input type="text" name="max_students" value={this.state.values.max_students} className="form-control" placeholder="Số lượng học sinh/sinh viên" onChange={this.handleChange} onBlur={this.handleBlur} />
-                                                                </div>
-                                                                {this.renderError(this.state.errors.max_students)}
-                                                                <div className="input-group mg-b-pro-edt">
                                                                     <span className="input-group-addon">Giảm giá(%)</span>
                                                                     <input type="text" name="sale" value={this.state.values.sale} className="form-control" placeholder="Giảm giá(%)" onChange={this.handleChange} onBlur={this.handleBlur} />
                                                                 </div>
-                                                                {this.renderError(this.state.errors.rate)}
+                                                                {this.renderError(this.state.errors.sale)}
+                                                                <div className="input-group mg-b-pro-edt">
+                                                                    <span className="input-group-addon">Đã hoàn thành khóa học</span>
+                                                                    <input type="checkbox" name="IsCompleted" checked={this.state.values.IsCompleted} className="form-control" onClick={this.handleChange} onBlur={this.handleBlur} />
+                                                                </div>
+                                                                {this.renderError(this.state.errors.max_students)}
                                                                 <div className="input-group mg-b-pro-edt">
                                                                     <span className="input-group-addon">Kết thúc khóa học</span>
                                                                     <input type="checkbox" name="IsFinish" checked={this.state.values.IsFinish} className="form-control" onClick={this.handleChange} onBlur={this.handleBlur} />
@@ -267,7 +268,7 @@ class CourseEdit extends Component {
                                                             <div className="review-content-section">
                                                                 <div className="input-group mg-b-pro-edt">
                                                                     <span className="input-group-addon">Mô tả chung</span>
-                                                                    <textarea className="form-control" name="short_description" value={this.state.values.short_description} cols="30" rows="10" placeholder="Mô tả ngắn gọn" onChange={this.handleChange} onBlur={this.handleBlur}></textarea>
+                                                                    <textarea className="form-control" name="short_description" value={this.state.values.short_description} cols="30" rows="8" placeholder="Mô tả ngắn gọn" onChange={this.handleChange} onBlur={this.handleBlur}></textarea>
                                                                 </div>
                                                                 {this.renderError(this.state.errors.short_description)}
                                                                 <div className="input-group mg-b-pro-edt">
@@ -297,7 +298,7 @@ class CourseEdit extends Component {
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div className="row">
+                                                    <div className="row" style={{marginTop:"2rem"}}>
                                                         <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                                             <div className="text-center custom-pro-edt-ds">
                                                                 <button type="submit" className="btn btn-ctl-bt waves-effect waves-light m-r-10">Save</button>
@@ -367,6 +368,7 @@ class CourseEdit extends Component {
             full_description: detail.data.full_description,
             sale_info: detail.data.sale_info,
             IsFinish: detail.data.IsFinish.data[0] === 1 ? true : false,
+            IsCompleted: detail.data.IsCompleted.data[0] === 1 ? true : false,
             selectedImage: null,
             selectedImageData: null,
         }
