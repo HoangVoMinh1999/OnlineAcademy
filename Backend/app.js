@@ -17,7 +17,9 @@ app.use(bodyParser.json()); // creates express http server
 
 
 
-const auth = require('./middlewares/auth.mdw')
+const auth = require('./middlewares/auth.mdw');
+const { setupProfile } = require('./models/chatbot.model');
+const chatbotModel = require('./models/chatbot.model');
 
 app.use('/api/category',require('./routes/category.route'));
 app.use('/api/user',require('./routes/user.route'));
@@ -46,4 +48,4 @@ app.listen(process.env.PORT || PORT,function(){
     console.log("Start server!!!")
 })
 
-
+app.post('/', chatbotModel.setupProfile)
