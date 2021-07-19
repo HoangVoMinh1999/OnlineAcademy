@@ -170,10 +170,8 @@ function callSendAPI(sender_psid, response) {
 const setupProfile = (req, res) => {
     // Construct the message body
     let request_body = {
-        "recipient": {
-            "id": sender_psid
-        },
-        "message": response
+        "get_started": {"payload": "GET_STARTED"},
+        "whitelisted_domains": ["http://mybackend-onlineacademy.herokuapp.com/"]
     }
 
     // Send the HTTP request to the Messenger Platform
@@ -190,9 +188,9 @@ const setupProfile = (req, res) => {
         console.log('####################################');
         if (!err) {
             // console.log(req);
-            console.log('message sent!')
+            console.log('Setup profile succeeded!')
         } else {
-            console.error("Unable to send message:" + err);
+            console.error("Unable to setup profile:" + err);
         }
     });
 }
