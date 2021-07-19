@@ -12,6 +12,7 @@ import Login from "./Screens/Login";
 import Register from "./Screens/Register";
 import { UserDetail } from "./Components/UserDetail";
 import './App.css'
+import ChangePassword from "./Components/ChangePassword";
 class App extends Component {
   render() {
     return (
@@ -27,6 +28,8 @@ class App extends Component {
             <Route path="/login" exact component={Login} />
             <Route path="/register" exact component={Register} />
             <Route path="/user_detail" exact component={UserDetail}></Route>
+
+            <Route path="/change-password" exact component={ChangePassword}></Route>
           </Switch>
           <Footer></Footer>
 

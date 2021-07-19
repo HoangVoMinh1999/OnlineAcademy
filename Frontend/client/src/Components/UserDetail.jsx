@@ -101,7 +101,7 @@ export class UserDetail extends Component {
             </div>
             <div className="mt-10 align-self-center">
                 <div className="button-group-area mt-40 " >
-                    <a href="#" className="genric-btn primary circle">Thay đổi mật khẩu</a>
+                    <Link to="/change-password" className="genric-btn primary circle">Thay đổi mật khẩu</Link>
                 </div>
             </div>
             <div className="mt-10 align-self-center">

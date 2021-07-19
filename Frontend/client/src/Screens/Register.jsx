@@ -150,7 +150,7 @@ export default class Login extends Component {
                                                 {this.renderError(this.state.errors.email)}
                                             </div>
                                             <div className="col-xl-12">
-                                                <button type="submit" className="boxed_btn_orange">Sign in</button>
+                                                <button type="submit" className="boxed_btn_orange">Sign up</button>
                                             </div>
                                         </div>
                                         <p className="doen_have_acc">Back to login ? <Link className="dont-hav-acc" to="/login">Login</Link>
