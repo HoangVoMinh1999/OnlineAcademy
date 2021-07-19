@@ -84,32 +84,32 @@ function handleMessage(sender_psid, received_message) {
             "attachment": {
                 "type": "template",
                 "payload": {
-                  "template_type": "generic",
-                  "elements": [{
-                    "title": "Chọn yêu cầu mà bạn muốn?",
-                    "subtitle": "KH: Khóa học.",
-                    // "image_url": attachment_url,
-                    "buttons": [
-                      {
-                        "type": "postback",
-                        "title": "Tìm kiếm KH",
-                        "payload": "search",
-                      },
-                      {
-                        "type": "postback",
-                        "title": "Duyệt KH",
-                        "payload": "category",
-                      },
-                      {
-                        "type": "postback",
-                        "title": "Xem chi tiết KH",
-                        "payload": "course",
-                      },
-                    ],
-                  }]
+                    "template_type": "generic",
+                    "elements": [{
+                        "title": "Chọn yêu cầu mà bạn muốn?",
+                        "subtitle": "KH: Khóa học.",
+                        // "image_url": attachment_url,
+                        "buttons": [
+                            {
+                                "type": "postback",
+                                "title": "Tìm kiếm KH",
+                                "payload": "search",
+                            },
+                            {
+                                "type": "postback",
+                                "title": "Duyệt KH",
+                                "payload": "category",
+                            },
+                            {
+                                "type": "postback",
+                                "title": "Xem chi tiết KH",
+                                "payload": "course",
+                            },
+                        ],
+                    }]
                 }
-              }
-            
+            }
+
         }
     }
 
@@ -120,15 +120,15 @@ function handleMessage(sender_psid, received_message) {
 // Handles messaging_postbacks events
 function handlePostback(sender_psid, received_postback) {
     let response;
-  
+
     // Get the payload for the postback
     let payload = received_postback.payload;
-  
+
     // Set the response based on the postback payload
     if (payload === 'search') {
-      response = { "text": "Hãy gõ từ khóa cần tìm khóa học!" }
+        response = { "text": "Hãy gõ từ khóa cần tìm khóa học!" }
     } else if (payload === 'category') {
-      response = { "text": "Hãy chọn danh mục!" }
+        response = { "text": "Hãy chọn danh mục!" }
     } else if (payload === 'course') {
         response = { "text": "Hãy gõ tên khóa học!" }
     }
@@ -167,7 +167,37 @@ function callSendAPI(sender_psid, response) {
     });
 }
 
+const setupProfile = (req, res) => {
+    // Construct the message body
+    let request_body = {
+        "recipient": {
+            "id": sender_psid
+        },
+        "message": response
+    }
+
+    // Send the HTTP request to the Messenger Platform
+    request({
+        "uri": `https://graph.facebook.com/v11.0/me/messenger_profile?access_token=${PAGE_ACCESS_TOKEN}`,
+        "qs": { "access_token": PAGE_ACCESS_TOKEN },
+        "method": "POST",
+        "json": request_body
+    }, (err, res, body) => {
+        console.log('####################################');
+        console.log(request_body);
+        console.log('####################################');
+        console.log(body);
+        console.log('####################################');
+        if (!err) {
+            // console.log(req);
+            console.log('message sent!')
+        } else {
+            console.error("Unable to send message:" + err);
+        }
+    });
+}
 module.exports = {
     getWebhook: getWebhook,
     postWebhook: postWebhook,
+    setupProfile: setupProfile,
 }
