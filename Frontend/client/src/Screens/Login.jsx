@@ -115,7 +115,7 @@ export default class Login extends Component {
                 <div className="slider_area ">
                     <div className="single_slider d-flex align-items-center justify-content-center slider_bg_1">
                         <div className="container">
-                            <form onSubmit={this.handleSubmit}>
+                            <form onSubmit={this.handleSubmit} style= {{margin:"20rem 25%"}}>
                                 <div className="popup_box ">
                                     <div className="popup_inner">
                                         <div className="logo text-center">

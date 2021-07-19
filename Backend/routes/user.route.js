@@ -77,6 +77,13 @@ router.post('/register', async function (req, res, next) {
             message: 'Username is not available!'
         })
     }
+    const tmp_email = await userModel.singleByEmail(user.email);
+    if (tmp_email !== null){
+        return res.json({
+            message: 'Email is not available!'
+        })
+    }
+
     delete user.password_02;
     user.password = bcrypt.hashSync(user.password, 10);
     user.Log_CreatedDate = new Date();

@@ -25,6 +25,14 @@ module.exports = {
         return null;
     },
 
+    async singleByEmail(email){
+        const users = await db('user').where('isdeleted',false).andWhere('email',email);
+        if (users != null && users.length > 0){
+            return users[0];
+        }
+        return null;
+    },
+
     async delete(id){
         const user = await this.singleById(id);
         if (user === null){

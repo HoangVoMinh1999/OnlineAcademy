@@ -34,14 +34,35 @@ export default class Login extends Component {
         event.preventDefault();
         if (Object.keys(this.state.errors).every((k) => this.state.errors[k] === '')) {
             const res = await userService.register(this.state.values);
-            swal({
-                title: "Đăng ký thành công",
-                text: "Khách hàng vui lòng xác nhận qua email nha !!!",
-                icon: "success",
-                button: "Đồng ý",
-            }).then(() => {
-                this.props.history.push('/login');
-            });
+            if (!res.data.message){
+                swal({
+                    title: "Đăng ký thành công",
+                    text: "Khách hàng vui lòng xác nhận qua email nha !!!",
+                    icon: "success",
+                    button: "Đồng ý",
+                }).then(() => {
+                    this.props.history.push('/login');
+                });
+            }
+            else{
+                if (res.data.message === "Username is not available!"){
+                    swal({
+                        title: "Cảnh báo",
+                        text: "Username đã được sử dụng trước đó !!!",
+                        icon: "error",
+                        button: "Đồng ý",
+                    });
+                }
+                else if (res.data.message === 'Email is not available!'){
+                    swal({
+                        title: "Cảnh báo",
+                        text: "Email đã được sử dụng trước đó !!!",
+                        icon: "error",
+                        button: "Đồng ý",
+                    });
+                }
+            }
+
         }
         else {
             swal({
@@ -102,7 +123,7 @@ export default class Login extends Component {
                 <div className="slider_area">
                     <div className="single_slider d-flex align-items-center justify-content-center slider_bg_1">
                         <div className="container">
-                            <form onSubmit={this.handleSubmit}>
+                            <form onSubmit={this.handleSubmit}  style= {{margin:"20rem 25%"}}>
                                 <div className="popup_box">
                                     <div className="popup_inner">
                                         <div className="logo text-center">
