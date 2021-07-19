@@ -3,8 +3,22 @@ import { connect } from 'react-redux'
 
 
 class CourseDetailBanner extends Component {
+
+    constructor(props){
+        super(props);
+        this.state = {
+            detail : {},
+        }
+    }
+
+    com
+
+
     render() {
-        const category = this.props.categoryList.find(t => t.id === this.props.info.category_id)
+        let isCompleted = null;
+        if (this.props.hasOwnProperty('IsCompleted')){
+            isCompleted = this.state.detail.IsCompleted.data[0] === 1 ? "Đã hoàn thiện": "Chưa hoàn thiện";
+        }
         return (
             <div>
                 {/* bradcam_area_start */}
@@ -13,7 +27,7 @@ class CourseDetailBanner extends Component {
                         <div className="row">
                             <div className="col-xl-6">
                                 <div className="course_text">
-                                    <h3>{this.props.info.name}</h3>
+                                    <h3>{this.props.info.name} <small>({isCompleted})</small></h3>
                                     <div className="prise">
                                         <span className="inactive">{this.props.info.price} VND</span>
                                         <span className="active">{this.props.info.price - this.props.info.price * this.props.info.sale / 100} VND</span>
@@ -47,6 +61,10 @@ class CourseDetailBanner extends Component {
         )
     }
     componentDidMount(){
+        const course = this.props.courseList.find(t => t.id == this.props.info.id);
+        this.setState({
+            detail : course,
+        })
         window.scrollTo(0,0)
     }
 }
@@ -54,6 +72,7 @@ class CourseDetailBanner extends Component {
 const mapStateToProps = (state) => {
     return {
         categoryList: state.CategoryReducer.ChildCategoryList,
+        courseList: state.CourseReducer.CourseList,
     }
 }
 

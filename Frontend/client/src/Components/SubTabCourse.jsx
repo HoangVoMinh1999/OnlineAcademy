@@ -6,8 +6,10 @@ class SubTabCourse extends Component {
 
     renderContent = () => {
         if (this.props.id === "suggested-course"){
-            this.props.courseList.sort((a,b) => b.rate - a.rate);
-            return this.props.courseList.map((course,index) => {
+            let cList = [...this.props.courseList];
+            cList = cList.filter(t => t.IsFinish.data[0] === 0);
+            cList.sort((a,b) => b.rate - a.rate);
+            return cList.map((course,index) => {
                 if (index < 6){
                     return(
                         <div className="col-xl-4 col-lg-4 col-md-6">
@@ -18,8 +20,10 @@ class SubTabCourse extends Component {
             })
         }
         else if (this.props.id === "most-view"){
-            this.props.courseList.sort((a,b) => b.view - a.view);
-            return this.props.courseList.map((course,index) => {
+            let cList = [...this.props.courseList];
+            cList = cList.filter(t => t.IsFinish.data[0] === 0);
+            cList.sort((a,b) => b.view - a.view);
+            return cList.map((course,index) => {
                 if (index < 6){
                     return(
                         <div className="col-xl-4 col-lg-4 col-md-6">
@@ -30,8 +34,10 @@ class SubTabCourse extends Component {
             })
         }
         else if (this.props.id === "most-popular"){
-            this.props.courseList.sort((a,b) => b.current_student -a.current_student);
-            return this.props.courseList.map((course,index) => {
+            let cList = [...this.props.courseList];
+            cList = cList.filter(t => t.IsFinish.data[0] === 0);
+            cList.sort((a,b) => b.current_student -a.current_student);
+            return cList.map((course,index) => {
                 if (index < 6){
                     return(
                         <div className="col-xl-4 col-lg-4 col-md-6">
@@ -42,8 +48,10 @@ class SubTabCourse extends Component {
             })
         }
         else if (this.props.id === "new-course"){
-            this.props.courseList.sort((a,b) => b.id - a.id);
-            return this.props.courseList.map((course,index) => {
+            let cList = [...this.props.courseList];
+            cList = cList.filter(t => t.IsFinish.data[0] === 0);
+            cList.sort((a,b) => b.id - a.id);
+            return cList.map((course,index) => {
                 if (index < 6){
                     return(
                         <div className="col-xl-4 col-lg-4 col-md-6">
@@ -54,7 +62,7 @@ class SubTabCourse extends Component {
             })
         }
         else {
-            const cList = this.props.courseList.filter(t => t.category_id == this.props.isActive)
+            const cList = this.props.courseList.filter(t => t.category_id == this.props.isActive && t.IsFinish.data[0] === 0)
             return cList.map((course,index) => {
                 return(
                     <div className="col-xl-4 col-lg-4 col-md-6">
