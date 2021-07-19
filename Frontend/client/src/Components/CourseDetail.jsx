@@ -285,7 +285,7 @@ class CourseDetail extends Component {
 
             res = await courseService.getAllCourses({ category: course.category_id });
             if (res.data.length > 0) {
-                let relativeCourse = res.data.listCourse.filter(t => t.id.toString() !== course_id.toString());
+                let relativeCourse = res.data.listCourse.filter(t => t.id.toString() !== course_id.toString() && t.IsFinish.data[0] === 0);
                 relativeCourse = relativeCourse.sort((a,b) => b.current_student -a.current_student);
                 relativeCourse = relativeCourse.slice(0, 3);
                 this.setState({
@@ -441,7 +441,7 @@ class CourseDetail extends Component {
 
         res = await courseService.getAllCourses({ category: course.category_id });
         if (res.data.length > 0) {
-            let relativeCourse = res.data.listCourse.filter(t => t.id.toString() !== course_id.toString());
+            let relativeCourse = res.data.listCourse.filter(t => t.id.toString() !== course_id.toString() && t.IsFinish.data[0] === 0);
             relativeCourse = relativeCourse.slice(0, 3);
             this.setState({
                 ...this.state,
