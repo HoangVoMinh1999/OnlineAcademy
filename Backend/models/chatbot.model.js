@@ -131,6 +131,39 @@ function handlePostback(sender_psid, received_postback) {
         response = { "text": "Hãy chọn danh mục!" }
     } else if (payload === 'course') {
         response = { "text": "Hãy gõ tên khóa học!" }
+    } else if (payload === 'GET_STARTED') {
+        response = {
+            // "text": `You sent the message: "${received_message.text}". Now choose a button!`
+            "attachment": {
+                "type": "template",
+                "payload": {
+                    "template_type": "generic",
+                    "elements": [{
+                        "title": "Chọn yêu cầu mà bạn muốn?",
+                        "subtitle": "KH: Khóa học.",
+                        // "image_url": attachment_url,
+                        "buttons": [
+                            {
+                                "type": "postback",
+                                "title": "Tìm kiếm KH",
+                                "payload": "search",
+                            },
+                            {
+                                "type": "postback",
+                                "title": "Duyệt KH",
+                                "payload": "category",
+                            },
+                            {
+                                "type": "postback",
+                                "title": "Xem chi tiết KH",
+                                "payload": "course",
+                            },
+                        ],
+                    }]
+                }
+            }
+
+        }
     }
     // Send the message to acknowledge the postback
     callSendAPI(sender_psid, response);
