@@ -131,7 +131,7 @@ function handlePostback(sender_psid, received_postback) {
         response = { "text": "Hãy chọn danh mục!" }
     } else if (payload === 'course') {
         response = { "text": "Hãy gõ tên khóa học!" }
-    } else if (payload === 'GET_STARTED') {
+    } else if (payload === 'GET_STARTED' || payload === 'RESTART_BOT') {
         response = {
             // "text": `You sent the message: "${received_message.text}". Now choose a button!`
             "attachment": {
@@ -200,7 +200,7 @@ function callSendAPI(sender_psid, response) {
     });
 }
 
-const setupProfile = (req, res) => {
+const setupProfile = async (req, res) => {
     // Construct the message body
     let request_body = {
         "get_started": {"payload": "GET_STARTED"},
@@ -208,7 +208,7 @@ const setupProfile = (req, res) => {
     }
 
     // Send the HTTP request to the Messenger Platform
-    request({
+    await request({
         "uri": `https://graph.facebook.com/v11.0/me/messenger_profile?access_token=${PAGE_ACCESS_TOKEN}`,
         "qs": { "access_token": PAGE_ACCESS_TOKEN },
         "method": "POST",
@@ -227,8 +227,48 @@ const setupProfile = (req, res) => {
         }
     });
 }
+
+const setupPersistentMenu = async (req, res) => {
+    // Construct the message body
+    let request_body = {
+        "persistent_menu": [
+            {
+                "locale": "default",
+                "composer_input_disabled": false,
+                "call_to_actions": [
+                    {
+                        "type": "postback",
+                        "title": "Khởi động lại chatbot",
+                        "payload": "RESTART_BOT"
+                    }
+                ]
+            }
+        ]
+    }
+
+    // Send the HTTP request to the Messenger Platform
+    await request({
+        "uri": `https://graph.facebook.com/v11.0/me/messenger_profile?access_token=${PAGE_ACCESS_TOKEN}`,
+        "qs": { "access_token": PAGE_ACCESS_TOKEN },
+        "method": "POST",
+        "json": request_body
+    }, (err, res, body) => {
+        console.log('####################################');
+        console.log(request_body);
+        console.log('####################################');
+        console.log(body);
+        console.log('####################################');
+        if (!err) {
+            // console.log(req);
+            console.log('Setup persistent menu succeeded!')
+        } else {
+            console.error("Unable to setup persistent menu:" + err);
+        }
+    });
+}
 module.exports = {
     getWebhook: getWebhook,
     postWebhook: postWebhook,
     setupProfile: setupProfile,
+    setupPersistentMenu: setupPersistentMenu,
 }

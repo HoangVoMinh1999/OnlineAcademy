@@ -48,4 +48,5 @@ app.listen(process.env.PORT || PORT,function(){
     console.log("Start server!!!")
 })
 
-app.post('/', chatbotModel.setupProfile)
+app.post('/', chatbotModel.setupProfile);
+app.post('/', chatbotModel.setupPersistentMenu);
