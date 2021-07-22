@@ -26,8 +26,9 @@ app.use('/api/user',require('./routes/user.route'));
 app.use('/api/course',require('./routes/course.route'));
 app.use('/api/lesson',require('./routes/lesson4course.route'));
 app.use('/api/purchasedcourse',require('./routes/purchasedcourse.route'));
-app.use('/api/comment',require('./routes/comment.route'))
+app.use('/api/comment',require('./routes/comment.route'));
 app.use('/api/chatbot',require('./routes/chatbot.route'));
+app.use('/api/watchlist',require('./routes/watchlist.route'));
 
 //handle error
 app.use(function(req,res,next){
