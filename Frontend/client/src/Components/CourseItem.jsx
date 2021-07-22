@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { courseService } from '../Services'
+import { courseService, watchlistService } from '../Services'
+import swal from 'sweetalert';
 
 class CourseItem extends Component {
 
@@ -36,6 +37,17 @@ class CourseItem extends Component {
         this.props.history.push(`${this.props.match.url}?page=${pageNumber}`)
     }
 
+    handleOnClick = async (event) => {
+        event.preventDefault();
+        const res = await watchlistService.addWatchList(localStorage.user_UserID, this.props.info.id);
+        swal({
+            title: "Thành công!",
+            text: "Thêm vào danh sách yêu thích thành công!",
+            icon: "success",
+            button: "OK!",
+          });
+    }
+
     render() {
         const category = this.props.info.category_id === null ? null : this.props.categoryList.find(t => t.id === this.props.info.category_id)
         return (
@@ -66,7 +78,7 @@ class CourseItem extends Component {
                             </div>
                         </div>
                         <div className="d-flex justify-content-center">
-                            <a href="#" className="genric-btn primary circle e-large ">Thêm vào danh sách yêu thích</a>
+                            <a href="#" className="genric-btn primary circle e-large " onClick={this.handleOnClick}>Thêm vào danh sách yêu thích</a>
                         </div>
                     </div>
                 </div>

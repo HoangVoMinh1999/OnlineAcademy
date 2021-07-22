@@ -4,6 +4,7 @@ import { CourseService } from "./CourseService";
 import { LessonService } from "./LessonService";
 import { PurchasedCourseService } from "./PurchasedCourseService";
 import { UserService } from "./UserService";
+import { WatchListService } from "./WatchListService";
 
 export const categoryService = new CategoryService();
 
@@ -16,3 +17,5 @@ export const userService = new UserService();
 export const purchaseCourseService = new PurchasedCourseService();
 
 export const commentService = new CommentService();
+
+export const watchlistService = new WatchListService();
