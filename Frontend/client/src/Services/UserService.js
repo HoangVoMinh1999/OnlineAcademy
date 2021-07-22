@@ -26,4 +26,9 @@ export class UserService {
         let currentURL =  this.baseURL + '/'+ id;
         return Axios.patch(currentURL,user)
     }
+
+    changePassword(id, newPassword) {
+        let currentURL =  this.baseURL + '/change-password/'+ id;
+        return Axios.patch(currentURL, {'password': newPassword})
+    }
 }

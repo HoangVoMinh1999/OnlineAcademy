@@ -190,4 +190,21 @@ router.post('/confirm/:id',async function(req,res,next){
     await userModel.confirmAccount(id,user);
     return res.redirect('http://localhost:3000/')
 })
+
+router.patch('/change-password/:id', async(req, res) => {
+    let id = req.params.id;
+    let user = await userModel.singleById(id);
+    if (user === null){
+        return res.status(204).json({
+            'err_message': 'No user !!!'
+        })
+    }
+    let newPassword = req.body.password;
+    console.log(newPassword);
+    let newHashPassword = bcrypt.hashSync(newPassword, 10);
+    await userModel.changePassword(id, newHashPassword);
+    return res.status(200).json({
+        'message': 'Change password successfully !!!'
+    })
+})
 module.exports = router;

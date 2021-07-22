@@ -1,3 +1,4 @@
+// const { default: ChangePassword } = require('../../Frontend/client/src/Components/ChangePassword');
 const db = require('../utils/db')
 
 module.exports = {
@@ -76,5 +77,13 @@ module.exports = {
 
     async confirmAccount(id,data){
         return db('user').where('isdeleted',false).andWhere('id',id).update(data);
+    },
+
+    async changePassword(id, newHashPassword) {
+        const user = await this.singleById(id);
+        if (user === null) {
+            return null;
+        }
+        return db('user').where('id',id).update({'password': newHashPassword})
     }
 }
