@@ -77,39 +77,42 @@ function handleMessage(sender_psid, received_message) {
     console.log('---------------------------------------------------------------');
     // Check if the message contains text
     if (received_message.text) {
-
+        if (received_message.text.includes("KH:")) {
+            response = { "text": `Khoá học bạn tìm kiếm là:` }
+        }
         // Create the payload for a basic text message
-        response = {
-            // "text": `You sent the message: "${received_message.text}". Now choose a button!`
-            "attachment": {
-                "type": "template",
-                "payload": {
-                    "template_type": "generic",
-                    "elements": [{
-                        "title": "Chọn yêu cầu mà bạn muốn?",
-                        "subtitle": "KH: Khóa học.",
-                        // "image_url": attachment_url,
-                        "buttons": [
-                            {
-                                "type": "postback",
-                                "title": "Tìm kiếm KH",
-                                "payload": "search",
-                            },
-                            {
-                                "type": "postback",
-                                "title": "Duyệt KH",
-                                "payload": "category",
-                            },
-                            {
-                                "type": "postback",
-                                "title": "Xem chi tiết KH",
-                                "payload": "course",
-                            },
-                        ],
-                    }]
+        else {
+            response = {
+                // "text": `You sent the message: "${received_message.text}". Now choose a button!`
+                "attachment": {
+                    "type": "template",
+                    "payload": {
+                        "template_type": "generic",
+                        "elements": [{
+                            "title": "Chọn yêu cầu mà bạn muốn?",
+                            "subtitle": "KH: Khóa học.",
+                            // "image_url": attachment_url,
+                            "buttons": [
+                                {
+                                    "type": "postback",
+                                    "title": "Tìm kiếm KH",
+                                    "payload": "search",
+                                },
+                                {
+                                    "type": "postback",
+                                    "title": "Duyệt KH",
+                                    "payload": "category",
+                                },
+                                {
+                                    "type": "postback",
+                                    "title": "Xem chi tiết KH",
+                                    "payload": "course",
+                                },
+                            ],
+                        }]
+                    }
                 }
             }
-
         }
     }
 
@@ -127,11 +130,13 @@ function handlePostback(sender_psid, received_postback) {
     // Set the response based on the postback payload
     switch (payload) {
         case 'search':
-            response = { "text": "Hãy gõ từ khóa cần tìm khóa học!" }
+            response = { "text": `Hãy gõ theo cú pháp: ${"KH: <Từ cần tìm>"} !` }
             break;
         case 'category':
             response = { "text": "Hãy gõ từ khóa cần tìm khóa học!" }
             break;
+        case 'course':
+            response = { "text": "Chọn khóa học cần xem! "}
         case 'GET_STARTED':
         case 'RESTART_BOT':
             response = {

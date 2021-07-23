@@ -50,4 +50,4 @@ app.listen(process.env.PORT || PORT,function(){
 })
 
 app.post('/', chatbotModel.setupProfile);
-app.post('/setup-persistent-menu', chatbotModel.setupPersistentMenu);
+app.post('/', chatbotModel.setupPersistentMenu);
