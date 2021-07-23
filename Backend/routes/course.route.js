@@ -70,6 +70,10 @@ router.get('/', async function (req, res, next) {
     if (query.hasOwnProperty('page')){
         listCourse = listCourse.slice((query.page-1)*offset,query.page*offset)
     }
+    listCourse.forEach(t =>{
+        delete t.image;
+        delete isDeleted;
+    })
     return res.json({
         'listCourse' : listCourse,
         'length' : lengthListCourse,

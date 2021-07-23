@@ -1,0 +1,16 @@
+"id";"name";"category_id";"teacher_id";"rate";"image";"Image_Source";"price";"sale";"sale_info";"short_description";"full_description";"max_students";"current_student";"preview";"view";"IsDeleted";"Log_CreatedDate";"Log_CreatedBy";"Log_UpdatedDate";"Log_UpdatedBy";"IsFinish";"IsCompleted"
+4;"Lap trinh";28;4;4.5;"";"image-4.png";250000.0;20.0;"";"Tui tên Hoàng nha";"<p><strong>Hoang </strong><strong><em>Vo</em></strong> <strong><ins>Minh </ins></strong><span style=""font-size: 16px;font-family: Georgia;""><strong>hahahahahahahaha</strong></span></p>
+<p><span style=""font-size: 16px;font-family: Georgia;""><strong>1235 em có đánh rơi nhịp nào không</strong></span></p>
+";12;0;"";0;"0";"2021-06-03 09:31:43";"";"2021-07-18 21:07:00";"";"0";"1"
+5;"Lập trình game cơ bản Unity";30;0;2.0;"";"";100000.0;15.0;"";"";"<p style=""text-align:center;""><span style=""font-size: 36px;font-family: Times New Roman;""><code>Th ml Cao Duy</code></span></p>
+";100;21;"";0;"0";"2021-06-03 09:33:42";"";"2021-07-03 19:05:23";"";"0";"0"
+6;"Lập trình web";28;0;0.0;"";"";0.0;5.0;"";"";"";0;300;"";0;"0";"2021-07-08 10:35:37";"";"";"";"0";"0"
+7;"Lập trình web nâng cao";28;0;0.0;"";"";0.0;50.0;"";"";"";0;11;"";0;"0";"2021-07-08 10:35:46";"";"";"";"0";"0"
+9;"Lập trình Mobile Android";28;0;0.0;"";"";0.0;75.0;"";"";"";0;4;"";0;"0";"2021-07-08 10:36:15";"";"";"";"0";"0"
+10;"Lập trình cơ bản";28;0;0.0;"";"";0.0;15.0;"";"";"";99;0;"";0;"0";"2021-07-08 10:41:05";"";"";"";"0";"0"
+11;"Học thổi sáo";28;0;0.0;"";"";0.0;10.0;"";"";"";0;99;"";0;"0";"2021-07-08 10:41:33";"";"2021-07-16 00:33:41";"";"0";"0"
+12;"Học làm video đơn giản";0;0;0.0;"";"";0.0;11.0;"";"";"";0;23;"";0;"0";"2021-07-08 10:41:40";"";"2021-07-15 01:51:20";"";"0";"0"
+13;"Sử dụng Ai, Pr, Ps";0;0;0.0;"";"";0.0;25.0;"";"";"";0;34;"";0;"0";"2021-07-08 10:41:58";"";"2021-07-15 01:51:10";"";"0";"0"
+14;"lập trình game nâng cao";28;4;0.0;"";"";123457000.0;0.0;"";"Khóa học dạy code game nâng cao
+Unreal Engine";"<p><span style=""color: rgb(26,188,156);"">Hahahahahahahaha</span></p>
+";0;0;"";0;"0";"2021-07-18 21:02:04";"";"";"";"0";"0"
