@@ -1,8 +1,8 @@
 const db = require('../utils/db')
 
 module.exports = {
-    all() {
-        return db('watchlist').where('isdeleted',0);
+    all(uid) {
+        return db('watchlist').where('isdeleted',false).andWhere('UserID', uid);
     },
 
     addWatchList(obj) {

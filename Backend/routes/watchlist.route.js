@@ -4,7 +4,8 @@ const watchlistModel = require('../models/watchlist.model');
 const router = express.Router()
 
 router.get('/', async function(req, res) {
-    const watchlist = await watchlistModel.all();
+    const uid = req.body.UserID;
+    const watchlist = await watchlistModel.all(uid);
     const lengthWatchList = watchlist.length;
     if (lengthWatchList === 0) {
         return res.status(204).json({

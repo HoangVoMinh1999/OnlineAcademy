@@ -3,8 +3,8 @@ import Axios from 'axios'
 export class WatchListService {
     baseURL =  'http://localhost:4000/api/watchlist';
 
-    getAllWatchList = () => {
-        return Axios.get(this.baseURL);
+    getAllWatchList = (uid) => {
+        return Axios.get(this.baseURL, {'UserID': uid});
     }
 
     addWatchList = (uid, cid) => {

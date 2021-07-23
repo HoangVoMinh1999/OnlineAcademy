@@ -37,7 +37,7 @@ class Header extends Component {
                                 <li><a href="#">{localStorage.user_username} <i className="ti-angle-down" /></a>
                                     <ul className="submenu">
                                         <li><Link to="/user_detail">Thông tin cá nhân</Link></li>
-                                        <li><Link to="/" > Khóa học yêu thích</Link></li>
+                                        <li><Link to="/watchlist" > Khóa học yêu thích</Link></li>
                                         <li onClick={this.handleLogout}><Link to="/" > Đăng xuất</Link></li>
                                     </ul>
                                 </li>

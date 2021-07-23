@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import { PopularCourse } from '../Components/PopularCourse'
 import { Slider } from '../Components/Slider'
 import createAction from '../Redux/Action'
-import { GET_CATEGORY_LIST, GET_COURSE_LIST } from '../Redux/Action/type'
-import { categoryService, courseService } from '../Services/index'
+import { GET_CATEGORY_LIST, GET_COURSE_LIST, GET_WATCHLIST } from '../Redux/Action/type'
+import { categoryService, courseService, watchlistService } from '../Services/index'
 import { connect } from 'react-redux'
 
 class HomePage extends Component {
@@ -17,6 +17,15 @@ class HomePage extends Component {
         )
     }
     async componentDidMount() {
+        if(localStorage.user_UserID !== null && localStorage.user_UserID !== undefined) {
+            let res_watchlist = await watchlistService.getAllWatchList(localStorage.user_UserID);
+            this.props.dispatch(
+                createAction(
+                    GET_WATCHLIST,
+                    res_watchlist.data,
+                )
+            )
+        }
         const res_category = await categoryService.getAllCategory();
         this.props.dispatch(
             createAction(
