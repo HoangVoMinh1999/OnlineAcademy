@@ -70,7 +70,7 @@ export class UserDetail extends Component {
         const res = await userService.updateUserDetail(localStorage.user_UserId, this.state.values);
         if (!res.err_message){
             swal("Good job!", "You clicked the button!", "success", {
-                button: "Aww yiss!",
+                button: "OK",
               }).then((value) => {
                   this.setState({
                       ...this.state,

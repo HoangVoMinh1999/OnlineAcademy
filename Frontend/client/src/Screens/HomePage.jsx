@@ -17,12 +17,12 @@ class HomePage extends Component {
         )
     }
     async componentDidMount() {
-        if(localStorage.user_UserID !== null && localStorage.user_UserID !== undefined) {
-            let res_watchlist = await watchlistService.getAllWatchList(localStorage.user_UserID);
+        if(localStorage.user_UserId !== null && localStorage.user_UserId !== undefined) {
+            let res_watchlist = await watchlistService.getAllWatchList(localStorage.user_UserId);
             this.props.dispatch(
                 createAction(
                     GET_WATCHLIST,
-                    res_watchlist.data,
+                    res_watchlist.data.watchlist,
                 )
             )
         }

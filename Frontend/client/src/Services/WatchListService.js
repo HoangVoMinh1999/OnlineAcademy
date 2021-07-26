@@ -4,7 +4,8 @@ export class WatchListService {
     baseURL =  'http://localhost:4000/api/watchlist';
 
     getAllWatchList = (uid) => {
-        return Axios.get(this.baseURL, {'UserID': uid});
+        const currentURL = this.baseURL + '/'+uid;
+        return Axios.get(currentURL);
     }
 
     addWatchList = (uid, cid) => {

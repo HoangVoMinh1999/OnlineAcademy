@@ -3,11 +3,11 @@ const watchlistModel = require('../models/watchlist.model');
 
 const router = express.Router()
 
-router.get('/', async function(req, res) {
-    const uid = req.body.UserID;
+router.get('/:UserID', async function(req, res) {
+    const uid = req.params.UserID;
     const watchlist = await watchlistModel.all(uid);
     const lengthWatchList = watchlist.length;
-    if (lengthWatchList === 0) {
+    if (lengthWatchList === null) {
         return res.status(204).json({
             'message': 'Danh sách yêu thích rỗng'
         })

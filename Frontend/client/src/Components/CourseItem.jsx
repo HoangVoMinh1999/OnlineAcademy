@@ -39,13 +39,23 @@ class CourseItem extends Component {
 
     handleOnClick = async (event) => {
         event.preventDefault();
-        const res = await watchlistService.addWatchList(localStorage.user_UserID, this.props.info.id);
-        swal({
-            title: "Thành công!",
-            text: "Thêm vào danh sách yêu thích thành công!",
-            icon: "success",
-            button: "OK!",
-          });
+        console.log(localStorage.user_UserId);
+        if (localStorage.user_UserId !== null && localStorage.user_UserId !== undefined) {
+            const res = await watchlistService.addWatchList(localStorage.user_UserId, this.props.info.id);
+            swal({
+                title: "Thành công!",
+                text: "Thêm vào danh sách yêu thích thành công!",
+                icon: "success",
+                button: "OK!",
+            });
+        }
+        else{
+            swal("Lỗi !!!", "Vui lòng đăng nhập tài khoản !!!", "error", {
+                button: "OK",
+              }).then((value) => {
+                window.location.assign("/login");
+              });
+        }
     }
 
     render() {
