@@ -78,23 +78,37 @@ async function handleMessage(sender_psid, received_message) {
     if (received_message.text) {
         if (received_message.text.includes("KH:")) {
             const query = received_message.text.split(": ");
-            const res =  await axios.get('https://mybackend-onlineacademy.herokuapp.com/api/course',{params: {"search":query[1]}});
+            const res = await axios.get('https://mybackend-onlineacademy.herokuapp.com/api/course', { params: { "search": query[1] } });
             const data = res.data.listCourse;
-            let result = "" ;
-            for(var i=0;i<data.length;i++){
-                result = result + data[i].name + '\n';
+            let result = "";
+            for (var i = 0; i < data.length; i++) {
+                result = result + `${data[i].id}-${data[i].name} \n`;
             }
             response = { "text": `Khoá học bạn tìm kiếm là: \n${result}` };
         }
         else if (received_message.text.includes("Category:")) {
             const query = received_message.text.split(": ");
-            const res =  await axios.get('https://mybackend-onlineacademy.herokuapp.com/api/course',{params: {"category":query[1]}});
+            const res = await axios.get('https://mybackend-onlineacademy.herokuapp.com/api/course', { params: { "category": query[1] } });
             const data = res.data.listCourse;
-            let result = "" ;
-            for(var i=0;i<data.length;i++){
-                result = result + data[i].name + '\n';
+            let result = "";
+            for (var i = 0; i < data.length; i++) {
+                result = result + `${data[i].id}-${data[i].name} \n`;
             }
             response = { "text": `Danh mục gồm: \n${result}` };
+        }
+        else if (received_message.text.includes("Course:")) {
+            const query = received_message.text.split(": ");
+            const res = await axios.get(`https://mybackend-onlineacademy.herokuapp.com/api/course/${Number(query[1])}`);
+            const data = res.data;
+            console.log(data);
+            if (Object.keys(data).length === 0) {
+                response = { "text": "Không có thông tin phù hợp" };
+            }
+            else {
+                let result = "";
+                result = result + `Tên: ${data.name} \nĐánh giá: ${data.rate} \nGiá: ${data.price} \nGiảm giá: ${data.sale} \nSố học sinh: ${data.current_student} \n`;
+                response = { "text": `Thông tin: \n${result}` };
+            }
         }
         // Create the payload for a basic text message
         else {
@@ -149,17 +163,18 @@ async function handlePostback(sender_psid, received_postback) {
             response = { "text": `Hãy gõ theo cú pháp: ${"KH: <Từ cần tìm>"} !` }
             break;
         case 'category':
-            const res =  await axios.get('https://mybackend-onlineacademy.herokuapp.com/api/category');
+            const res = await axios.get('https://mybackend-onlineacademy.herokuapp.com/api/category');
             let data = res.data.listCategory;
             data = data.filter(t => t.category_id !== null);
-            let result = "" ;
-            for(var i=0;i<data.length;i++){
+            let result = "";
+            for (var i = 0; i < data.length; i++) {
                 result = result + `${data[i].id}-${data[i].name} \n`;
             }
             response = { "text": `Danh sách category:\n${result}\nHãy gõ theo cú pháp: ${"Category: <ID cần tìm>"} !\nVí dụ: Category: 1` };
             break;
         case 'course':
-            response = { "text": "Chọn khóa học cần xem! "}
+            response = { "text": `Hãy gõ theo cú pháp: ${"Course: <ID cần tìm>"} !\nVí dụ: Course: 1\nNếu chưa biết thông tin, có thể tham khảo thông qua tìm kiếm khóa học và danh mục` };
+            break;
         case 'GET_STARTED':
         case 'RESTART_BOT':
             response = {
