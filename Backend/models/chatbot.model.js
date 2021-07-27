@@ -86,6 +86,16 @@ async function handleMessage(sender_psid, received_message) {
             }
             response = { "text": `Khoá học bạn tìm kiếm là: \n${result}` };
         }
+        else if (received_message.text.includes("Category:")) {
+            const query = received_message.text.split(": ");
+            const res =  await axios.get('https://mybackend-onlineacademy.herokuapp.com/api/course',{params: {"category":query[1]}});
+            const data = res.data.listCourse;
+            let result = "" ;
+            for(var i=0;i<data.length;i++){
+                result = result + data[i].name + '\n';
+            }
+            response = { "text": `Danh mục gồm: \n${result}` };
+        }
         // Create the payload for a basic text message
         else {
             response = {
