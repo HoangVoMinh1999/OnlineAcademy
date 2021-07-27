@@ -127,7 +127,7 @@ async function handleMessage(sender_psid, received_message) {
 }
 
 // Handles messaging_postbacks events
-function handlePostback(sender_psid, received_postback) {
+async function handlePostback(sender_psid, received_postback) {
     let response;
 
     // Get the payload for the postback
@@ -139,7 +139,14 @@ function handlePostback(sender_psid, received_postback) {
             response = { "text": `Hãy gõ theo cú pháp: ${"KH: <Từ cần tìm>"} !` }
             break;
         case 'category':
-            response = { "text": "Hãy gõ từ khóa cần tìm khóa học!" }
+            const res =  await axios.get('https://mybackend-onlineacademy.herokuapp.com/api/category');
+            let data = res.data.listCategory;
+            data = data.filter(t => t.category_id !== null);
+            let result = "" ;
+            for(var i=0;i<data.length;i++){
+                result = result + `${data[i].id}-${data[i].name} \n`;
+            }
+            response = { "text": `Danh sách category:\n${result}\nHãy gõ theo cú pháp: ${"Category: <ID cần tìm>"} !\nVí dụ: Category: 1` };
             break;
         case 'course':
             response = { "text": "Chọn khóa học cần xem! "}
