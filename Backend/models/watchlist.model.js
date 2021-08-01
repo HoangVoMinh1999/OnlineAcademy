@@ -9,7 +9,10 @@ module.exports = {
         return db('watchlist').insert(obj);
     },
 
-    async deleteWatchList() {
-        
+    deleteWatchList(uid,cid) {
+        return db('watchlist').where('UserId',uid).andWhere('CourseId',cid).update({
+                                                    'isdeleted':true,
+                                                    'Log_UpdatedDate': new Date(),
+                                                    });
     }
 }

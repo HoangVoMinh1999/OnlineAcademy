@@ -3,6 +3,8 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { courseService, watchlistService } from '../Services'
 import swal from 'sweetalert';
+import { GET_WATCHLIST } from '../Redux/Action/type';
+import createAction from '../Redux/Action';
 
 class CourseItem extends Component {
 
@@ -11,6 +13,7 @@ class CourseItem extends Component {
         this.state = {
             imgData: null,
             imgURL: null,
+            isFavorite: null,
         }
     }
 
@@ -37,11 +40,55 @@ class CourseItem extends Component {
         this.props.history.push(`${this.props.match.url}?page=${pageNumber}`)
     }
 
-    handleOnClick = async (event) => {
+    renderAddWatchList = () => {
+        if (this.props.watchList.find(t => t.CourseId === this.props.info.id)){
+            return <a href="#" className="genric-btn danger circle " onClick={this.handleOnClickDeleteWatchList}>Xóa khỏi danh sách yêu thích</a>
+        }
+        return <a href="#" className="genric-btn success circle" onClick={this.handleOnClickAddWatchList}>Thêm vào danh sách yêu thích</a>
+    }
+
+    handleOnClickDeleteWatchList = async (event) => {
         event.preventDefault();
-        console.log(localStorage.user_UserId);
+        if (localStorage.user_UserId !== null && localStorage.user_UserId !== undefined) {
+            const res = await watchlistService.delete(localStorage.user_UserId, this.props.info.id);
+            if(localStorage.user_UserId !== null && localStorage.user_UserId !== undefined) {
+                let res_watchlist = await watchlistService.getAllWatchList(localStorage.user_UserId);
+                this.props.dispatch(
+                    createAction(
+                        GET_WATCHLIST,
+                        res_watchlist.data.watchlist,
+                    )
+                )
+            }
+            swal({
+                title: "Thành công!",
+                text: "Xóa khóa học yêu thích thành công!",
+                icon: "success",
+                button: "OK!",
+            });
+        }
+        else{
+            swal("Lỗi !!!", "Vui lòng đăng nhập tài khoản !!!", "error", {
+                button: "OK",
+              }).then((value) => {
+                window.location.assign("/login");
+              });
+        }
+    }
+
+    handleOnClickAddWatchList = async (event) => {
+        event.preventDefault();
         if (localStorage.user_UserId !== null && localStorage.user_UserId !== undefined) {
             const res = await watchlistService.addWatchList(localStorage.user_UserId, this.props.info.id);
+            if(localStorage.user_UserId !== null && localStorage.user_UserId !== undefined) {
+                let res_watchlist = await watchlistService.getAllWatchList(localStorage.user_UserId);
+                this.props.dispatch(
+                    createAction(
+                        GET_WATCHLIST,
+                        res_watchlist.data.watchlist,
+                    )
+                )
+            }
             swal({
                 title: "Thành công!",
                 text: "Thêm vào danh sách yêu thích thành công!",
@@ -88,7 +135,7 @@ class CourseItem extends Component {
                             </div>
                         </div>
                         <div className="d-flex justify-content-center">
-                            <a href="#" className="genric-btn primary circle e-large " onClick={this.handleOnClick}>Thêm vào danh sách yêu thích</a>
+                            {this.renderAddWatchList()}
                         </div>
                     </div>
                 </div>
@@ -109,7 +156,8 @@ class CourseItem extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        categoryList: state.CategoryReducer.ChildCategoryList
+        categoryList: state.CategoryReducer.ChildCategoryList,
+        watchList : state.WatchListReducer.WatchList,
     }
 }
 

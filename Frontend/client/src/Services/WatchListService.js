@@ -11,4 +11,9 @@ export class WatchListService {
     addWatchList = (uid, cid) => {
         return Axios.post(this.baseURL, {'UserID': uid, 'CourseID': cid});
     }
+
+    delete = (uid,cid) => {
+        const currentURL = `${this.baseURL}/delete`
+        return Axios.patch(currentURL,{'UserID': uid, 'CourseID': cid})
+    }
 }

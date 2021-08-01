@@ -25,4 +25,12 @@ router.post('/', async function(req, res) {
     })
 })
 
+router.patch('/delete',async function(req,res){
+    console.log(req.body)
+    const {UserID,CourseID} = req.body;
+    await watchlistModel.deleteWatchList(UserID,CourseID)
+    return res.status(200).json({
+        'message': 'Xóa thành công'
+    })
+})
 module.exports = router;
