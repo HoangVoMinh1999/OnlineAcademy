@@ -135,14 +135,14 @@ class CategoryList extends Component {
                         <div className="row">
                             <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <div className="product-status-wrap">
-                                    <h4>Products List</h4>
+                                    <h4>Danh sách loại khóa học</h4>
                                     <div className="add-product">
                                         <Link to="/category-add">Thêm loại khóa học</Link>
                                     </div>
                                     <div className="header-top-menu tabl-d-n hd-search-rp">
                                         <div className="breadcome-heading">
                                             <form role="search" className="d-inline-flex p-2" method='GET'>
-                                                <input type="text" name="search" placeholder="Search..." className="form-control" />
+                                                <input type="text" name="search" placeholder="Tìm kiếm..." className="form-control" />
                                             </form>
                                         </div>
                                     </div>
@@ -151,8 +151,8 @@ class CategoryList extends Component {
                                             <tr>
                                                 <th>ID</th>
                                                 <th>Tên</th>
-                                                <th>Category Cha</th>
-                                                <th>Status</th>
+                                                <th>Loại khóa học cha</th>
+                                                <th>Trạng thái</th>
                                                 <th>Tùy chỉnh</th>
                                             </tr>
                                         </thead>

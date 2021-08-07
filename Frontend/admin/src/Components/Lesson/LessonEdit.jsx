@@ -135,7 +135,7 @@ export default class LessonEdit extends Component {
                             </div>
                             {this.renderError(this.state.lessonError.content)}
                             <div className="input-group mg-b-15">
-                                <span className="input-group-addon">Cho phép xem review</span>
+                                <span className="input-group-addon">Cho phép xem trước</span>
                                 <input type="checkbox" name="is_preview" checked={this.state.lessonValues.is_preview} className="form-control" onClick={this.handleChangeLesson} onBlur={this.handleBlurLesson} />
                             </div>
                             <div className="review-content-section">

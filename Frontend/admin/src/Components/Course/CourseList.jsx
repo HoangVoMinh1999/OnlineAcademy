@@ -147,14 +147,14 @@ class CourseList extends Component {
                         <div className="row">
                             <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <div className="product-status-wrap">
-                                    <h4>Products List</h4>
+                                    <h4>Danh sách khóa học</h4>
                                     <div className="add-product">
                                         <Link to="/course-add">Thêm khóa học</Link>
                                     </div>
                                     <div className="header-top-menu tabl-d-n hd-search-rp">
                                         <div className="breadcome-heading">
                                             <form role="search" className="d-inline-flex p-2" onSubmit={this.handleSubmitSearch} method='GET'>
-                                                <input type="text" name="search" value={this.state.query.search} placeholder="Search..." className="form-control" onChange={this.handleSearch} />
+                                                <input type="text" name="search" value={this.state.query.search} placeholder="Tìm kiếm..." className="form-control" onChange={this.handleSearch} />
                                             </form>
                                         </div>
                                     </div>
@@ -170,7 +170,7 @@ class CourseList extends Component {
                                                 <th>Học sinh</th>
                                                 <th>Hoàn thành</th>
                                                 <th>Đã kết thúc</th>
-                                                <th>More</th>
+                                                <th>Tùy chỉnh</th>
                                             </tr>
                                         </thead>
                                         <tbody id="categoryContent">

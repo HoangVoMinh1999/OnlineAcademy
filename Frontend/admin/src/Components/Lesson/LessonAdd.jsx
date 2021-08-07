@@ -116,15 +116,15 @@ export default class LessonAdd extends Component {
                             </div>
                             {this.renderError(this.state.lessonError.content)}
                             <div className="input-group mg-b-15">
-                                <span className="input-group-addon">Cho phép xem review</span>
+                                <span className="input-group-addon">Cho phép xem trước</span>
                                 <input type="checkbox" />
                             </div>
                         </div>
                         <div className="row">
                             <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <div className="text-center custom-pro-edt-ds">
-                                    <button type="submit" className="btn btn-ctl-bt waves-effect waves-light m-r-10">Đồng ý</button>
-                                    <button type="button" className="btn btn-ctl-bt waves-effect waves-light" onClick={() => this.props.history.goBack()}>Quay lại</button>
+                                    <button type="submit" className="btn btn-ctl-bt waves-effect waves-light m-r-10">Thêm</button>
+                                    <button type="button" className="btn btn-ctl-bt waves-effect waves-light" onClick={() => this.props.history.goBack()}>Hủy</button>
                                 </div>
                             </div>
                         </div>
