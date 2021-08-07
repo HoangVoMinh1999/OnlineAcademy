@@ -82,7 +82,7 @@ class UserList extends Component {
                     <td>{item.address === null ? 'Chưa có thông tin' : item.address}</td>
                     <td>{item.phone === null ? 'Chưa có thông tin' : item.phone}</td>
                     <td>{item.email === null ? 'Chưa có thông tin' : item.email}</td>
-                    <td>{item.IsTeacher.data[0] === 0 ? 'Không' : 'Có'}</td>
+                    <td>{item.IsTeacher.data[0] === 0 ? 'Học sinh' : 'Giảng viên'}</td>
                     <td>
                         {item.IsTeacher.data[0] === 0 ?
                             <button type="button" class="btn btn-success" hidden={item.IsAdmin.data[0] === 1} onClick={() => this.handleUpgradeUser(item.id)}>Nâng cấp tài khoản</button> :
@@ -118,8 +118,8 @@ class UserList extends Component {
                                                 <th>Địa chỉ</th>
                                                 <th>Số điện thoại</th>
                                                 <th>Email</th>
-                                                <th>Là giáo viên</th>
-                                                <th>More</th>
+                                                <th>Chức vụ</th>
+                                                <th>Khác</th>
                                             </tr>
                                         </thead>
                                         <tbody id="categoryContent">
