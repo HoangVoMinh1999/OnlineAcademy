@@ -57,7 +57,17 @@ module.exports = {
                                                     });
     },
 
-
+    async updateStudent(id){
+        const course = await this.singleById(id);
+        if (course === null){
+            return null;
+        }
+        return db('course').where('id',id).update({
+                                                    'current_student':course.current_student + 1,
+                                                    'Log_UpdatedDate': new Date(),
+                                                    });
+    },
+    
     async updateImage(id,img,src){
         const course = await this.singleById(id);
         if (course === null){

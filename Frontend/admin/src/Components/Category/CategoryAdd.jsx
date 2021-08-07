@@ -28,7 +28,7 @@ class CategoryAdd extends Component {
         let errMessage = '';
         if (name = 'name') {
             if (!value) {
-                errMessage = 'Tên loại sản phẩm không được để trống'
+                errMessage = 'Tên loại khóa học không được để trống'
             }
         }
         return errMessage;

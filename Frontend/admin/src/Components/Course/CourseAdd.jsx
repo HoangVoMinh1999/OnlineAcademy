@@ -61,12 +61,12 @@ class CourseAdd extends Component {
         }
         if (name === 'max_students') {
             if (!value) {
-                errMessage = 'Tên loại sản phẩm không được để trống'
+                errMessage = 'Số lượng học sinh không được để trống'
             }
         }
         if (name === 'short_description') {
             if (!value) {
-                errMessage = 'Tên loại sản phẩm không được để trống'
+                errMessage = 'Mô tả khóa học không được để trống'
             }
         }
         return errMessage;

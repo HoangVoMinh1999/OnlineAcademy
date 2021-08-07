@@ -27,7 +27,8 @@ class CourseDetailBanner extends Component {
                         <div className="row">
                             <div className="col-xl-6">
                                 <div className="course_text">
-                                    <h3>{this.props.info.name} <small>({isCompleted})</small></h3>
+                                    <h3>{this.props.info.name} </h3>
+                                    <h4 style={{color: 'aqua'}}>({this.props.info.view} Lượt xem)</h4>
                                     <div className="prise">
                                         <span className="inactive">{this.props.info.price} VND</span>
                                         <span className="active">{this.props.info.price - this.props.info.price * this.props.info.sale / 100} VND</span>

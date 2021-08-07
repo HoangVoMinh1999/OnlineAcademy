@@ -183,4 +183,21 @@ router.patch('/course_img/:id', upload.single('image'), async (req, res) => {
         'message': 'Update successfully !!!'
     })
 })
+
+router.patch('/update_view/:id', async function(req, res) {
+    const id = req.params.id;
+    await courseModel.updateView(id);
+    return res.json({
+        'message': 'Update successfully !!!'
+    })
+})
+
+router.patch('/update_student/:id', async function(req, res) {
+    const id = req.params.id;
+    await courseModel.updateStudent(id);
+    return res.json({
+        'message': 'Update successfully !!!'
+    })
+})
+
 module.exports = router;

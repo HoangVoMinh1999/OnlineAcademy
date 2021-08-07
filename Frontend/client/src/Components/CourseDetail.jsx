@@ -75,6 +75,7 @@ class CourseDetail extends Component {
                             }
                             let res = await purchaseCourseService.buyCourse4User(data);
                             if (!res.data.err_message) {
+                                await courseService.updateStudent(course_id);
                                 swal("Mua khóa học thành công !!!");
                             }
                             else {
@@ -399,6 +400,7 @@ class CourseDetail extends Component {
                 })
             }
         }
+        await courseService.updateViewCourse(course_id);
         if (this.props.purchasedCourseList.find(t => t.course_id.toString() === course_id.toString()) === undefined) {
             res = await lessonService.getLessons4Course(course_id);
             const lessonPreview = res.data.filter(t => t.is_preview.data[0] === 1)
