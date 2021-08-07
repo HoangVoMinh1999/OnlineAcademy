@@ -29,20 +29,20 @@ export default class LeftMenu extends Component {
                                 <ul className="metismenu" id="menu1">
                                     <li className="active">
                                         <a className="has-arrow" href="index.html">
-                                            <i className="icon nalika-home icon-wrap" />
-                                            <span className="mini-click-non">Course List</span>
+                                            <i className="fa fa-graduation-cap icon-wrap" />
+                                            <span className="mini-click-non">Danh mục</span>
                                         </a>
                                         <ul className="submenu-angle" aria-expanded="true">
-                                            <li><Link to="/category-list"><span className="mini-sub-pro">Category</span></Link></li>
-                                            <li><Link to="/course-list?page=1"><span className="mini-sub-pro">Courses</span></Link></li>
+                                            <li><Link to="/category-list"><span className="mini-sub-pro">Loại khóa học</span></Link></li>
+                                            <li><Link to="/course-list?page=1"><span className="mini-sub-pro">Khóa học</span></Link></li>
                                         </ul>
                                     </li>
                                     <li>
-                                        <a className="has-arrow" href="mailbox.html" aria-expanded="false"><i className="icon nalika-mail icon-wrap" /> <span className="mini-click-non">Accout List</span></a>
+                                        <a className="has-arrow" href="mailbox.html" aria-expanded="false"><i className="fa fa-user icon-wrap" /> <span className="mini-click-non">Tài khoản</span></a>
                                         <ul className="submenu-angle" aria-expanded="false">
-                                            <li><Link to="/user/all-user"><span className="mini-sub-pro">Tất cả tài khoản</span></Link></li>
-                                            <li><Link to="/user/student"><span className="mini-sub-pro">Students</span></Link></li>
-                                            <li><Link to="/user/teacher"><span className="mini-sub-pro">Teachers</span></Link></li>
+                                            <li><Link to="/user/all-user"><span className="mini-sub-pro">Tất cả</span></Link></li>
+                                            <li><Link to="/user/student"><span className="mini-sub-pro">Học sinh</span></Link></li>
+                                            <li><Link to="/user/teacher"><span className="mini-sub-pro">Giảng viên</span></Link></li>
                                             <li><Link to="/user/admin"><span className="mini-sub-pro">Admin</span></Link></li>
                                         </ul>
                                     </li>
