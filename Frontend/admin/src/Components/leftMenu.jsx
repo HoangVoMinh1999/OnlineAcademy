@@ -30,15 +30,15 @@ export default class LeftMenu extends Component {
                                     <li className="active">
                                         <a className="has-arrow" href="index.html">
                                             <i className="icon nalika-home icon-wrap" />
-                                            <span className="mini-click-non">Course List</span>
+                                            <span className="mini-click-non">QL Khóa Học</span>
                                         </a>
                                         <ul className="submenu-angle" aria-expanded="true">
-                                            <li><Link to="/category-list"><span className="mini-sub-pro">Category</span></Link></li>
-                                            <li><Link to="/course-list?page=1"><span className="mini-sub-pro">Courses</span></Link></li>
+                                            <li><Link to="/category-list"><span className="mini-sub-pro">Loại khóa học</span></Link></li>
+                                            <li><Link to="/course-list?page=1"><span className="mini-sub-pro">Khóa học</span></Link></li>
                                         </ul>
                                     </li>
-                                    <li>
-                                        <a className="has-arrow" href="mailbox.html" aria-expanded="false"><i className="icon nalika-mail icon-wrap" /> <span className="mini-click-non">Accout List</span></a>
+                                    <li disabled={true}>
+                                        <a className="has-arrow" href="mailbox.html" aria-expanded="false"><i className="icon nalika-mail icon-wrap" /> <span className="mini-click-non">QL Tài Khoản</span></a>
                                         <ul className="submenu-angle" aria-expanded="false">
                                             <li><Link to="/user/all-user"><span className="mini-sub-pro">Tất cả tài khoản</span></Link></li>
                                             <li><Link to="/user/student"><span className="mini-sub-pro">Students</span></Link></li>
@@ -51,50 +51,6 @@ export default class LeftMenu extends Component {
                         </div>
                     </nav>
                 </div>
-
-                {/* Mobile Menu start */}
-                <div>
-                    <div className="mobile-menu-area">
-                        <div className="container">
-                            <div className="row">
-                                <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <div className="mobile-menu">
-                                        <nav id="dropdown">
-                                            <ul className="mobile-menu-nav">
-                                                <li><a data-toggle="collapse" data-target="#Charts" href="#">Home <span className="admin-project-icon nalika-icon nalika-down-arrow" /></a>
-                                                    <ul className="collapse dropdown-header-top">
-                                                        <li><a href="index.html">Dashboard v.1</a></li>
-                                                        <li><a href="index-1.html">Dashboard v.2</a></li>
-                                                        <li><a href="index-3.html">Dashboard v.3</a></li>
-                                                    </ul>
-                                                </li>
-                                                <li><a data-toggle="collapse" data-target="#demo" href="#">Mailbox <span className="admin-project-icon nalika-icon nalika-down-arrow" /></a>
-                                                    <ul id="demo" className="collapse dropdown-header-top">
-                                                        <li><a href="mailbox.html">Inbox</a>
-                                                        </li>
-                                                        <li><a href="mailbox-view.html">View Mail</a>
-                                                        </li>
-                                                        <li><a href="mailbox-compose.html">Compose Mail</a>
-                                                        </li>
-                                                    </ul>
-                                                </li>
-                                                <li><a data-toggle="collapse" data-target="#Pagemob" href="#">Pages <span className="admin-project-icon nalika-icon nalika-down-arrow" /></a>
-                                                    <ul id="Pagemob" className="collapse dropdown-header-top">
-                                                        <li><Link to="/login">Login</Link>
-                                                        </li>
-                                                        <li><a href="register.html">Register</a>
-                                                        </li>
-                                                    </ul>
-                                                </li>
-                                            </ul>
-                                        </nav>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
             </div>
         )
     }

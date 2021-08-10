@@ -62,7 +62,8 @@ export default class Login extends Component {
                 const obj = parseJwt(res.data.accessToken);
                 localStorage.user_UserId = obj.userId;
                 localStorage.user_username = this.state.values.username;
-                localStorage.user_IsAdmin = obj.IsAdmin.data[0];
+                localStorage.user_IsAdmin = obj.IsAdmin.data[0] === 0 ? false : true;
+                localStorage.user_IsTeacher = obj.IsTeacher.data[0] === 0 ? false : true;
                 this.props.history.push('/');
             }
         }
