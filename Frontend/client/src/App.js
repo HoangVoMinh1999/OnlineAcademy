@@ -14,6 +14,7 @@ import { UserDetail } from "./Components/UserDetail";
 import './App.css'
 import ChangePassword from "./Components/ChangePassword";
 import WatchList from "./Screens/WatchList";
+import PurchasedCourse from "./Screens/PurchasedCourse";
 class App extends Component {
   render() {
     return (
@@ -31,6 +32,7 @@ class App extends Component {
             <Route path="/user_detail" exact component={UserDetail}></Route>
             <Route path="/change-password" exact component={ChangePassword}></Route>
             <Route path="/watchlist" exact component={WatchList}></Route>
+            <Route path="/purchasedcourse" exact component={PurchasedCourse}></Route>
           </Switch>
           <Footer></Footer>
 
