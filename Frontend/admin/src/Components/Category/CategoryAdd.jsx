@@ -28,7 +28,7 @@ class CategoryAdd extends Component {
         let errMessage = '';
         if (name = 'name') {
             if (!value) {
-                errMessage = 'Tên loại sản phẩm không được để trống'
+                errMessage = 'Tên loại khóa học không được để trống'
             }
         }
         return errMessage;
@@ -105,7 +105,7 @@ class CategoryAdd extends Component {
                                 <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <div className="review-tab-pro-inner">
                                         <ul id="myTab3" className="tab-review-design">
-                                            <li className="active"><a href="#description"><i className="icon nalika-edit" aria-hidden="true" /> Product Info</a></li>
+                                            <li className="active"><a href="#description"><i className="icon nalika-edit" aria-hidden="true" />Thông tin loại khóa học</a></li>
                                         </ul>
                                         <div id="myTabContent" className="tab-content custom-product-edit">
                                             <form onSubmit={this.handleSubmit}>
@@ -115,11 +115,11 @@ class CategoryAdd extends Component {
                                                             <div className="review-content-section">
                                                                 <div className="input-group mg-b-pro-edt">
                                                                     <span className="input-group-addon"><i className="icon nalika-user" aria-hidden="true" /></span>
-                                                                    <input id="categoryName" type="text" name="name" value={this.state.values.name} className="form-control" placeholder="Name" onChange={this.handleChange} onBlur={this.handleBlur} />
+                                                                    <input id="categoryName" type="text" name="name" value={this.state.values.name} className="form-control" placeholder="Tên loại khóa học" onChange={this.handleChange} onBlur={this.handleBlur} />
                                                                 </div>
                                                                 {this.renderError(this.state.errors.name)}
                                                                 <select name="category_id" class="form-control pro-edt-select form-control-primary" value={this.state.values.category_id} onChange={this.handleChange}>
-                                                                    <option value="">Select One Value Only</option>
+                                                                    <option value="">Chọn 1 giá trị</option>
                                                                     {this.renderMainCategory()}
                                                                 </select>
                                                             </div>
@@ -128,8 +128,8 @@ class CategoryAdd extends Component {
                                                     <div className="row">
                                                         <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                                             <div className="text-center custom-pro-edt-ds">
-                                                                <button type="submit" className="btn btn-ctl-bt waves-effect waves-light m-r-10">Đồng ý</button>
-                                                                <button type="button" className="btn btn-ctl-bt waves-effect waves-light" onClick={() => this.props.history.goBack()}>Quay lại</button>
+                                                                <button type="submit" className="btn btn-ctl-bt waves-effect waves-light m-r-10">Thêm</button>
+                                                                <button type="button" className="btn btn-ctl-bt waves-effect waves-light" onClick={() => this.props.history.goBack()}>Hủy</button>
                                                             </div>
                                                         </div>
                                                     </div>

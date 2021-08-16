@@ -214,7 +214,7 @@ class CourseEdit extends Component {
                                     <div className="review-tab-pro-inner">
                                         <ul id="myTab3" className="tab-review-design">
                                             <li className={this.state.activeTab === "description" ? "active" : ""}><a id="description" href="#description" onClick={this.handleClickTab}><i className="icon nalika-edit" aria-hidden="true" /> Thông tin khóa học</a></li>
-                                            <li className={this.state.activeTab === "reviews" ? "active" : ""}><a id="reviews" href="#reviews" onClick={this.handleClickTab}><i className="icon nalika-picture" aria-hidden="true" /> Pictures</a></li>
+                                            <li className={this.state.activeTab === "reviews" ? "active" : ""}><a id="reviews" href="#reviews" onClick={this.handleClickTab}><i className="icon nalika-picture" aria-hidden="true" /> Hình ảnh</a></li>
                                             <li className={this.state.activeTab === "INFORMATION" ? "active" : ""}><a id="INFORMATION" href="#INFORMATION" onClick={this.handleClickTab}><i className="icon nalika-chat" aria-hidden="true" /> Bài học</a></li>
                                         </ul>
                                         <div id="myTabContent" className="tab-content custom-product-edit">
@@ -301,8 +301,8 @@ class CourseEdit extends Component {
                                                     <div className="row" style={{marginTop:"2rem"}}>
                                                         <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                                             <div className="text-center custom-pro-edt-ds">
-                                                                <button type="submit" className="btn btn-ctl-bt waves-effect waves-light m-r-10">Save</button>
-                                                                <button type="button" className="btn btn-ctl-bt waves-effect waves-light" onClick={() => this.props.history.goBack()}>Discard</button>
+                                                                <button type="submit" className="btn btn-ctl-bt waves-effect waves-light m-r-10">Lưu thay đổi</button>
+                                                                <button type="button" className="btn btn-ctl-bt waves-effect waves-light" onClick={() => this.props.history.goBack()}>Hủy</button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -324,8 +324,8 @@ class CourseEdit extends Component {
                                                             <div className="row">
                                                                 <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                                                     <div className="text-center custom-pro-edt-ds">
-                                                                        <button type="submit" className="btn btn-ctl-bt waves-effect waves-light m-r-10">Save</button>
-                                                                        <button type="button" className="btn btn-ctl-bt waves-effect waves-light" onClick={() => this.props.history.goBack()}>Discard</button>
+                                                                        <button type="submit" className="btn btn-ctl-bt waves-effect waves-light m-r-10">Lưu thay đổi</button>
+                                                                        <button type="button" className="btn btn-ctl-bt waves-effect waves-light" onClick={() => this.props.history.goBack()}>Hủy</button>
                                                                     </div>
                                                                 </div>
                                                             </div>

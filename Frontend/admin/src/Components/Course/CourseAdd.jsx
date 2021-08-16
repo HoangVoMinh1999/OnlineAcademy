@@ -61,12 +61,12 @@ class CourseAdd extends Component {
         }
         if (name === 'max_students') {
             if (!value) {
-                errMessage = 'Tên loại sản phẩm không được để trống'
+                errMessage = 'Số lượng học sinh không được để trống'
             }
         }
         if (name === 'short_description') {
             if (!value) {
-                errMessage = 'Tên loại sản phẩm không được để trống'
+                errMessage = 'Mô tả khóa học không được để trống'
             }
         }
         return errMessage;
@@ -245,8 +245,8 @@ class CourseAdd extends Component {
                                                     <div className="row">
                                                         <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                                             <div className="text-center custom-pro-edt-ds">
-                                                                <button type="submit" className="btn btn-ctl-bt waves-effect waves-light m-r-10">Save</button>
-                                                                <button type="button" className="btn btn-ctl-bt waves-effect waves-light" onClick={() => this.props.history.goBack()}>Discard</button>
+                                                                <button type="submit" className="btn btn-ctl-bt waves-effect waves-light m-r-10">Thêm</button>
+                                                                <button type="button" className="btn btn-ctl-bt waves-effect waves-light" onClick={() => this.props.history.goBack()}>Hủy</button>
                                                             </div>
                                                         </div>
                                                     </div>

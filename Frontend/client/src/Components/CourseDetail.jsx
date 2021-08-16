@@ -4,7 +4,7 @@ import { commentService, courseService, lessonService, purchaseCourseService, us
 import CourseDetailBanner from './CourseDetailBanner'
 import { CourseDetailPreview } from './CourseDetailPreview'
 import createAction from '../Redux/Action';
-import { GET_PURCHASED_COURSE_LIST, GET_COMMENT_LIST } from '../Redux/Action/type';
+import { GET_PURCHASED_COURSE_LIST, GET_COMMENT_LIST, GET_COURSE_LIST } from '../Redux/Action/type';
 import Comment from './Comment/Comment';
 import { Editor } from "react-draft-wysiwyg";
 import { EditorState, convertToRaw, ContentState, convertFromHTML } from 'draft-js';
@@ -75,6 +75,7 @@ class CourseDetail extends Component {
                             }
                             let res = await purchaseCourseService.buyCourse4User(data);
                             if (!res.data.err_message) {
+                                await courseService.updateStudent(course_id);
                                 swal("Mua khóa học thành công !!!");
                             }
                             else {
@@ -86,6 +87,13 @@ class CourseDetail extends Component {
                                     createAction(
                                         GET_PURCHASED_COURSE_LIST,
                                         res.data
+                                    )
+                                )
+                                const res_course = await courseService.getAllCourses();
+                                this.props.dispatch(
+                                    createAction(
+                                        GET_COURSE_LIST,
+                                        res_course.data.listCourse
                                     )
                                 )
                             }
@@ -200,6 +208,11 @@ class CourseDetail extends Component {
 
     async componentWillReceiveProps(nextProps) {
         const course_id = this.props.match.params.course_id;
+        if (nextProps.courseList !== this.props.courseList) {
+            this.setState({
+                ...this.state,
+            })
+        }
         if (nextProps.purchasedCourseList !== this.props.purchasedCourseList) {
             if (this.props.purchasedCourseList.find(t => t.course_id.toString() === course_id.toString()) === undefined) {
                 let res = await lessonService.getLessons4Course(course_id);
@@ -399,6 +412,7 @@ class CourseDetail extends Component {
                 })
             }
         }
+        await courseService.updateViewCourse(course_id);
         if (this.props.purchasedCourseList.find(t => t.course_id.toString() === course_id.toString()) === undefined) {
             res = await lessonService.getLessons4Course(course_id);
             const lessonPreview = res.data.filter(t => t.is_preview.data[0] === 1)

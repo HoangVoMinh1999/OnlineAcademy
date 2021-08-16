@@ -95,8 +95,8 @@ class LessonList extends Component {
                                             <tr>
                                                 <th>STT</th>
                                                 <th>Tiêu đề bài học</th>
-                                                <th>Cho phép preview</th>
-                                                <th>More</th>
+                                                <th>Cho phép xem trước</th>
+                                                <th>Tùy chỉnh</th>
                                             </tr>
                                         </thead>
                                         <tbody id="categoryContent">

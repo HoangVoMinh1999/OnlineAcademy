@@ -17,4 +17,13 @@ export class CourseService {
         });
     }
 
+    updateViewCourse = (id) => {
+        const currentURL = this.baseURL + "/update_view/" + id;
+        return Axios.patch(currentURL);
+    }
+    
+    updateStudent = (id) => {
+        const currentURL = this.baseURL + "/update_student/" + id;
+        return Axios.patch(currentURL);
+    }
 }
