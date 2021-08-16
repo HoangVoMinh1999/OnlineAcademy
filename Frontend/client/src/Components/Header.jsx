@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { LoginModal } from './LoginModal'
 import { connect } from 'react-redux'
 import { Link,Redirect, useHistory} from 'react-router-dom'
-import { purchaseCourseService } from '../Services'
+import { purchasedCourseService } from '../Services'
 import createAction from '../Redux/Action'
 import { GET_PURCHASED_COURSE_LIST } from '../Redux/Action/type'
 
@@ -38,6 +38,7 @@ class Header extends Component {
                                     <ul className="submenu">
                                         <li><Link to="/user_detail">Thông tin cá nhân</Link></li>
                                         <li><Link to="/watchlist" > Khóa học yêu thích</Link></li>
+                                        <li><Link to="/purchasedcourse">Khóa học đã mua</Link></li>
                                         <li onClick={this.handleLogout}><Link to="/" > Đăng xuất</Link></li>
                                     </ul>
                                 </li>
@@ -110,7 +111,7 @@ class Header extends Component {
     }
     async componentDidMount(){
         if (localStorage.user_accessToken){
-            const res = await purchaseCourseService.getPurchasedCourse4User(localStorage.user_UserId);
+            const res = await purchasedCourseService.getPurchasedCourse4User(localStorage.user_UserId);
             this.props.dispatch(
                 createAction(
                     GET_PURCHASED_COURSE_LIST,

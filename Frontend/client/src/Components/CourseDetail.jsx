@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { commentService, courseService, lessonService, purchaseCourseService, userService } from '../Services';
+import { commentService, courseService, lessonService, purchasedCourseService, userService } from '../Services';
 import CourseDetailBanner from './CourseDetailBanner'
 import { CourseDetailPreview } from './CourseDetailPreview'
 import createAction from '../Redux/Action';
@@ -73,7 +73,7 @@ class CourseDetail extends Component {
                                 user_id: localStorage.user_UserId,
                                 course_id: course_id,
                             }
-                            let res = await purchaseCourseService.buyCourse4User(data);
+                            let res = await purchasedCourseService.buyCourse4User(data);
                             if (!res.data.err_message) {
                                 await courseService.updateStudent(course_id);
                                 swal("Mua khóa học thành công !!!");
@@ -82,7 +82,7 @@ class CourseDetail extends Component {
                                 swal("Mua khóa học không thành công !!!");
                             }
                             if (localStorage.user_accessToken) {
-                                const res = await purchaseCourseService.getPurchasedCourse4User(localStorage.user_UserId);
+                                const res = await purchasedCourseService.getPurchasedCourse4User(localStorage.user_UserId);
                                 this.props.dispatch(
                                     createAction(
                                         GET_PURCHASED_COURSE_LIST,
@@ -123,7 +123,7 @@ class CourseDetail extends Component {
                             user_id: localStorage.user_UserId,
                             course_id: course_id,
                         }
-                        let res = await purchaseCourseService.deleteCourse4User(data);
+                        let res = await purchasedCourseService.deleteCourse4User(data);
                         if (!res.data.err_message) {
                             swal("Hủy khóa học thành công !!!");
                         }
@@ -131,7 +131,7 @@ class CourseDetail extends Component {
                             swal("Hủy khóa học không thành công !!!");
                         }
                         if (localStorage.user_accessToken) {
-                            const res = await purchaseCourseService.getPurchasedCourse4User(localStorage.user_UserId);
+                            const res = await purchasedCourseService.getPurchasedCourse4User(localStorage.user_UserId);
                             this.props.dispatch(
                                 createAction(
                                     GET_PURCHASED_COURSE_LIST,

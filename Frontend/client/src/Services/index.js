@@ -14,7 +14,7 @@ export const lessonService = new LessonService();
 
 export const userService = new UserService();
 
-export const purchaseCourseService = new PurchasedCourseService();
+export const purchasedCourseService = new PurchasedCourseService();
 
 export const commentService = new CommentService();
 
