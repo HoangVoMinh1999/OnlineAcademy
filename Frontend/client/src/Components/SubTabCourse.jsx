@@ -13,7 +13,7 @@ class SubTabCourse extends Component {
                 if (index < 6){
                     return(
                         <div className="col-xl-4 col-lg-4 col-md-6">
-                            <CourseItem info={course}></CourseItem>
+                            <CourseItem info={course} ></CourseItem>
                         </div>
                     )
                 }

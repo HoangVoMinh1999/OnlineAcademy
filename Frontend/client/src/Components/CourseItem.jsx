@@ -107,6 +107,10 @@ class CourseItem extends Component {
 
     render() {
         const category = this.props.info.category_id === null ? null : this.props.categoryList.find(t => t.id === this.props.info.category_id)
+        let isSuggestedCourse = "";
+        if (this.props.suggestedCourseList.find(t => t.id === this.props.info.id)){
+            isSuggestedCourse = "Suggested";
+        }
         return (
             <div>
                 <div className="single_courses" >
@@ -132,6 +136,7 @@ class CourseItem extends Component {
                                 <span className="active_prise">
                                     {this.props.info.price - this.props.info.price * this.props.info.sale / 100} VND
                                 </span>
+                                <p style={{color:"red",fontWeight:"bold",fontStyle:"italic",fontSize:"20px"}}>{isSuggestedCourse}</p>
                             </div>
                         </div>
                         <div className="d-flex justify-content-center">
@@ -158,6 +163,7 @@ const mapStateToProps = (state) => {
     return {
         categoryList: state.CategoryReducer.ChildCategoryList,
         watchList : state.WatchListReducer.WatchList,
+        suggestedCourseList : state.CourseReducer.SuggestedCourseList,
     }
 }
 

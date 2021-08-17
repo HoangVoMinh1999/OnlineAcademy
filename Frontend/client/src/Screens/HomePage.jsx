@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { PopularCourse } from '../Components/PopularCourse'
 import { Slider } from '../Components/Slider'
 import createAction from '../Redux/Action'
-import { GET_CATEGORY_LIST, GET_COURSE_LIST, GET_WATCHLIST } from '../Redux/Action/type'
+import { GET_CATEGORY_LIST, GET_COURSE_LIST, GET_SUGGESTED_COURSE_LIST, GET_WATCHLIST } from '../Redux/Action/type'
 import { categoryService, courseService, watchlistService } from '../Services/index'
 import { connect } from 'react-redux'
 
@@ -39,11 +39,22 @@ class HomePage extends Component {
             element.image = null;
             element.imageURL = null;
             delete element.Image_Source;
+
         })
+
+        let cList = res_course.data.listCourse;
+        cList = cList.filter(t => t.IsFinish.data[0] === 0);
+
         this.props.dispatch(
             createAction(
                 GET_COURSE_LIST,
-                res_course.data.listCourse
+                cList,
+            )
+        )
+        this.props.dispatch(
+            createAction(
+                GET_SUGGESTED_COURSE_LIST,
+                cList,
             )
         )
     }
