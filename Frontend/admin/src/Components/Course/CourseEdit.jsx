@@ -258,7 +258,7 @@ class CourseEdit extends Component {
                                                                 </div>
                                                                 {this.renderError(this.state.errors.max_students)}
                                                                 <div className="input-group mg-b-pro-edt">
-                                                                    <span className="input-group-addon">Kết thúc khóa học</span>
+                                                                    <span className="input-group-addon">Vô hiệu hóa khóa học</span>
                                                                     <input type="checkbox" name="IsFinish" checked={this.state.values.IsFinish} className="form-control" onClick={this.handleChange} onBlur={this.handleBlur} />
                                                                 </div>
                                                                 {this.renderError(this.state.errors.rate)}
