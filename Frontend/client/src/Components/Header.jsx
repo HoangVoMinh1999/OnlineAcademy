@@ -29,7 +29,7 @@ class Header extends Component {
             )
         }
         else {
-            console.log(localStorage.user_IsAdmin);
+            console.log(localStorage);
             return (
                 <div>
                     <div className="main-menu  d-none d-lg-block">
@@ -43,8 +43,7 @@ class Header extends Component {
                                         <li onClick={this.handleLogout}><Link to="/" > Đăng xuất</Link></li>
                                     </ul>
                                 </li>
-                                {localStorage.user_IsAdmin === true ? <li><a href="https://hoangduy-online-academy-admin.netlify.app/">Đến trang admin</a></li> : <span></span>}
-                                
+                                <li><a style={{display:localStorage.user_IsAdmin.toString() === "true" ? "block" : "none"}} href="https://hoangduy-online-academy-admin.netlify.app/">Đến trang admin</a></li>
                             </ul>
                         </nav>
                     </div>

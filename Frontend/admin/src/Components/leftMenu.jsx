@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 
 export default class LeftMenu extends Component {
     render() {
+        console.log(localStorage);
         return (
             <div>
                 <div className="left-sidebar-pro">
