@@ -29,6 +29,7 @@ class Header extends Component {
             )
         }
         else {
+            console.log(localStorage.user_IsAdmin);
             return (
                 <div>
                     <div className="main-menu  d-none d-lg-block">

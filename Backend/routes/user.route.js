@@ -130,6 +130,7 @@ router.post('/login', async function (req, res, next) {
     const payload = {
         userId: tmp.id,
         IsAdmin: tmp.IsAdmin,
+        IsTeacher: tmp.IsTeacher,
     }
     const opts = {
         expiresIn: 10 * 60

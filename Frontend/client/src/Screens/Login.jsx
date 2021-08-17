@@ -60,6 +60,7 @@ export default class Login extends Component {
             else{
                 localStorage.user_accessToken = res.data.accessToken;
                 const obj = parseJwt(res.data.accessToken);
+                console.log(obj.IsAdmin.data[0]);
                 localStorage.user_UserId = obj.userId;
                 localStorage.user_username = this.state.values.username;
                 localStorage.user_IsAdmin = obj.IsAdmin.data[0] === 0 ? false : true;
