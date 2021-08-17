@@ -1,7 +1,9 @@
 import Axios from 'axios'
+import { URL } from './backendURL';
 
 class LessonService {
-    baseURL =  'http://localhost:4000/api/lesson';
+    //baseURL =  'http://localhost:4000/api/lesson';
+    baseURL = `${URL}/api/lesson`;
 
     getLessons4Course = (course_id) => {
         const currentURL = this.baseURL + "/"+ course_id;

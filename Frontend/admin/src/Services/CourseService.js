@@ -1,7 +1,9 @@
 import axios from 'axios'
+import { URL } from './backendURL';
 
 class CourseService {
-    baseURL = 'http://localhost:4000/api/course';
+    //baseURL = 'http://localhost:4000/api/course';
+    baseURL = `${URL}/api/course`;
 
     addNewCourse = (course) => {
         return axios.post(this.baseURL, course);

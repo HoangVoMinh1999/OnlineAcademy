@@ -33,7 +33,7 @@ class CourseList extends Component {
                 <td>{course.sale}%</td>
                 <td>{course.current_student}</td>
                 <td>{course.IsCompleted.data[0] === 1 ? "Đã hoàn thành" : "Chưa hoàn thành"}</td>
-                <td>{course.IsFinish.data[0] === 1 ? "Đã kết thúc" : "Chưa kết thúc"}</td>
+                <td>{course.IsFinish.data[0] === 1 ? "Vô hiệu hóa" : ""}</td>
                 <td>
                     <Link to={`/course-edit/${course.id}`}><button id="categoryEdit" title="Edit" class="pd-setting-ed"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></Link>
                     {/* Button trigger modal */}

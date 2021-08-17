@@ -1,7 +1,9 @@
 import Axios from 'axios'
+import { URL } from './backendURL';
 
 export class CourseService {
-    baseURL =  'http://localhost:4000/api/course';
+    //baseURL =  'http://localhost:4000/api/course';
+    baseURL = `${URL}/api/course`;
 
     getAllCourses = (query) => {
         if (query === null || query === undefined) 

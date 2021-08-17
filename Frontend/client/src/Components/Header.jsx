@@ -43,7 +43,7 @@ class Header extends Component {
                                         <li onClick={this.handleLogout}><Link to="/" > Đăng xuất</Link></li>
                                     </ul>
                                 </li>
-                                {localStorage.user_IsAdmin === true ? <li><a href="about.html">Đến trang admin</a></li> : <span></span>}
+                                {localStorage.user_IsAdmin === true ? <li><a href="https://hoangduy-online-academy-admin.netlify.app/">Đến trang admin</a></li> : <span></span>}
                                 
                             </ul>
                         </nav>
