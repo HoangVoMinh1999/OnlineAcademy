@@ -1,0 +1,1 @@
+export const URL = "https://mybackend-onlineacademy.herokuapp.com"

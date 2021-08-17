@@ -1,7 +1,9 @@
 import axios from 'axios';
+import { URL } from './backendURL';
 
 class CategoryService {
-    baseURL = 'http://localhost:4000/api/category';
+    //baseURL = 'http://localhost:4000/api/category';
+    baseURL = `${URL}/api/category`;
 
 
     addNewCategory = (cat) => {

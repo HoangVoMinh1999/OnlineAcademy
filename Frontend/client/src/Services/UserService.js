@@ -1,7 +1,9 @@
 import Axios from 'axios'
+import { URL } from './backendURL';
 
 export class UserService {
-    baseURL = 'http://localhost:4000/api/user';
+    //baseURL = 'http://localhost:4000/api/user';
+    baseURL = `${URL}/api/user`;
 
     login(username,password){
         let currentURL = this.baseURL + '/login'

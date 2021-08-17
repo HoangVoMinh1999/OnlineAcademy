@@ -1,7 +1,9 @@
-import Axios from 'axios'
+import Axios from 'axios';
+import { URL } from './backendURL';
 
 export class WatchListService {
-    baseURL =  'http://localhost:4000/api/watchlist';
+    //baseURL =  'http://localhost:4000/api/watchlist';
+    baseURL = `${URL}/api/watchlist`;
 
     getAllWatchList = (uid) => {
         const currentURL = this.baseURL + '/'+uid;
