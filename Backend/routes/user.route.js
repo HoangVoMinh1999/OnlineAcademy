@@ -126,6 +126,13 @@ router.post('/login', async function (req, res, next) {
             message: 'User is not confirmed !!!'
         })
     }
+    var value = [...tmp.IsDisabled];
+    if (value[0] === 1){
+        return res.json({
+            authenticated:false,
+            message: 'User is disabled !!!'
+        })
+    }
     //--- input for jwt.sign
     const payload = {
         userId: tmp.id,

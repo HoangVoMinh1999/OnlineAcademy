@@ -88,7 +88,7 @@ class UserList extends Component {
                     case "confirm":
                         const res = await userService.updateUser(id, { IsDisabled: true });
                         if (!res.err_message) {
-                            swal('Giáng cấp thành công !!!');
+                            swal('Khóa tài khoản thành công !!!');
                             const res = await userService.getAllUser();
                             this.props.dispatch(
                                 createAction(
@@ -116,7 +116,7 @@ class UserList extends Component {
                     case "confirm":
                         const res = await userService.updateUser(id, { IsDisabled: false });
                         if (!res.err_message) {
-                            swal('Giáng cấp thành công !!!');
+                            swal('Mở tài khoản thành công !!!');
                             const res = await userService.getAllUser();
                             this.props.dispatch(
                                 createAction(
@@ -151,8 +151,8 @@ class UserList extends Component {
                     <td>{role}</td>
                     <td>
                         {item.IsDisabled.data[0] === 0 ?
-                            <button type="button" class="btn btn-success" hidden={item.IsAdmin.data[0] === 1} onClick={() => this.handleAbleUser(item.id)}>Mở tài khoản </button> :
-                            <button type="button" class="btn btn-danger" hidden={item.IsAdmin.data[0] === 1} onClick={() => this.handleDisableUser(item.id)}>Khóa tài khoản</button>
+                            <button type="button" class="btn btn-success" hidden={item.IsAdmin.data[0] === 1} onClick={() => this.handleDisableUser(item.id)}>Khóa tài khoản</button> :
+                            <button type="button" class="btn btn-danger" hidden={item.IsAdmin.data[0] === 1} onClick={() => this.handleAbleUser(item.id)}>Mở tài khoản</button>
                         }
                     </td>
                     <td>

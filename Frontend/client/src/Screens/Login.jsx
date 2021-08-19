@@ -48,6 +48,14 @@ export default class Login extends Component {
                         button: "Xác nhận",
                     });
                 }
+                else if (res.data.message === 'User is disabled !!!'){
+                    swal({
+                        title: "Cảnh báo",
+                        text: "Tài khoản của bạn đã bị khóa !!!",
+                        icon: "error",
+                        button: "Xác nhận",
+                    });
+                }
                 else{
                     swal({
                         title: "Cảnh báo",

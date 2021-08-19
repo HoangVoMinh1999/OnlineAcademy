@@ -14,7 +14,6 @@ import CourseEdit from './Components/Course/CourseEdit';
 import LessonAdd from './Components/Lesson/LessonAdd';
 import LessonEdit from './Components/Lesson/LessonEdit';
 import UserList from './Components/User/UserList';
-import Login from './Components/User/Login';
 import TeacherList from './Components/User/TeacherList';
 import StudentList from './Components/User/StudentList';
 import AdminList from './Components/User/AdminList';
